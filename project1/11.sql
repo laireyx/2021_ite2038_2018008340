@@ -11,4 +11,4 @@ FROM
 WHERE
 	Pokemon.type = 'Water'
 ORDER BY
-	nickname
+	nickname;

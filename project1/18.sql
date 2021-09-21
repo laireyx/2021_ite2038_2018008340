@@ -5,4 +5,4 @@ FROM
 WHERE
 	Pokemon.type = 'Grass'
 ORDER BY
-	name
+	name;

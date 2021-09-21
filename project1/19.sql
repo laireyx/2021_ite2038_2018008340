@@ -4,4 +4,4 @@ FROM
 	CatchedPokemon
     JOIN Trainer
     	ON CatchedPokemon.owner_id = Trainer.id
-        AND Trainer.name = 'Matis'
+        AND Trainer.name = 'Matis';

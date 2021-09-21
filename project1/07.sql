@@ -20,4 +20,4 @@ GROUP BY
 HAVING
 	SUM(OtherCatchedPokemon.level) IS NULL
 ORDER BY
-	City.name
+	City.name;

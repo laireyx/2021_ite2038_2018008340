@@ -5,4 +5,4 @@ FROM
 WHERE
 	hometown = 'Blue City'
 ORDER BY
-	name
+	name;

@@ -4,4 +4,4 @@ FROM
 	Trainer
     JOIN Gym
     	ON Gym.leader_id = Trainer.id
-        AND Gym.city = 'Brown City'
+        AND Gym.city = 'Brown City';

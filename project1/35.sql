@@ -7,4 +7,4 @@ FROM
 GROUP BY
 	Trainer.name
 ORDER BY
-	Trainer.name
+	Trainer.name;

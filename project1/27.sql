@@ -6,4 +6,4 @@ WHERE
 	CatchedPokemon.level >= 40 AND
     CatchedPokemon.owner_id >= 5
 ORDER BY
-	nickname
+	nickname;

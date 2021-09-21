@@ -8,4 +8,4 @@ FROM
     	ON City.description = 'Amazon'
         AND Gym.city = City.name
 GROUP BY
-	Trainer.name
+	Trainer.name;

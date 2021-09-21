@@ -6,4 +6,4 @@ WHERE
 	hometown = 'Brown City' OR
     hometown ='Rainbow City'
 ORDER BY
-	name
+	name;

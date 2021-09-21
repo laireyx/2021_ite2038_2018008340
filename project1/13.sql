@@ -3,4 +3,4 @@ SELECT
 FROM
 	Pokemon
 WHERE
-	type != 'Fire'
+	type != 'Fire';

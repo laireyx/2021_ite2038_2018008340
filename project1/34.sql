@@ -10,4 +10,4 @@ FROM
     	ON PrimitivePokemon.name = 'Charmander'
         AND PrimitivePokemon.id = FirstEvolution.before_id
 GROUP BY
-	Pokemon.name
+	Pokemon.name;

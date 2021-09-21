@@ -5,4 +5,4 @@ FROM
     JOIN Gym
     	ON Gym.leader_id = Trainer.id
 ORDER BY
-	Trainer.name
+	Trainer.name;

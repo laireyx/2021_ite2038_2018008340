@@ -5,4 +5,4 @@ FROM
 WHERE
 	id LIKE '__'
 ORDER BY
-	name
+	name;

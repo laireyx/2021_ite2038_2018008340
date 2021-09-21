@@ -7,4 +7,4 @@ FROM
     	ON EvolvedPokemon.id = Evolution.after_id
         AND Pokemon.id > EvolvedPokemon.id
 ORDER BY
-	Pokemon.name
+	Pokemon.name;

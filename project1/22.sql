@@ -3,4 +3,4 @@ SELECT
 FROM
 	Pokemon
 ORDER BY
-	id
+	id;

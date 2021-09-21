@@ -6,4 +6,4 @@ FROM
 WHERE
 	CatchedPokemon.pid IS NULL
 ORDER BY
-	name
+	name;

@@ -8,4 +8,4 @@ FROM
     	ON CatchedPokemon.pid = Pokemon.id
         AND	Trainer.id = CatchedPokemon.owner_id
 ORDER BY
-	Trainer.name
+	Trainer.name;

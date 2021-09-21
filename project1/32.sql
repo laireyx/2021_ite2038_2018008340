@@ -17,4 +17,4 @@ GROUP BY
 HAVING
 	SUM(OtherCatchedPokemon.level) IS NULL
 ORDER BY
-	Trainer.name
+	Trainer.name;

@@ -15,4 +15,4 @@ HAVING
         		ON OtherCatchedPokemon.owner_id = OtherTrainer.id
         	GROUP BY OtherTrainer.name
 		) CatchedTable
-    )
+    );

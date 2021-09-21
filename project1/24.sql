@@ -5,4 +5,4 @@ FROM
 WHERE
 	name REGEXP '^[AEIOUaeiou]'
 ORDER BY
-	name
+	name;

@@ -15,4 +15,4 @@ HAVING
         		ON OtherTrainer.hometown = OtherCity.name
         	GROUP BY OtherCity.name
 		) TrainerCount
-    )
+    );

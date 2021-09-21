@@ -13,4 +13,4 @@ WHERE
 GROUP BY
 	Pokemon.name
 ORDER BY
-	Pokemon.name
+	Pokemon.name;

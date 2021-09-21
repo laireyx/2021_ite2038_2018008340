@@ -23,4 +23,4 @@ WHERE
 GROUP BY
 	Trainer.name, CatchedPokemon.nickname
 ORDER BY
-    CatchedPokemon.nickname
+    CatchedPokemon.nickname;

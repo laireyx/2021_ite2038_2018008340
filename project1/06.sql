@@ -8,4 +8,4 @@ WHERE
 GROUP BY
 	Trainer.id
 ORDER BY
-	Trainer.name
+	Trainer.name;

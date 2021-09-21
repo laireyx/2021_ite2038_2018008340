@@ -4,4 +4,4 @@ FROM
 	CatchedPokemon
     JOIN Pokemon
     	ON Pokemon.id = CatchedPokemon.pid
-        AND Pokemon.type = 'Fire'
+        AND Pokemon.type = 'Fire';

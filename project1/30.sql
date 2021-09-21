@@ -5,4 +5,4 @@ FROM
 WHERE
 	name LIKE '%s'
 ORDER BY
-	name
+	name;

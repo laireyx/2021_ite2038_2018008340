@@ -7,4 +7,4 @@ FROM
 GROUP BY
 	Pokemon.type
 ORDER BY
-	Pokemon.type
+	Pokemon.type;
