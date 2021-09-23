@@ -1,5 +1,5 @@
 SELECT
-	Pokemon.type, COUNT(*)
+	COUNT(*)
 FROM
 	CatchedPokemon
     JOIN Pokemon
