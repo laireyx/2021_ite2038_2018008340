@@ -1,5 +1,5 @@
 SELECT
-	City.name, CatchedPokemon.nickname
+	CatchedPokemon.nickname
 FROM
 	City
     JOIN Trainer
@@ -20,4 +20,4 @@ GROUP BY
 HAVING
 	SUM(OtherCatchedPokemon.level) IS NULL
 ORDER BY
-	City.name;
+	CatchedPokemon.nickname;
