@@ -9,6 +9,6 @@ FROM
         AND OtherCatchedPokemon.pid = CatchedPokemon.pid
         AND OtherCatchedPokemon.owner_id = Trainer.id
 GROUP BY
-	Trainer.name
+	Trainer.id, Trainer.name
 ORDER BY
 	Trainer.name;
