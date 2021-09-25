@@ -17,4 +17,4 @@ Inherited by [AllocatedPage](Classes/structAllocatedPage.md), [FreePage](Classes
 
 -------------------------------
 
-Updated on 2021-09-25 at 19:30:23 +0900
+Updated on 2021-09-25 at 19:40:44 +0900
