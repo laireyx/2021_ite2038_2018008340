@@ -1,9 +1,9 @@
 ---
-title: file.cc
+title: filemanager/file.cc
 
 ---
 
-# file.cc
+# filemanager/file.cc
 
 
 
@@ -13,12 +13,12 @@ title: file.cc
 | -------------- | -------------- |
 | void | **[_initialize](Files/file_8cc.md#function--initialize)**()<br>Initialize file manager.  |
 | void | **[_page_growth](Files/file_8cc.md#function--page-growth)**()<br>Automatically check and size-up a page file.  |
-| void | **[_seek_page](Files/file_8cc.md#function--seek-page)**([pagenum_t](Modules/group__Type.md#typedef-pagenum-t) pagenum)<br>Seek page file pointer at offset matching with given page index.  |
+| void | **[_seek_page](Files/file_8cc.md#function--seek-page)**(pagenum_t pagenum)<br>Seek page file pointer at offset matching with given page index.  |
 | void | **[_flush_header](Files/file_8cc.md#function--flush-header)**()<br>Flush a header page as "pagenum 0".  |
-| [pagenum_t](Modules/group__Type.md#typedef-pagenum-t) | **[file_alloc_page](Modules/group__File.md#function-file-alloc-page)**()<br>Allocate an on-disk page from the free page list.  |
-| void | **[file_free_page](Modules/group__File.md#function-file-free-page)**([pagenum_t](Modules/group__Type.md#typedef-pagenum-t) pagenum)<br>Free an on-disk page to the free page list.  |
-| void | **[file_read_page](Modules/group__File.md#function-file-read-page)**([pagenum_t](Modules/group__Type.md#typedef-pagenum-t) pagenum, [page_t](Modules/group__Type.md#typedef-page-t) * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
-| void | **[file_write_page](Modules/group__File.md#function-file-write-page)**([pagenum_t](Modules/group__Type.md#typedef-pagenum-t) pagenum, const [page_t](Modules/group__Type.md#typedef-page-t) * src)<br>Write an in-memory page(src) to the on-disk page.  |
+| pagenum_t | **[file_alloc_page](Files/file_8cc.md#function-file-alloc-page)**()<br>Allocate an on-disk page from the free page list.  |
+| void | **[file_free_page](Files/file_8cc.md#function-file-free-page)**(pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
+| void | **[file_read_page](Files/file_8cc.md#function-file-read-page)**(pagenum_t pagenum, [page_t](Classes/structPage.md) * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
+| void | **[file_write_page](Files/file_8cc.md#function-file-write-page)**(pagenum_t pagenum, const [page_t](Classes/structPage.md) * src)<br>Write an in-memory page(src) to the on-disk page.  |
 
 ## Attributes
 
@@ -26,7 +26,7 @@ title: file.cc
 | -------------- | -------------- |
 | bool | **[initialized](Files/file_8cc.md#variable-initialized)**  |
 | FILE * | **[page_file](Files/file_8cc.md#variable-page-file)**  |
-| [headerpage_t](Modules/group__Type.md#typedef-headerpage-t) | **[header_page](Files/file_8cc.md#variable-header-page)**  |
+| [headerpage_t](Classes/structHeaderPage.md) | **[header_page](Files/file_8cc.md#variable-header-page)**  |
 
 
 ## Functions Documentation
@@ -267,4 +267,4 @@ void file_write_page(pagenum_t pagenum, const page_t* src) {
 
 -------------------------------
 
-Updated on 2021-09-25 at 17:48:29 +0900
+Updated on 2021-09-25 at 19:30:23 +0900

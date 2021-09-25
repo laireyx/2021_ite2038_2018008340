@@ -6,8 +6,6 @@ summary: struct for abstract page.
 
 # Page
 
-**Module:** **[Page structure](Modules/group__Page.md)**
-
 
 
 struct for abstract page. 
@@ -19,4 +17,4 @@ Inherited by [AllocatedPage](Classes/structAllocatedPage.md), [FreePage](Classes
 
 -------------------------------
 
-Updated on 2021-09-25 at 17:48:29 +0900
+Updated on 2021-09-25 at 19:30:23 +0900

@@ -6,8 +6,6 @@ summary: struct for allocated page.
 
 # AllocatedPage
 
-**Module:** **[Page structure](Modules/group__Page.md)**
-
 
 
 struct for allocated page. 
@@ -35,4 +33,4 @@ Reserved area for normal allocated page.
 
 -------------------------------
 
-Updated on 2021-09-25 at 17:48:29 +0900
+Updated on 2021-09-25 at 19:30:23 +0900

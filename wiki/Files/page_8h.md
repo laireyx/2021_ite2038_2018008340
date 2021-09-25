@@ -1,9 +1,9 @@
 ---
-title: page.h
+title: filemanager/page.h
 
 ---
 
-# page.h
+# filemanager/page.h
 
 
 
@@ -20,7 +20,7 @@ title: page.h
 
 |                | Name           |
 | -------------- | -------------- |
-| constexpr int | **[PAGE_SIZE](Modules/group__Page.md#variable-page-size)**  |
+| constexpr int | **[PAGE_SIZE](Files/page_8h.md#variable-page-size)**  |
 
 
 
@@ -37,7 +37,6 @@ constexpr int PAGE_SIZE = 4096;
 ## Source code
 
 ```cpp
-
 #pragma once
 #include <cstdint>
 
@@ -66,4 +65,4 @@ struct FreePage : public Page {
 
 -------------------------------
 
-Updated on 2021-09-25 at 17:48:29 +0900
+Updated on 2021-09-25 at 19:30:23 +0900

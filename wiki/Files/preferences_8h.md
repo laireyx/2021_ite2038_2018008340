@@ -1,9 +1,9 @@
 ---
-title: preferences.h
+title: filemanager/preferences.h
 
 ---
 
-# preferences.h
+# filemanager/preferences.h
 
 
 
@@ -36,4 +36,4 @@ const char* FILE_NAME = "db";
 
 -------------------------------
 
-Updated on 2021-09-25 at 17:48:29 +0900
+Updated on 2021-09-25 at 19:30:23 +0900
