@@ -11,46 +11,44 @@ title: filemanager/file.cc
 
 |                | Name           |
 | -------------- | -------------- |
-| void | **[_initialize](Files/file_8cc.md#function--initialize)**()<br>Initialize file manager.  |
-| void | **[_page_growth](Files/file_8cc.md#function--page-growth)**()<br>Automatically check and size-up a page file.  |
-| void | **[_seek_page](Files/file_8cc.md#function--seek-page)**(pagenum_t pagenum)<br>Seek page file pointer at offset matching with given page index.  |
-| void | **[_flush_header](Files/file_8cc.md#function--flush-header)**()<br>Flush a header page as "pagenum 0".  |
-| pagenum_t | **[file_alloc_page](Files/file_8cc.md#function-file-alloc-page)**()<br>Allocate an on-disk page from the free page list.  |
-| void | **[file_free_page](Files/file_8cc.md#function-file-free-page)**(pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
-| void | **[file_read_page](Files/file_8cc.md#function-file-read-page)**(pagenum_t pagenum, [page_t](Classes/structPage.md) * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
-| void | **[file_write_page](Files/file_8cc.md#function-file-write-page)**(pagenum_t pagenum, const [page_t](Classes/structPage.md) * src)<br>Write an in-memory page(src) to the on-disk page.  |
+| void | **[_extend_capacity](/Files/file_8cc.md#function--extend-capacity)**(pagenum_t newsize =0)<br>Automatically check and size-up a page file.  |
+| void | **[_seek_page](/Files/file_8cc.md#function--seek-page)**(pagenum_t pagenum)<br>Seek page file pointer at offset matching with given page index.  |
+| void | **[_flush_header](/Files/file_8cc.md#function--flush-header)**()<br>Flush a header page as "pagenum 0".  |
+| int64_t | **[file_open_database_file](/Files/file_8cc.md#function-file-open-database-file)**(char * path)<br>Open existing database file or create one if not existed.  |
+| pagenum_t | **[file_alloc_page](/Files/file_8cc.md#function-file-alloc-page)**()<br>Allocate an on-disk page from the free page list.  |
+| void | **[file_free_page](/Files/file_8cc.md#function-file-free-page)**(pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
+| void | **[file_read_page](/Files/file_8cc.md#function-file-read-page)**(pagenum_t pagenum, [page_t](/Classes/structPage.md) * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
+| void | **[file_write_page](/Files/file_8cc.md#function-file-write-page)**(pagenum_t pagenum, const [page_t](/Classes/structPage.md) * src)<br>Write an in-memory page(src) to the on-disk page.  |
+| void | **[file_close_database_file](/Files/file_8cc.md#function-file-close-database-file)**()<br>Stop referencing the database file.  |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| bool | **[initialized](Files/file_8cc.md#variable-initialized)**  |
-| FILE * | **[page_file](Files/file_8cc.md#variable-page-file)**  |
-| [headerpage_t](Classes/structHeaderPage.md) | **[header_page](Files/file_8cc.md#variable-header-page)**  |
+| int | **[database_instance_count](/Files/file_8cc.md#variable-database-instance-count)** <br>current database instance number  |
+| [DatabaseInstance](/Classes/structDatabaseInstance.md) | **[database_instances](/Files/file_8cc.md#variable-database-instances)** <br>all database instances  |
+| FILE * | **[database_file](/Files/file_8cc.md#variable-database-file)**  |
+| [headerpage_t](/Classes/structHeaderPage.md) | **[header_page](/Files/file_8cc.md#variable-header-page)**  |
 
 
 ## Functions Documentation
 
-### function _initialize
+### function _extend_capacity
 
 ```cpp
-void _initialize()
-```
-
-Initialize file manager. 
-
-Open a page file and read header page, or create and initialize if not exists. 
-
-
-### function _page_growth
-
-```cpp
-void _page_growth()
+void _extend_capacity(
+    pagenum_t newsize =0
+)
 ```
 
 Automatically check and size-up a page file. 
 
-If there are no space for the next free page, double the reserved page count. 
+**Parameters**: 
+
+  * **newsize** extended size. default is 0, which means doubleing the reserved page count if there are no free page. 
+
+
+Extend capacity if newsize if specified. Or if there are no space for the next free page, double the reserved page count.
 
 
 ### function _seek_page
@@ -75,6 +73,23 @@ void _flush_header()
 ```
 
 Flush a header page as "pagenum 0". 
+
+### function file_open_database_file
+
+```cpp
+int64_t file_open_database_file(
+    char * path
+)
+```
+
+Open existing database file or create one if not existed. 
+
+**Parameters**: 
+
+  * **path** Database file. 
+
+
+**Return**: ID of the opened database file. 
 
 ### function file_alloc_page
 
@@ -135,20 +150,37 @@ Write an in-memory page(src) to the on-disk page.
   * **src** the pointer of the page data. 
 
 
+### function file_close_database_file
+
+```cpp
+void file_close_database_file()
+```
+
+Stop referencing the database file. 
+
 
 ## Attributes Documentation
 
-### variable initialized
+### variable database_instance_count
 
 ```cpp
-bool initialized = false;
+int database_instance_count = 0;
 ```
 
+current database instance number 
 
-### variable page_file
+### variable database_instances
 
 ```cpp
-FILE * page_file;
+DatabaseInstance database_instances;
+```
+
+all database instances 
+
+### variable database_file
+
+```cpp
+FILE * database_file;
 ```
 
 
@@ -165,40 +197,34 @@ headerpage_t header_page;
 ```cpp
 
 #include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include "file.h"
-#include "preferences.h"
 
-bool initialized = false;
-FILE* page_file;
+int database_instance_count = 0;
+DatabaseInstance database_instances[MAX_DATABASE_INSTANCE + 1];
+
+FILE* database_file;
 headerpage_t header_page;
 
-void _initialize() {
-    if ((page_file = fopen(FILE_NAME, "r+b")) == NULL) {
-        page_file = fopen(FILE_NAME, "w+b");
+void _extend_capacity(pagenum_t newsize = 0) {
+    if (
+        newsize > header_page.page_num ||
+        header_page.free_page_idx == 0
+    ) {
+        if (newsize == 0) {
+            newsize = header_page.page_num * 2;
+        }
 
-        header_page.free_page_idx = 0;
-        header_page.page_num = 1;
-
-        fwrite(&header_page, PAGE_SIZE, 1, page_file);
-        fflush(page_file);
-    }
-    else {
-        fread(&header_page, PAGE_SIZE, 1, page_file);
-    }
-    initialized = true;
-}
-
-void _page_growth() {
-    if (header_page.free_page_idx == 0) {
         for (
             pagenum_t free_page_index = header_page.page_num;
-            free_page_index < header_page.page_num * 2;
+            free_page_index < newsize;
             free_page_index++
-            ) {
+        ) {
 
             freepage_t free_page;
 
-            if (free_page_index < header_page.page_num * 2 - 1)
+            if (free_page_index < newsize - 1)
                 free_page.next_free_idx = free_page_index + 1;
             else
                 free_page.next_free_idx = 0;
@@ -207,24 +233,66 @@ void _page_growth() {
         }
 
         header_page.free_page_idx = header_page.page_num;
-        header_page.page_num *= 2;
+        header_page.page_num = newsize;
     }
 }
 
 void _seek_page(pagenum_t pagenum) {
-    fseek(page_file, pagenum * PAGE_SIZE, SEEK_SET);
+    fseek(database_file, pagenum * PAGE_SIZE, SEEK_SET);
 }
 
 void _flush_header() {
-    fseek(page_file, 0, SEEK_SET);
-    fwrite(&header_page, PAGE_SIZE, 1, page_file);
-    fflush(page_file);
+    fseek(database_file, 0, SEEK_SET);
+    fwrite(&header_page, PAGE_SIZE, 1, database_file);
+    fflush(database_file);
+}
+
+int64_t file_open_database_file(char* path) {
+    for (
+        int index = 1;
+        index <= database_instance_count;
+        index++
+    ) {
+        if (
+            strcmp(
+                database_instances[index].file_path,
+                path
+            ) == 0
+        ) {
+            return index;
+        }
+    }
+
+    if (database_instance_count >= MAX_DATABASE_INSTANCE) {
+        return -1;
+    }
+
+    DatabaseInstance& new_instance = database_instances[++database_instance_count];
+    new_instance.file_path = reinterpret_cast<char*>(malloc(sizeof(char) * (strlen(path) + 1)));
+    strncpy(new_instance.file_path, path, strlen(path) + 1);
+
+    if ((database_file = fopen(path, "r+b")) == NULL) {
+        database_file = fopen(path, "w+b");
+
+        header_page.free_page_idx = 0;
+        header_page.page_num = 1;
+
+        _extend_capacity(2560);
+
+        fseek(database_file, 0, SEEK_SET);
+        fwrite(&header_page, PAGE_SIZE, 1, database_file);
+        fflush(database_file);
+    }
+    else {
+        fread(&header_page, PAGE_SIZE, 1, database_file);
+    }
+
+    new_instance.file_pointer = database_file;
+    return database_instance_count;
 }
 
 pagenum_t file_alloc_page() {
-    if (!initialized) _initialize();
-
-    _page_growth();
+    _extend_capacity();
 
     pagenum_t free_page_idx = header_page.free_page_idx;
     freepage_t free_page;
@@ -251,20 +319,28 @@ void file_free_page(pagenum_t pagenum) {
 }
 
 void file_read_page(pagenum_t pagenum, page_t* dest) {
-    if (!initialized) _initialize();
     _seek_page(pagenum);
-    fread(dest, PAGE_SIZE, 1, page_file);
+    fread(dest, PAGE_SIZE, 1, database_file);
 }
 
 void file_write_page(pagenum_t pagenum, const page_t* src) {
-    if (!initialized) _initialize();
     _seek_page(pagenum);
-    fwrite(src, PAGE_SIZE, 1, page_file);
-    fflush(page_file);
+    fwrite(src, PAGE_SIZE, 1, database_file);
+    fflush(database_file);
+}
+
+void file_close_database_file() {
+    for (
+        int index = 1;
+        index <= database_instance_count;
+        index++
+    ) {
+        fclose(database_instances[index].file_pointer);
+    }
 }
 ```
 
 
 -------------------------------
 
-Updated on 2021-09-25 at 19:40:44 +0900
+Updated on 2021-09-26 at 01:06:20 +0900
