@@ -6,8 +6,6 @@ summary: struct for the header page.
 
 # HeaderPage
 
-**Module:** **[Page structure](Modules/group__Page.md)**
-
 
 
 struct for the header page. 
@@ -52,4 +50,4 @@ uint8_t reserved;
 
 -------------------------------
 
-Updated on 2021-09-25 at 17:48:29 +0900
+Updated on 2021-09-25 at 19:13:10 +0900

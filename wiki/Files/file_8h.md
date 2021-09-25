@@ -1,9 +1,9 @@
 ---
-title: file.h
+title: filemanager/file.h
 
 ---
 
-# file.h
+# filemanager/file.h
 
 
 
@@ -11,10 +11,10 @@ title: file.h
 
 |                | Name           |
 | -------------- | -------------- |
-| [pagenum_t](Modules/group__Type.md#typedef-pagenum-t) | **[file_alloc_page](Modules/group__File.md#function-file-alloc-page)**()<br>Allocate an on-disk page from the free page list.  |
-| void | **[file_free_page](Modules/group__File.md#function-file-free-page)**([pagenum_t](Modules/group__Type.md#typedef-pagenum-t) pagenum)<br>Free an on-disk page to the free page list.  |
-| void | **[file_read_page](Modules/group__File.md#function-file-read-page)**([pagenum_t](Modules/group__Type.md#typedef-pagenum-t) pagenum, [page_t](Modules/group__Type.md#typedef-page-t) * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
-| void | **[file_write_page](Modules/group__File.md#function-file-write-page)**([pagenum_t](Modules/group__Type.md#typedef-pagenum-t) pagenum, const [page_t](Modules/group__Type.md#typedef-page-t) * src)<br>Write an in-memory page(src) to the on-disk page.  |
+| pagenum_t | **[file_alloc_page](Files/file_8h.md#function-file-alloc-page)**()<br>Allocate an on-disk page from the free page list.  |
+| void | **[file_free_page](Files/file_8h.md#function-file-free-page)**(pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
+| void | **[file_read_page](Files/file_8h.md#function-file-read-page)**(pagenum_t pagenum, [page_t](Classes/structPage.md) * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
+| void | **[file_write_page](Files/file_8h.md#function-file-write-page)**(pagenum_t pagenum, const [page_t](Classes/structPage.md) * src)<br>Write an in-memory page(src) to the on-disk page.  |
 
 
 ## Functions Documentation
@@ -83,7 +83,6 @@ Write an in-memory page(src) to the on-disk page.
 ## Source code
 
 ```cpp
-
 #pragma once
 
 #include "types.h"
@@ -100,4 +99,4 @@ void file_write_page(pagenum_t pagenum, const page_t* src);
 
 -------------------------------
 
-Updated on 2021-09-25 at 17:48:29 +0900
+Updated on 2021-09-25 at 19:13:10 +0900

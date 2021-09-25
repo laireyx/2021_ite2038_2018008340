@@ -1,9 +1,9 @@
 ---
-title: types.h
+title: filemanager/types.h
 
 ---
 
-# types.h
+# filemanager/types.h
 
 
 
@@ -11,11 +11,11 @@ title: types.h
 
 |                | Name           |
 | -------------- | -------------- |
-| typedef uint64_t | **[pagenum_t](Modules/group__Type.md#typedef-pagenum-t)**  |
-| typedef [Page](Classes/structPage.md) | **[page_t](Modules/group__Type.md#typedef-page-t)**  |
-| typedef [AllocatedPage](Classes/structAllocatedPage.md) | **[allocatedpage_t](Modules/group__Type.md#typedef-allocatedpage-t)**  |
-| typedef [HeaderPage](Classes/structHeaderPage.md) | **[headerpage_t](Modules/group__Type.md#typedef-headerpage-t)**  |
-| typedef [FreePage](Classes/structFreePage.md) | **[freepage_t](Modules/group__Type.md#typedef-freepage-t)**  |
+| typedef uint64_t | **[pagenum_t](Files/types_8h.md#typedef-pagenum-t)**  |
+| typedef [Page](Classes/structPage.md) | **[page_t](Files/types_8h.md#typedef-page-t)**  |
+| typedef [AllocatedPage](Classes/structAllocatedPage.md) | **[allocatedpage_t](Files/types_8h.md#typedef-allocatedpage-t)**  |
+| typedef [HeaderPage](Classes/structHeaderPage.md) | **[headerpage_t](Files/types_8h.md#typedef-headerpage-t)**  |
+| typedef [FreePage](Classes/structFreePage.md) | **[freepage_t](Files/types_8h.md#typedef-freepage-t)**  |
 
 ## Types Documentation
 
@@ -60,7 +60,6 @@ typedef FreePage freepage_t;
 ## Source code
 
 ```cpp
-
 #pragma once
 
 #include <cstdint>
@@ -78,4 +77,4 @@ typedef FreePage freepage_t;
 
 -------------------------------
 
-Updated on 2021-09-25 at 17:48:29 +0900
+Updated on 2021-09-25 at 19:13:10 +0900
