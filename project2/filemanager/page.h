@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 
+/// @brief Size of each page(in bytes).
 constexpr int PAGE_SIZE = 4096;
 
 /**

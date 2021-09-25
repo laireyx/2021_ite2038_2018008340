@@ -1,0 +1,14 @@
+{
+    "baseUrl": "/",
+    "indexInFolders": true,
+    "linkSuffix": ".md",
+    "linkLowercase": false,
+    "indexClassesName": "home",
+    "indexFilesName": "home",
+    "indexGroupsName": "home",
+    "indexNamespacesName": "home",
+    "indexRelatedPagesName": "home",
+    "indexExamplesName": "home",
+    "mainPageInRoot": true,
+    "mainPageName": "home"
+  }

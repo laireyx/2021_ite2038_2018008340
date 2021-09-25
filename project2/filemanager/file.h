@@ -2,6 +2,26 @@
 
 #include "types.h"
 
+/// @brief Maximum number of database instances count.
+constexpr int MAX_DATABASE_INSTANCE = 1024;
+
+/**
+ * @class DatabaseInstance
+ * @brief Database file instance.
+ */
+typedef struct DatabaseInstance {
+    char* file_path;
+    FILE* file_pointer;
+} DatabaseInstance;
+
+/**
+ * @brief Open existing database file or create one if not existed.
+ *
+ * @param path Database file.
+ * @return ID of the opened database file.
+ */
+int64_t file_open_database_file(char* path);
+
 /**
  * @brief Allocate an on-disk page from the free page list
  *
@@ -31,3 +51,8 @@ void file_read_page(pagenum_t pagenum, page_t* dest);
  * @param src the pointer of the page data.
  */
 void file_write_page(pagenum_t pagenum, const page_t* src);
+
+/**
+ * @brief Stop referencing the database file
+ */
+void file_close_database_file();
