@@ -13,15 +13,15 @@ struct for the header page.
 
 `#include <page.h>`
 
-Inherits from [Page](/Classes/structPage.md)
+Inherits from [Page](/Classes/structPage)
 
 ## Public Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| uint64_t | **[free_page_idx](/Classes/structHeaderPage.md#variable-free-page-idx)** <br>The first free page index.  |
-| uint64_t | **[page_num](/Classes/structHeaderPage.md#variable-page-num)** <br>Total count of the page reserved.  |
-| uint8_t | **[reserved](/Classes/structHeaderPage.md#variable-reserved)**  |
+| uint64_t | **[free_page_idx](/Classes/structHeaderPage#variable-free-page-idx)** <br>The first free page index.  |
+| uint64_t | **[page_num](/Classes/structHeaderPage#variable-page-num)** <br>Total count of the page reserved.  |
+| uint8_t | **[reserved](/Classes/structHeaderPage#variable-reserved)**  |
 
 ## Public Attributes Documentation
 
@@ -50,4 +50,4 @@ uint8_t reserved;
 
 -------------------------------
 
-Updated on 2021-09-26 at 01:06:20 +0900
+Updated on 2021-09-26 at 01:10:18 +0900

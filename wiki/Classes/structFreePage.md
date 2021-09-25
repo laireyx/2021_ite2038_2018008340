@@ -13,14 +13,14 @@ struct for the free page.
 
 `#include <page.h>`
 
-Inherits from [Page](/Classes/structPage.md)
+Inherits from [Page](/Classes/structPage)
 
 ## Public Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| uint64_t | **[next_free_idx](/Classes/structFreePage.md#variable-next-free-idx)** <br>Index of the very next free page.  |
-| uint8_t | **[reserved](/Classes/structFreePage.md#variable-reserved)** <br>Reserved area for next project.  |
+| uint64_t | **[next_free_idx](/Classes/structFreePage#variable-next-free-idx)** <br>Index of the very next free page.  |
+| uint8_t | **[reserved](/Classes/structFreePage#variable-reserved)** <br>Reserved area for next project.  |
 
 ## Public Attributes Documentation
 
@@ -42,4 +42,4 @@ Reserved area for next project.
 
 -------------------------------
 
-Updated on 2021-09-26 at 01:06:20 +0900
+Updated on 2021-09-26 at 01:10:18 +0900

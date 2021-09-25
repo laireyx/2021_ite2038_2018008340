@@ -17,8 +17,8 @@ Database file instance.
 
 |                | Name           |
 | -------------- | -------------- |
-| char * | **[file_path](/Classes/structDatabaseInstance.md#variable-file-path)**  |
-| FILE * | **[file_pointer](/Classes/structDatabaseInstance.md#variable-file-pointer)**  |
+| char * | **[file_path](/Classes/structDatabaseInstance#variable-file-path)**  |
+| FILE * | **[file_pointer](/Classes/structDatabaseInstance#variable-file-pointer)**  |
 
 ## Public Attributes Documentation
 
@@ -38,4 +38,4 @@ FILE * file_pointer;
 
 -------------------------------
 
-Updated on 2021-09-26 at 01:06:20 +0900
+Updated on 2021-09-26 at 01:10:18 +0900

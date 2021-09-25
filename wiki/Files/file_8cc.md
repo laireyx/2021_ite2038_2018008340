@@ -11,24 +11,24 @@ title: filemanager/file.cc
 
 |                | Name           |
 | -------------- | -------------- |
-| void | **[_extend_capacity](/Files/file_8cc.md#function--extend-capacity)**(pagenum_t newsize =0)<br>Automatically check and size-up a page file.  |
-| void | **[_seek_page](/Files/file_8cc.md#function--seek-page)**(pagenum_t pagenum)<br>Seek page file pointer at offset matching with given page index.  |
-| void | **[_flush_header](/Files/file_8cc.md#function--flush-header)**()<br>Flush a header page as "pagenum 0".  |
-| int64_t | **[file_open_database_file](/Files/file_8cc.md#function-file-open-database-file)**(char * path)<br>Open existing database file or create one if not existed.  |
-| pagenum_t | **[file_alloc_page](/Files/file_8cc.md#function-file-alloc-page)**()<br>Allocate an on-disk page from the free page list.  |
-| void | **[file_free_page](/Files/file_8cc.md#function-file-free-page)**(pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
-| void | **[file_read_page](/Files/file_8cc.md#function-file-read-page)**(pagenum_t pagenum, [page_t](/Classes/structPage.md) * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
-| void | **[file_write_page](/Files/file_8cc.md#function-file-write-page)**(pagenum_t pagenum, const [page_t](/Classes/structPage.md) * src)<br>Write an in-memory page(src) to the on-disk page.  |
-| void | **[file_close_database_file](/Files/file_8cc.md#function-file-close-database-file)**()<br>Stop referencing the database file.  |
+| void | **[_extend_capacity](/Files/file_8cc#function--extend-capacity)**(pagenum_t newsize =0)<br>Automatically check and size-up a page file.  |
+| void | **[_seek_page](/Files/file_8cc#function--seek-page)**(pagenum_t pagenum)<br>Seek page file pointer at offset matching with given page index.  |
+| void | **[_flush_header](/Files/file_8cc#function--flush-header)**()<br>Flush a header page as "pagenum 0".  |
+| int64_t | **[file_open_database_file](/Files/file_8cc#function-file-open-database-file)**(char * path)<br>Open existing database file or create one if not existed.  |
+| pagenum_t | **[file_alloc_page](/Files/file_8cc#function-file-alloc-page)**()<br>Allocate an on-disk page from the free page list.  |
+| void | **[file_free_page](/Files/file_8cc#function-file-free-page)**(pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
+| void | **[file_read_page](/Files/file_8cc#function-file-read-page)**(pagenum_t pagenum, [page_t](/Classes/structPage) * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
+| void | **[file_write_page](/Files/file_8cc#function-file-write-page)**(pagenum_t pagenum, const [page_t](/Classes/structPage) * src)<br>Write an in-memory page(src) to the on-disk page.  |
+| void | **[file_close_database_file](/Files/file_8cc#function-file-close-database-file)**()<br>Stop referencing the database file.  |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| int | **[database_instance_count](/Files/file_8cc.md#variable-database-instance-count)** <br>current database instance number  |
-| [DatabaseInstance](/Classes/structDatabaseInstance.md) | **[database_instances](/Files/file_8cc.md#variable-database-instances)** <br>all database instances  |
-| FILE * | **[database_file](/Files/file_8cc.md#variable-database-file)**  |
-| [headerpage_t](/Classes/structHeaderPage.md) | **[header_page](/Files/file_8cc.md#variable-header-page)**  |
+| int | **[database_instance_count](/Files/file_8cc#variable-database-instance-count)** <br>current database instance number  |
+| [DatabaseInstance](/Classes/structDatabaseInstance) | **[database_instances](/Files/file_8cc#variable-database-instances)** <br>all database instances  |
+| FILE * | **[database_file](/Files/file_8cc#variable-database-file)**  |
+| [headerpage_t](/Classes/structHeaderPage) | **[header_page](/Files/file_8cc#variable-header-page)**  |
 
 
 ## Functions Documentation
@@ -343,4 +343,4 @@ void file_close_database_file() {
 
 -------------------------------
 
-Updated on 2021-09-26 at 01:06:20 +0900
+Updated on 2021-09-26 at 01:10:18 +0900

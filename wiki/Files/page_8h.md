@@ -11,16 +11,16 @@ title: filemanager/page.h
 
 |                | Name           |
 | -------------- | -------------- |
-| class | **[Page](/Classes/structPage.md)** <br>struct for abstract page.  |
-| class | **[AllocatedPage](/Classes/structAllocatedPage.md)** <br>struct for allocated page.  |
-| class | **[HeaderPage](/Classes/structHeaderPage.md)** <br>struct for the header page.  |
-| class | **[FreePage](/Classes/structFreePage.md)** <br>struct for the free page.  |
+| class | **[Page](/Classes/structPage)** <br>struct for abstract page.  |
+| class | **[AllocatedPage](/Classes/structAllocatedPage)** <br>struct for allocated page.  |
+| class | **[HeaderPage](/Classes/structHeaderPage)** <br>struct for the header page.  |
+| class | **[FreePage](/Classes/structFreePage)** <br>struct for the free page.  |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| constexpr int | **[PAGE_SIZE](/Files/page_8h.md#variable-page-size)** <br>Size of each page(in bytes).  |
+| constexpr int | **[PAGE_SIZE](/Files/page_8h#variable-page-size)** <br>Size of each page(in bytes).  |
 
 
 
@@ -66,4 +66,4 @@ struct FreePage : public Page {
 
 -------------------------------
 
-Updated on 2021-09-26 at 01:06:20 +0900
+Updated on 2021-09-26 at 01:10:18 +0900
