@@ -5,6 +5,8 @@
     "linkLowercase": false,
     "indexClassesName": "home",
     "indexFilesName": "home",
-    "mainPageInRoot": true,
-    "mainPageName": "home"
+    "foldersToGenerate": [
+      "classes",
+      "files"
+    ]
   }
