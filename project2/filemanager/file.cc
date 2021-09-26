@@ -9,7 +9,9 @@ int database_instance_count = 0;
 /// @brief all database instances
 DatabaseInstance database_instances[MAX_DATABASE_INSTANCE + 1];
 
-FILE* database_file;
+/// @brief currently opened database file pointer
+FILE* database_file = nullptr;
+/// @brief currently opened database header page
 headerpage_t header_page;
 
 /*!
@@ -66,7 +68,7 @@ void _flush_header() {
 	fflush(database_file);
 }
 
-int64_t file_open_database_file(char* path) {
+int64_t file_open_database_file(const char* path) {
 	for (
 		int index = 1;
 		index <= database_instance_count;
@@ -90,7 +92,7 @@ int64_t file_open_database_file(char* path) {
 	new_instance.file_path = reinterpret_cast<char*>(malloc(sizeof(char) * (strlen(path) + 1)));
 	strncpy(new_instance.file_path, path, strlen(path) + 1);
 
-	if ((database_file = fopen(path, "r+b")) == NULL) {
+	if ((database_file = fopen(path, "r+b")) == nullptr) {
 		database_file = fopen(path, "w+b");
 
 		header_page.free_page_idx = 0;
@@ -98,9 +100,7 @@ int64_t file_open_database_file(char* path) {
 
 		_extend_capacity(2560);
 
-		fseek(database_file, 0, SEEK_SET);
-		fwrite(&header_page, PAGE_SIZE, 1, database_file);
-		fflush(database_file);
+		_flush_header();
 	}
 	else {
 		fread(&header_page, PAGE_SIZE, 1, database_file);

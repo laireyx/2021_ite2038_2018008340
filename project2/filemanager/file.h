@@ -20,7 +20,7 @@ typedef struct DatabaseInstance {
  * @param path Database file.
  * @return ID of the opened database file.
  */
-int64_t file_open_database_file(char* path);
+int64_t file_open_database_file(const char* path);
 
 /**
  * @brief Allocate an on-disk page from the free page list
