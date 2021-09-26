@@ -6,7 +6,9 @@ doxygen
 doxybook2 \
     --input doxygen/xml \
     --output ../wiki \
-    --config .doxybook/config.json
+    --config .doxybook/config.json \
+    --summary-input home.md.tmpl \
+    --summary-output ../wiki/home.md
 
 cd ..
 git add wiki/

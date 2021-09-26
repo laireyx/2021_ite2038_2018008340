@@ -1,24 +1,20 @@
----
-title: File manager Wiki
+# File manager wiki
 
----
-
-# File manager Wiki
-
-
-
-
-
-
-# Classes
-
-[Link](/Classes/home)
-
-
-# Files
-
-[Link](/Files/home)
-
--------------------------------
-
-Updated on 2021-09-26 at 19:06:26 +0900
+* Introduction
+  * [Classes](Classes/home.md)
+    * [Page](Classes/structPage.md)
+    * [HeaderPage](Classes/structHeaderPage.md)
+    * [FreePage](Classes/structFreePage.md)
+    * [DatabaseInstance](Classes/structDatabaseInstance.md)
+    * [AllocatedPage](Classes/structAllocatedPage.md)
+  * [Namespaces](Namespaces/index_namespaces.md)
+  * [Modules](Modules/index_groups.md)
+  * [Files](Files/home.md)
+    * [filemanager](Files/dir_e5a1b2409a66609d6d0cf34927ea32bd.md)
+    * [file.cc](Files/file_8cc.md)
+    * [file.h](Files/file_8h.md)
+    * [page.h](Files/page_8h.md)
+    * [test.cc](Files/test_8cc.md)
+    * [types.h](Files/types_8h.md)
+  * [Pages](Pages/index_pages.md)
+  * [Examples](Examples/index_examples.md)
