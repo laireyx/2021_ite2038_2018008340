@@ -1,12 +1,12 @@
 # File manager wiki
 
-* [Classes](Classes/home.md)
+* [Classes](Classes/index_classes.md)
   * [Page](Classes/structPage.md)
   * [HeaderPage](Classes/structHeaderPage.md)
   * [FreePage](Classes/structFreePage.md)
   * [DatabaseInstance](Classes/structDatabaseInstance.md)
   * [AllocatedPage](Classes/structAllocatedPage.md)
-* [Files](Files/home.md)
+* [Files](Files/index_files.md)
   * [filemanager](Files/dir_e5a1b2409a66609d6d0cf34927ea32bd.md)
   * [file.cc](Files/file_8cc.md)
   * [file.h](Files/file_8h.md)
