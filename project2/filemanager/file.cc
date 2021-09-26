@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <cassert>
 #include "file.h"
 
 /// @brief current database instance number
@@ -56,6 +57,7 @@ void _extend_capacity(pagenum_t newsize = 0) {
  * @param pagenum page index.
  */
 void _seek_page(pagenum_t pagenum) {
+	assert(database_file != nullptr);
 	fseek(database_file, pagenum * PAGE_SIZE, SEEK_SET);
 }
 
@@ -63,6 +65,7 @@ void _seek_page(pagenum_t pagenum) {
  * @brief Flush a header page as "pagenum 0".
  */
 void _flush_header() {
+	assert(database_file != nullptr);
 	fseek(database_file, 0, SEEK_SET);
 	fwrite(&header_page, PAGE_SIZE, 1, database_file);
 	fflush(database_file);
@@ -111,6 +114,7 @@ int64_t file_open_database_file(const char* path) {
 }
 
 pagenum_t file_alloc_page() {
+	assert(database_file != nullptr);
 	_extend_capacity();
 
 	pagenum_t free_page_idx = header_page.free_page_idx;
@@ -125,6 +129,7 @@ pagenum_t file_alloc_page() {
 }
 
 void file_free_page(pagenum_t pagenum) {
+	assert(database_file != nullptr);
 	pagenum_t old_free_page_idx = header_page.free_page_idx;
 	freepage_t new_free_page;
 
@@ -156,4 +161,7 @@ void file_close_database_file() {
 	) {
 		fclose(database_instances[index].file_pointer);
 	}
+
+	database_instance_count = 0;
+	database_file = nullptr;
 }
