@@ -23,7 +23,7 @@ title: filemanager/file.h
 
 |                | Name           |
 | -------------- | -------------- |
-| int64_t | **[file_open_database_file](/Files/file_8h#function-file-open-database-file)**(char * path)<br>Open existing database file or create one if not existed.  |
+| int64_t | **[file_open_database_file](/Files/file_8h#function-file-open-database-file)**(const char * path)<br>Open existing database file or create one if not existed.  |
 | pagenum_t | **[file_alloc_page](/Files/file_8h#function-file-alloc-page)**()<br>Allocate an on-disk page from the free page list.  |
 | void | **[file_free_page](/Files/file_8h#function-file-free-page)**(pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
 | void | **[file_read_page](/Files/file_8h#function-file-read-page)**(pagenum_t pagenum, [page_t](/Classes/structPage) * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
@@ -52,7 +52,7 @@ typedef struct DatabaseInstance DatabaseInstance;
 
 ```cpp
 int64_t file_open_database_file(
-    char * path
+    const char * path
 )
 ```
 
@@ -158,7 +158,7 @@ typedef struct DatabaseInstance {
     FILE* file_pointer;
 } DatabaseInstance;
 
-int64_t file_open_database_file(char* path);
+int64_t file_open_database_file(const char* path);
 
 pagenum_t file_alloc_page();
 
@@ -174,4 +174,4 @@ void file_close_database_file();
 
 -------------------------------
 
-Updated on 2021-09-26 at 09:39:33 +0900
+Updated on 2021-09-26 at 19:06:26 +0900
