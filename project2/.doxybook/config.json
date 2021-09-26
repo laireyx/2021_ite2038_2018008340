@@ -3,8 +3,6 @@
     "indexInFolders": true,
     "linkSuffix": "",
     "linkLowercase": false,
-    "indexClassesName": "home",
-    "indexFilesName": "home",
     "foldersToGenerate": [
       "classes",
       "files"
