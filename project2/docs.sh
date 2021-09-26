@@ -9,8 +9,3 @@ doxybook2 \
     --config .doxybook/config.json \
     --summary-input home.md.tmpl \
     --summary-output wiki/home.md
-
-cd ..
-git add wiki/
-git commit -m "Wiki update"
-git subtree push --prefix wiki origin-wiki master
