@@ -1,14 +1,14 @@
 
-rm -rf ../wiki
-mkdir ../wiki
+rm -rf wiki
+mkdir wiki
 
 doxygen
 doxybook2 \
     --input doxygen/xml \
-    --output ../wiki \
+    --output wiki \
     --config .doxybook/config.json \
     --summary-input home.md.tmpl \
-    --summary-output ../wiki/home.md
+    --summary-output wiki/home.md
 
 cd ..
 git add wiki/
