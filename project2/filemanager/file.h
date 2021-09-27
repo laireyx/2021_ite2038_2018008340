@@ -10,14 +10,16 @@ constexpr int MAX_DATABASE_INSTANCE = 1024;
  * @brief Database file instance.
  */
 typedef struct DatabaseInstance {
+    /// @brief Database file path.
     char* file_path;
+    /// @brief Database file pointer.
     FILE* file_pointer;
 } DatabaseInstance;
 
 /**
  * @brief Open existing database file or create one if not existed.
  *
- * @param path Database file.
+ * @param path Database file path.
  * @return ID of the opened database file.
  */
 int64_t file_open_database_file(const char* path);
@@ -25,7 +27,7 @@ int64_t file_open_database_file(const char* path);
 /**
  * @brief Allocate an on-disk page from the free page list
  *
- * @return The very free page index.
+ * @return Allocated page index.
  */
 pagenum_t file_alloc_page();
 

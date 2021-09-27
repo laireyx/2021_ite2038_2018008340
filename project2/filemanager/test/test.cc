@@ -51,8 +51,8 @@ TEST(RandomTest, RandomAllocateTest) {
         EXPECT_EQ(test_order[test_count - 1 - i], file_alloc_page());
     }
 
-    for(int i = 0; i < test_count; i++) {
-        file_free_page(i);
+    for(int i = 1; i < test_count; i++) {
+        file_free_page(test_order[i]);
     }
     file_close_database_file();
 }

@@ -15,6 +15,17 @@ FILE* database_file = nullptr;
 /// @brief currently opened database header page
 headerpage_t header_page;
 
+
+/*!
+ * @brief Seek page file pointer at offset matching with given page index.
+ *
+ * @param pagenum page index.
+ */
+void _seek_page(pagenum_t pagenum) {
+	assert(database_file != nullptr);
+	fseek(database_file, pagenum * PAGE_SIZE, SEEK_SET);
+}
+
 /*!
  * @brief Automatically check and size-up a page file.
  * @details Extend capacity if newsize if specified. Or if there are no space for the next free page, double the reserved page count.
@@ -43,22 +54,14 @@ void _extend_capacity(pagenum_t newsize = 0) {
 			else
 				free_page.next_free_idx = 0;
 
-			file_write_page(free_page_index, reinterpret_cast<page_t*>(&free_page));
+			_seek_page(free_page_index);
+			fwrite(&free_page, PAGE_SIZE, 1, database_file);
+			fflush(database_file);
 		}
 
 		header_page.free_page_idx = header_page.page_num;
 		header_page.page_num = newsize;
 	}
-}
-
-/*!
- * @brief Seek page file pointer at offset matching with given page index.
- *
- * @param pagenum page index.
- */
-void _seek_page(pagenum_t pagenum) {
-	assert(database_file != nullptr);
-	fseek(database_file, pagenum * PAGE_SIZE, SEEK_SET);
 }
 
 /*!
@@ -120,7 +123,8 @@ pagenum_t file_alloc_page() {
 	pagenum_t free_page_idx = header_page.free_page_idx;
 	freepage_t free_page;
 
-	file_read_page(free_page_idx, reinterpret_cast<page_t*>(&free_page));
+	_seek_page(free_page_idx);
+	fread(&free_page, PAGE_SIZE, 1, database_file);
 	header_page.free_page_idx = free_page.next_free_idx;
 
 	_flush_header();
@@ -134,7 +138,8 @@ void file_free_page(pagenum_t pagenum) {
 	freepage_t new_free_page;
 
 	new_free_page.next_free_idx = old_free_page_idx;
-	file_write_page(pagenum, reinterpret_cast<page_t*>(&new_free_page));
+	_seek_page(pagenum);
+	fwrite(&new_free_page, PAGE_SIZE, 1, database_file);
 	header_page.free_page_idx = pagenum;
 
 	_flush_header();
