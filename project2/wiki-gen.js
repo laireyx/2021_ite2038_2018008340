@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const startPath = './wiki';
+const startPath = '../wiki';
 
 const fileNameMapping = {};
 const linkMapping = {};

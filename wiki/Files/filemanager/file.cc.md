@@ -8,8 +8,8 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| void | **[_extend_capacity](/Files/filemanager/file.cc#function-_extend_capacity)**(pagenum_t newsize =0)<br>Automatically check and size-up a page file.  |
 | void | **[_seek_page](/Files/filemanager/file.cc#function-_seek_page)**(pagenum_t pagenum)<br>Seek page file pointer at offset matching with given page index.  |
+| void | **[_extend_capacity](/Files/filemanager/file.cc#function-_extend_capacity)**(pagenum_t newsize)<br>Automatically check and size-up a page file.  |
 | void | **[_flush_header](/Files/filemanager/file.cc#function-_flush_header)**()<br>Flush a header page as "pagenum 0".  |
 | int64_t | **[file_open_database_file](/Files/filemanager/file.cc#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
 | pagenum_t | **[file_alloc_page](/Files/filemanager/file.cc#function-file_alloc_page)**()<br>Allocate an on-disk page from the free page list.  |
@@ -30,24 +30,6 @@
 
 ## Functions Documentation
 
-### function _extend_capacity
-
-```cpp
-void _extend_capacity(
-    pagenum_t newsize =0
-)
-```
-
-Automatically check and size-up a page file. 
-
-**Parameters**: 
-
-  * **newsize** extended size. default is 0, which means doubleing the reserved page count if there are no free page. 
-
-
-Extend capacity if newsize if specified. Or if there are no space for the next free page, double the reserved page count.
-
-
 ### function _seek_page
 
 ```cpp
@@ -61,6 +43,24 @@ Seek page file pointer at offset matching with given page index.
 **Parameters**: 
 
   * **pagenum** page index. 
+
+
+### function _extend_capacity
+
+```cpp
+void _extend_capacity(
+    pagenum_t newsize
+)
+```
+
+Automatically check and size-up a page file. 
+
+**Parameters**: 
+
+  * **newsize** extended size. default is 0, which means doubleing the reserved page count if there are no free page. 
+
+
+Extend capacity if newsize if specified. Or if there are no space for the next free page, double the reserved page count.
 
 
 ### function _flush_header
@@ -83,7 +83,7 @@ Open existing database file or create one if not existed.
 
 **Parameters**: 
 
-  * **path** Database file. 
+  * **path** Database file path. 
 
 
 **Return**: ID of the opened database file. 
@@ -96,7 +96,7 @@ pagenum_t file_alloc_page()
 
 Allocate an on-disk page from the free page list. 
 
-**Return**: The very free page index. 
+**Return**: Allocated page index. 
 
 ### function file_free_page
 
@@ -207,6 +207,11 @@ DatabaseInstance database_instances[MAX_DATABASE_INSTANCE + 1];
 FILE* database_file = nullptr;
 headerpage_t header_page;
 
+void _seek_page(pagenum_t pagenum) {
+    assert(database_file != nullptr);
+    fseek(database_file, pagenum * PAGE_SIZE, SEEK_SET);
+}
+
 void _extend_capacity(pagenum_t newsize = 0) {
     if (
         newsize > header_page.page_num ||
@@ -229,17 +234,14 @@ void _extend_capacity(pagenum_t newsize = 0) {
             else
                 free_page.next_free_idx = 0;
 
-            file_write_page(free_page_index, reinterpret_cast<page_t*>(&free_page));
+            _seek_page(free_page_index);
+            fwrite(&free_page, PAGE_SIZE, 1, database_file);
+            fflush(database_file);
         }
 
         header_page.free_page_idx = header_page.page_num;
         header_page.page_num = newsize;
     }
-}
-
-void _seek_page(pagenum_t pagenum) {
-    assert(database_file != nullptr);
-    fseek(database_file, pagenum * PAGE_SIZE, SEEK_SET);
 }
 
 void _flush_header() {
@@ -298,7 +300,8 @@ pagenum_t file_alloc_page() {
     pagenum_t free_page_idx = header_page.free_page_idx;
     freepage_t free_page;
 
-    file_read_page(free_page_idx, reinterpret_cast<page_t*>(&free_page));
+    _seek_page(free_page_idx);
+    fread(&free_page, PAGE_SIZE, 1, database_file);
     header_page.free_page_idx = free_page.next_free_idx;
 
     _flush_header();
@@ -312,7 +315,8 @@ void file_free_page(pagenum_t pagenum) {
     freepage_t new_free_page;
 
     new_free_page.next_free_idx = old_free_page_idx;
-    file_write_page(pagenum, reinterpret_cast<page_t*>(&new_free_page));
+    _seek_page(pagenum);
+    fwrite(&new_free_page, PAGE_SIZE, 1, database_file);
     header_page.free_page_idx = pagenum;
 
     _flush_header();
@@ -348,4 +352,4 @@ void file_close_database_file() {
 
 -------------------------------
 
-Updated on 2021-09-27 at 12:12:06 +0900
+Updated on 2021-09-27 at 14:58:06 +0900

@@ -20,6 +20,9 @@
 
 |                | Name           |
 | -------------- | -------------- |
+| void | **[_seek_page](/Files/filemanager/file.h#function-_seek_page)**(pagenum_t pagenum)<br>Seek page file pointer at offset matching with given page index.  |
+| void | **[_extend_capacity](/Files/filemanager/file.h#function-_extend_capacity)**(pagenum_t newsize)<br>Automatically check and size-up a page file.  |
+| void | **[_flush_header](/Files/filemanager/file.h#function-_flush_header)**()<br>Flush a header page as "pagenum 0".  |
 | int64_t | **[file_open_database_file](/Files/filemanager/file.h#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
 | pagenum_t | **[file_alloc_page](/Files/filemanager/file.h#function-file_alloc_page)**()<br>Allocate an on-disk page from the free page list.  |
 | void | **[file_free_page](/Files/filemanager/file.h#function-file_free_page)**(pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
@@ -45,6 +48,47 @@ typedef struct DatabaseInstance DatabaseInstance;
 
 ## Functions Documentation
 
+### function _seek_page
+
+```cpp
+void _seek_page(
+    pagenum_t pagenum
+)
+```
+
+Seek page file pointer at offset matching with given page index. 
+
+**Parameters**: 
+
+  * **pagenum** page index. 
+
+
+### function _extend_capacity
+
+```cpp
+void _extend_capacity(
+    pagenum_t newsize
+)
+```
+
+Automatically check and size-up a page file. 
+
+**Parameters**: 
+
+  * **newsize** extended size. default is 0, which means doubleing the reserved page count if there are no free page. 
+
+
+Extend capacity if newsize if specified. Or if there are no space for the next free page, double the reserved page count.
+
+
+### function _flush_header
+
+```cpp
+void _flush_header()
+```
+
+Flush a header page as "pagenum 0". 
+
 ### function file_open_database_file
 
 ```cpp
@@ -57,7 +101,7 @@ Open existing database file or create one if not existed.
 
 **Parameters**: 
 
-  * **path** Database file. 
+  * **path** Database file path. 
 
 
 **Return**: ID of the opened database file. 
@@ -70,7 +114,7 @@ pagenum_t file_alloc_page()
 
 Allocate an on-disk page from the free page list. 
 
-**Return**: The very free page index. 
+**Return**: Allocated page index. 
 
 ### function file_free_page
 
@@ -155,6 +199,12 @@ typedef struct DatabaseInstance {
     FILE* file_pointer;
 } DatabaseInstance;
 
+void _seek_page(pagenum_t pagenum);
+
+void _extend_capacity(pagenum_t newsize);
+
+void _flush_header();
+
 int64_t file_open_database_file(const char* path);
 
 pagenum_t file_alloc_page();
@@ -171,4 +221,4 @@ void file_close_database_file();
 
 -------------------------------
 
-Updated on 2021-09-27 at 12:12:06 +0900
+Updated on 2021-09-27 at 14:58:06 +0900
