@@ -16,6 +16,26 @@ typedef struct DatabaseInstance {
     FILE* file_pointer;
 } DatabaseInstance;
 
+/*!
+ * @brief Seek page file pointer at offset matching with given page index.
+ *
+ * @param pagenum page index.
+ */
+void _seek_page(pagenum_t pagenum);
+
+/*!
+ * @brief Automatically check and size-up a page file.
+ * @details Extend capacity if newsize if specified. Or if there are no space for the next free page, double the reserved page count.
+ *
+ * @param newsize extended size. default is 0, which means doubleing the reserved page count if there are no free page.
+ */
+void _extend_capacity(pagenum_t newsize);
+
+/*!
+ * @brief Flush a header page as "pagenum 0".
+ */
+void _flush_header();
+
 /**
  * @brief Open existing database file or create one if not existed.
  *

@@ -15,23 +15,11 @@ FILE* database_file = nullptr;
 /// @brief currently opened database header page
 headerpage_t header_page;
 
-
-/*!
- * @brief Seek page file pointer at offset matching with given page index.
- *
- * @param pagenum page index.
- */
 void _seek_page(pagenum_t pagenum) {
 	assert(database_file != nullptr);
 	fseek(database_file, pagenum * PAGE_SIZE, SEEK_SET);
 }
 
-/*!
- * @brief Automatically check and size-up a page file.
- * @details Extend capacity if newsize if specified. Or if there are no space for the next free page, double the reserved page count.
- *
- * @param newsize extended size. default is 0, which means doubleing the reserved page count if there are no free page.
- */
 void _extend_capacity(pagenum_t newsize = 0) {
 	if (
 		newsize > header_page.page_num ||
@@ -64,9 +52,6 @@ void _extend_capacity(pagenum_t newsize = 0) {
 	}
 }
 
-/*!
- * @brief Flush a header page as "pagenum 0".
- */
 void _flush_header() {
 	assert(database_file != nullptr);
 	fseek(database_file, 0, SEEK_SET);
