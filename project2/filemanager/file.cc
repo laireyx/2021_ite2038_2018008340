@@ -20,6 +20,14 @@ int database_fd = 0;
 /// @brief currently opened database header page
 headerpage_t header_page;
 
+void _switch_to_fd(int fd) {
+	assert(fd != 0);
+	if(database_fd == fd) return;
+
+	database_fd = fd;
+	pread64(database_fd, &header_page, PAGE_SIZE, 0);
+}
+
 void _extend_capacity(pagenum_t newsize = 0) {
 	if (
 		newsize > header_page.page_num ||
@@ -30,19 +38,19 @@ void _extend_capacity(pagenum_t newsize = 0) {
 		}
 
 		for (
-			pagenum_t free_page_index = header_page.page_num;
-			free_page_index < newsize;
-			free_page_index++
+			pagenum_t free_page_idx = header_page.page_num;
+			free_page_idx < newsize;
+			free_page_idx++
 		) {
 
 			freepage_t free_page;
 
-			if (free_page_index < newsize - 1)
-				free_page.next_free_idx = free_page_index + 1;
+			if (free_page_idx < newsize - 1)
+				free_page.next_free_idx = free_page_idx + 1;
 			else
 				free_page.next_free_idx = 0;
 
-			pwrite64(database_fd, &free_page, PAGE_SIZE, free_page_index * PAGE_SIZE);
+			pwrite64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE);
 		}
 
 		header_page.free_page_idx = header_page.page_num;
@@ -75,12 +83,12 @@ int64_t file_open_database_file(const char* path) {
 		return -1;
 	}
 
-	DatabaseInstance& new_instance = database_instances[++database_instance_count];
+	DatabaseInstance& new_instance = database_instances[database_instance_count++];
 	new_instance.file_path = reinterpret_cast<char*>(malloc(sizeof(char) * (strlen(path) + 1)));
 	strncpy(new_instance.file_path, path, strlen(path) + 1);
 
-	if ((database_fd = open(path, O_RDWR | O_SYNC)) > 0) {
-		database_fd = open(path, O_RDWR | O_CREAT | O_SYNC);
+	if ((database_fd = open(path, O_RDWR | O_SYNC, 0644)) < 1) {
+		database_fd = open(path, O_RDWR | O_CREAT | O_SYNC, 0644);
 
 		header_page.free_page_idx = 0;
 		header_page.page_num = 1;
@@ -93,12 +101,11 @@ int64_t file_open_database_file(const char* path) {
 		read(database_fd, &header_page, PAGE_SIZE);
 	}
 
-	new_instance.file_descriptor = database_fd;
-	return database_instance_count;
+	return new_instance.file_descriptor = database_fd;
 }
 
-pagenum_t file_alloc_page() {
-	assert(database_fd != 0);
+pagenum_t file_alloc_page(int fd) {
+	_switch_to_fd(fd);
 	_extend_capacity();
 
 	pagenum_t free_page_idx = header_page.free_page_idx;
@@ -112,8 +119,9 @@ pagenum_t file_alloc_page() {
 	return free_page_idx;
 }
 
-void file_free_page(pagenum_t pagenum) {
-	assert(database_fd != 0);
+void file_free_page(int fd, pagenum_t pagenum) {
+	_switch_to_fd(fd);
+
 	pagenum_t old_free_page_idx = header_page.free_page_idx;
 	freepage_t new_free_page;
 
@@ -126,11 +134,13 @@ void file_free_page(pagenum_t pagenum) {
 	return;
 }
 
-void file_read_page(pagenum_t pagenum, page_t* dest) {
+void file_read_page(int fd, pagenum_t pagenum, page_t* dest) {
+	_switch_to_fd(fd);
 	pread64(database_fd, dest, PAGE_SIZE, pagenum * PAGE_SIZE);
 }
 
-void file_write_page(pagenum_t pagenum, const page_t* src) {
+void file_write_page(int fd, pagenum_t pagenum, const page_t* src) {
+	_switch_to_fd(fd);
 	pwrite64(database_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE);
 }
 

@@ -2,12 +2,12 @@
 
 #include "types.h"
 
-/// @brief Maximum number of database instances count.
+/// @brief  Maximum number of database instances count.
 constexpr int MAX_DATABASE_INSTANCE = 1024;
 
 /**
- * @class DatabaseInstance
- * @brief Database file instance.
+ * @class   DatabaseInstance
+ * @brief   Database file instance.
  */
 typedef struct DatabaseInstance {
     /// @brief Database file path.
@@ -17,64 +17,72 @@ typedef struct DatabaseInstance {
 } DatabaseInstance;
 
 /*!
- * @brief Seek page file pointer at offset matching with given page index.
+ * @brief   Switch current database into given database.
+ * @details If current database_fd is equal to given fd, then do nothing.
+ *          If not, change database_fd to given fd and re-read header_page from it.
  *
- * @param pagenum page index.
+ * @param fd Database file descriptor gained with file_open_database_file.
  */
-void _seek_page(pagenum_t pagenum);
+void _switch_to_fd(int fd);
 
 /*!
- * @brief Automatically check and size-up a page file.
- * @details Extend capacity if newsize if specified. Or if there are no space for the next free page, double the reserved page count.
+ * @brief   Automatically check and size-up a page file.
+ * @details If newsize > page_num, reserve pages so that total page num is equivalent to newsize.
+ *          If newsize = 0 and header page's free_page_idx is 0, double the reserved page count.
  *
- * @param newsize extended size. default is 0, which means doubleing the reserved page count if there are no free page.
+ * @param   newsize extended size. default is 0, which means doubling the reserved page count if there are no free page.
  */
 void _extend_capacity(pagenum_t newsize);
 
 /*!
- * @brief Flush a header page as "pagenum 0".
+ * @brief   Flush a header page as "pagenum 0".
+ * @details Write header page into offset 0 of the current database file descriptor.
  */
 void _flush_header();
 
 /**
- * @brief Open existing database file or create one if not existed.
+ * @brief   Open existing database file or create one if not existed.
  *
- * @param path Database file path.
- * @return ID of the opened database file.
+ * @param   path    Database file path.
+ * @return          ID of the opened database file.
  */
 int64_t file_open_database_file(const char* path);
 
 /**
- * @brief Allocate an on-disk page from the free page list
+ * @brief   Allocate an on-disk page from the free page list
  *
- * @return Allocated page index.
+ * @param   fd  Database file descriptor gained with file_open_database_file.
+ * @return      Allocated page index.
  */
-pagenum_t file_alloc_page();
+pagenum_t file_alloc_page(int fd);
 
 /**
- * @brief Free an on-disk page to the free page list
+ * @brief   Free an on-disk page to the free page list
  *
- * @param pagenum page index.
+ * @param   fd      Database file descriptor gained with file_open_database_file.
+ * @param   pagenum page index.
  */
-void file_free_page(pagenum_t pagenum);
+void file_free_page(int fd, pagenum_t pagenum);
 
 /**
- * @brief Read an on-disk page into the in-memory page structure(dest)
+ * @brief   Read an on-disk page into the in-memory page structure(dest)
  *
- * @param pagenum page index.
- * @param dest the pointer of the page data.
+ * @param   fd      Database file descriptor gained with file_open_database_file.
+ * @param   pagenum page index.
+ * @param   dest    the pointer of the page data.
  */
-void file_read_page(pagenum_t pagenum, page_t* dest);
+void file_read_page(int fd, pagenum_t pagenum, page_t* dest);
 
 /**
- * @brief Write an in-memory page(src) to the on-disk page
+ * @brief   Write an in-memory page(src) to the on-disk page
  *
- * @param pagenum page index.
- * @param src the pointer of the page data.
+ * @param   fd      Database file descriptor gained with file_open_database_file.
+ * @param   pagenum page index.
+ * @param   src     the pointer of the page data.
  */
-void file_write_page(pagenum_t pagenum, const page_t* src);
+void file_write_page(int fd, pagenum_t pagenum, const page_t* src);
 
 /**
- * @brief Stop referencing the database file
+ * @brief   Stop referencing the database file
  */
 void file_close_database_file();

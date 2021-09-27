@@ -1,18 +1,19 @@
 #pragma once
 #include <cstdint>
 
-/// @brief Size of each page(in bytes).
+/// @brief  Size of each page(in bytes).
 constexpr int PAGE_SIZE = 4096;
 
 /**
- * @class Page
- * @brief struct for abstract page.
+ * @class   Page
+ * @brief   struct for abstract page.
+ * @details This struct is empty for equalizing the size of all inherited pages.
  */
 struct Page { };
 
 /**
- * @class AllocatedPage
- * @brief struct for allocated page.
+ * @class   AllocatedPage
+ * @brief   struct for allocated page.
  */
 struct AllocatedPage : public Page {
     /// @brief Reserved area for normal allocated page.
@@ -20,8 +21,8 @@ struct AllocatedPage : public Page {
 };
 
 /**
- * @class HeaderPage
- * @brief struct for the header page.
+ * @class   HeaderPage
+ * @brief   struct for the header page.
  */
 struct HeaderPage : public Page {
     /// @brief The first free page index
@@ -34,8 +35,8 @@ struct HeaderPage : public Page {
 };
 
 /**
- * @class FreePage
- * @brief struct for the free page.
+ * @class   FreePage
+ * @brief   struct for the free page.
  */
 struct FreePage : public Page {
     /// @brief Index of the very next free page.

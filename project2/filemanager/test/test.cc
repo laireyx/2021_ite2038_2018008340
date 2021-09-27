@@ -8,9 +8,10 @@ constexpr int test_count = 2048;
 class FilemanagerTest : public ::testing::Test {
 protected:
     int test_order[test_count];
+    int db_id = 0;
 
     void SetUp() override {
-        //file_open_database_file("db/sequential_allocate.db");
+        db_id = file_open_database_file("test.db");
         srand(time(NULL));
 
         for(int i = 0; i < test_count; i++) {
@@ -33,34 +34,33 @@ protected:
 };
 
 TEST_F(FilemanagerTest, SequentialAllocateTest) {
-    file_open_database_file("db/sequential_allocate.db");
-    EXPECT_EQ(1, file_alloc_page());
-    EXPECT_EQ(2, file_alloc_page());
-    EXPECT_EQ(3, file_alloc_page());
-    EXPECT_EQ(4, file_alloc_page());
+    int allocation_result[test_count] = { 0, };
 
-    file_free_page(4);
-    file_free_page(3);
-    file_free_page(2);
-    file_free_page(1);
+    for(int i = 0; i < 4; i++) {
+        for(int i = 0; i < test_count; i++) {
+            allocation_result[i] = file_alloc_page(db_id);
+        }
+
+        for(int i = 0; i < test_count; i++) {
+            file_free_page(db_id, allocation_result[i]);
+        }
+    }
 }
 
 TEST_F(FilemanagerTest, RandomAllocateTest) {
-    file_open_database_file("db/random_allocate.db");
-
     for(int i = 0; i < test_count; i++) {
-        file_alloc_page();
+        file_alloc_page(db_id);
     }
     
     for(int i = 0; i < test_count; i++) {
-        file_free_page(test_order[i]);
+        file_free_page(db_id, test_order[i]);
     }
 
     for(int i = 0; i < test_count; i++) {
-        EXPECT_EQ(test_order[test_count - 1 - i], file_alloc_page());
+        EXPECT_EQ(test_order[test_count - 1 - i], file_alloc_page(db_id));
     }
 
     for(int i = 0; i < test_count; i++) {
-        file_free_page(test_order[i]);
+        file_free_page(db_id, test_order[i]);
     }
 }
