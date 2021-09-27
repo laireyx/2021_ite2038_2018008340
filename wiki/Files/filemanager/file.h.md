@@ -1,7 +1,4 @@
----
-title: filemanager/file.h
 
----
 
 # filemanager/file.h
 
@@ -11,30 +8,30 @@ title: filemanager/file.h
 
 |                | Name           |
 | -------------- | -------------- |
-| class | **[DatabaseInstance](/Classes/structDatabaseInstance)** <br>Database file instance.  |
+| class | **[DatabaseInstance](/Classes/DatabaseInstance)** <br>Database file instance.  |
 
 ## Types
 
 |                | Name           |
 | -------------- | -------------- |
-| typedef struct [DatabaseInstance](/Classes/structDatabaseInstance) | **[DatabaseInstance](/Files/file_8h#typedef-databaseinstance)**  |
+| typedef struct <a href="/Classes/DatabaseInstance">DatabaseInstance</a> | **[DatabaseInstance](/Files/filemanager/file.h#typedef-databaseinstance)**  |
 
 ## Functions
 
 |                | Name           |
 | -------------- | -------------- |
-| int64_t | **[file_open_database_file](/Files/file_8h#function-file-open-database-file)**(const char * path)<br>Open existing database file or create one if not existed.  |
-| pagenum_t | **[file_alloc_page](/Files/file_8h#function-file-alloc-page)**()<br>Allocate an on-disk page from the free page list.  |
-| void | **[file_free_page](/Files/file_8h#function-file-free-page)**(pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
-| void | **[file_read_page](/Files/file_8h#function-file-read-page)**(pagenum_t pagenum, [page_t](/Classes/structPage) * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
-| void | **[file_write_page](/Files/file_8h#function-file-write-page)**(pagenum_t pagenum, const [page_t](/Classes/structPage) * src)<br>Write an in-memory page(src) to the on-disk page.  |
-| void | **[file_close_database_file](/Files/file_8h#function-file-close-database-file)**()<br>Stop referencing the database file.  |
+| int64_t | **[file_open_database_file](/Files/filemanager/file.h#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
+| pagenum_t | **[file_alloc_page](/Files/filemanager/file.h#function-file_alloc_page)**()<br>Allocate an on-disk page from the free page list.  |
+| void | **[file_free_page](/Files/filemanager/file.h#function-file_free_page)**(pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
+| void | **[file_read_page](/Files/filemanager/file.h#function-file_read_page)**(pagenum_t pagenum, <a href="/Classes/Page">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
+| void | **[file_write_page](/Files/filemanager/file.h#function-file_write_page)**(pagenum_t pagenum, const <a href="/Classes/Page">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
+| void | **[file_close_database_file](/Files/filemanager/file.h#function-file_close_database_file)**()<br>Stop referencing the database file.  |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| constexpr int | **[MAX_DATABASE_INSTANCE](/Files/file_8h#variable-max-database-instance)** <br>Maximum number of database instances count.  |
+| constexpr int | **[MAX_DATABASE_INSTANCE](/Files/filemanager/file.h#variable-max-database-instance)** <br>Maximum number of database instances count.  |
 
 ## Types Documentation
 
@@ -174,4 +171,4 @@ void file_close_database_file();
 
 -------------------------------
 
-Updated on 2021-09-27 at 00:13:04 +0900
+Updated on 2021-09-27 at 12:12:06 +0900

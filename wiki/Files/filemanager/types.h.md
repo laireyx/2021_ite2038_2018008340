@@ -1,7 +1,4 @@
----
-title: filemanager/types.h
 
----
 
 # filemanager/types.h
 
@@ -11,11 +8,11 @@ title: filemanager/types.h
 
 |                | Name           |
 | -------------- | -------------- |
-| typedef uint64_t | **[pagenum_t](/Files/types_8h#typedef-pagenum-t)**  |
-| typedef [Page](/Classes/structPage) | **[page_t](/Files/types_8h#typedef-page-t)**  |
-| typedef [AllocatedPage](/Classes/structAllocatedPage) | **[allocatedpage_t](/Files/types_8h#typedef-allocatedpage-t)**  |
-| typedef [HeaderPage](/Classes/structHeaderPage) | **[headerpage_t](/Files/types_8h#typedef-headerpage-t)**  |
-| typedef [FreePage](/Classes/structFreePage) | **[freepage_t](/Files/types_8h#typedef-freepage-t)**  |
+| typedef uint64_t | **[pagenum_t](/Files/filemanager/types.h#typedef-pagenum_t)**  |
+| typedef <a href="/Classes/Page">Page</a> | **[page_t](/Files/filemanager/types.h#typedef-page_t)**  |
+| typedef <a href="/Classes/AllocatedPage">AllocatedPage</a> | **[allocatedpage_t](/Files/filemanager/types.h#typedef-allocatedpage_t)**  |
+| typedef <a href="/Classes/HeaderPage">HeaderPage</a> | **[headerpage_t](/Files/filemanager/types.h#typedef-headerpage_t)**  |
+| typedef <a href="/Classes/FreePage">FreePage</a> | **[freepage_t](/Files/filemanager/types.h#typedef-freepage_t)**  |
 
 ## Types Documentation
 
@@ -77,4 +74,4 @@ typedef FreePage freepage_t;
 
 -------------------------------
 
-Updated on 2021-09-27 at 00:13:04 +0900
+Updated on 2021-09-27 at 12:12:06 +0900

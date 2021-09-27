@@ -1,7 +1,4 @@
----
-title: filemanager/file.cc
 
----
 
 # filemanager/file.cc
 
@@ -11,24 +8,24 @@ title: filemanager/file.cc
 
 |                | Name           |
 | -------------- | -------------- |
-| void | **[_extend_capacity](/Files/file_8cc#function--extend-capacity)**(pagenum_t newsize =0)<br>Automatically check and size-up a page file.  |
-| void | **[_seek_page](/Files/file_8cc#function--seek-page)**(pagenum_t pagenum)<br>Seek page file pointer at offset matching with given page index.  |
-| void | **[_flush_header](/Files/file_8cc#function--flush-header)**()<br>Flush a header page as "pagenum 0".  |
-| int64_t | **[file_open_database_file](/Files/file_8cc#function-file-open-database-file)**(const char * path)<br>Open existing database file or create one if not existed.  |
-| pagenum_t | **[file_alloc_page](/Files/file_8cc#function-file-alloc-page)**()<br>Allocate an on-disk page from the free page list.  |
-| void | **[file_free_page](/Files/file_8cc#function-file-free-page)**(pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
-| void | **[file_read_page](/Files/file_8cc#function-file-read-page)**(pagenum_t pagenum, [page_t](/Classes/structPage) * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
-| void | **[file_write_page](/Files/file_8cc#function-file-write-page)**(pagenum_t pagenum, const [page_t](/Classes/structPage) * src)<br>Write an in-memory page(src) to the on-disk page.  |
-| void | **[file_close_database_file](/Files/file_8cc#function-file-close-database-file)**()<br>Stop referencing the database file.  |
+| void | **[_extend_capacity](/Files/filemanager/file.cc#function-_extend_capacity)**(pagenum_t newsize =0)<br>Automatically check and size-up a page file.  |
+| void | **[_seek_page](/Files/filemanager/file.cc#function-_seek_page)**(pagenum_t pagenum)<br>Seek page file pointer at offset matching with given page index.  |
+| void | **[_flush_header](/Files/filemanager/file.cc#function-_flush_header)**()<br>Flush a header page as "pagenum 0".  |
+| int64_t | **[file_open_database_file](/Files/filemanager/file.cc#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
+| pagenum_t | **[file_alloc_page](/Files/filemanager/file.cc#function-file_alloc_page)**()<br>Allocate an on-disk page from the free page list.  |
+| void | **[file_free_page](/Files/filemanager/file.cc#function-file_free_page)**(pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
+| void | **[file_read_page](/Files/filemanager/file.cc#function-file_read_page)**(pagenum_t pagenum, <a href="/Classes/Page">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
+| void | **[file_write_page](/Files/filemanager/file.cc#function-file_write_page)**(pagenum_t pagenum, const <a href="/Classes/Page">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
+| void | **[file_close_database_file](/Files/filemanager/file.cc#function-file_close_database_file)**()<br>Stop referencing the database file.  |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| int | **[database_instance_count](/Files/file_8cc#variable-database-instance-count)** <br>current database instance number  |
-| [DatabaseInstance](/Classes/structDatabaseInstance) | **[database_instances](/Files/file_8cc#variable-database-instances)** <br>all database instances  |
-| FILE * | **[database_file](/Files/file_8cc#variable-database-file)** <br>currently opened database file pointer  |
-| [headerpage_t](/Classes/structHeaderPage) | **[header_page](/Files/file_8cc#variable-header-page)** <br>currently opened database header page  |
+| int | **[database_instance_count](/Files/filemanager/file.cc#variable-database_instance_count)** <br>current database instance number  |
+| <a href="/Classes/DatabaseInstance">DatabaseInstance</a> | **[database_instances](/Files/filemanager/file.cc#variable-database_instances)** <br>all database instances  |
+| FILE * | **[database_file](/Files/filemanager/file.cc#variable-database_file)** <br>currently opened database file pointer  |
+| <a href="/Classes/HeaderPage">headerpage_t</a> | **[header_page](/Files/filemanager/file.cc#variable-header_page)** <br>currently opened database header page  |
 
 
 ## Functions Documentation
@@ -351,4 +348,4 @@ void file_close_database_file() {
 
 -------------------------------
 
-Updated on 2021-09-27 at 00:13:04 +0900
+Updated on 2021-09-27 at 12:12:06 +0900
