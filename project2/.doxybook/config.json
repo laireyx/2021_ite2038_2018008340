@@ -3,6 +3,9 @@
     "indexInFolders": true,
     "linkSuffix": "",
     "linkLowercase": false,
+    "linkAndInlineCodeAsHTML": true,
+    "indexClassesName": "home",
+    "indexFilesName": "home",
     "foldersToGenerate": [
       "classes",
       "files"

@@ -9,3 +9,5 @@ doxybook2 \
     --config .doxybook/config.json \
     --summary-input home.md.tmpl \
     --summary-output wiki/home.md
+
+node wiki-gen.js
