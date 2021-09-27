@@ -4,13 +4,23 @@
 
 
 
-struct for abstract page. 
+struct for abstract page.  [More...](#detailed-description)
 
 
 `#include <page.h>`
 
 Inherited by [AllocatedPage](/Classes/AllocatedPage), [FreePage](/Classes/FreePage), [HeaderPage](/Classes/HeaderPage)
 
+## Detailed Description
+
+```cpp
+class Page;
+```
+
+struct for abstract page. 
+
+This struct is empty for equalizing the size of all inherited pages. 
+
 -------------------------------
 
-Updated on 2021-09-27 at 14:58:06 +0900
+Updated on 2021-09-27 at 20:57:40 +0900

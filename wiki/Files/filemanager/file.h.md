@@ -20,14 +20,14 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| void | **[_seek_page](/Files/filemanager/file.h#function-_seek_page)**(pagenum_t pagenum)<br>Seek page file pointer at offset matching with given page index.  |
+| void | **[_switch_to_fd](/Files/filemanager/file.h#function-_switch_to_fd)**(int fd)<br>Switch current database into given database.  |
 | void | **[_extend_capacity](/Files/filemanager/file.h#function-_extend_capacity)**(pagenum_t newsize)<br>Automatically check and size-up a page file.  |
 | void | **[_flush_header](/Files/filemanager/file.h#function-_flush_header)**()<br>Flush a header page as "pagenum 0".  |
 | int64_t | **[file_open_database_file](/Files/filemanager/file.h#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
-| pagenum_t | **[file_alloc_page](/Files/filemanager/file.h#function-file_alloc_page)**()<br>Allocate an on-disk page from the free page list.  |
-| void | **[file_free_page](/Files/filemanager/file.h#function-file_free_page)**(pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
-| void | **[file_read_page](/Files/filemanager/file.h#function-file_read_page)**(pagenum_t pagenum, <a href="/Classes/Page">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
-| void | **[file_write_page](/Files/filemanager/file.h#function-file_write_page)**(pagenum_t pagenum, const <a href="/Classes/Page">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
+| pagenum_t | **[file_alloc_page](/Files/filemanager/file.h#function-file_alloc_page)**(int fd)<br>Allocate an on-disk page from the free page list.  |
+| void | **[file_free_page](/Files/filemanager/file.h#function-file_free_page)**(int fd, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
+| void | **[file_read_page](/Files/filemanager/file.h#function-file_read_page)**(int fd, pagenum_t pagenum, <a href="/Classes/Page">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
+| void | **[file_write_page](/Files/filemanager/file.h#function-file_write_page)**(int fd, pagenum_t pagenum, const <a href="/Classes/Page">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
 | void | **[file_close_database_file](/Files/filemanager/file.h#function-file_close_database_file)**()<br>Stop referencing the database file.  |
 
 ## Attributes
@@ -48,19 +48,22 @@ typedef struct DatabaseInstance DatabaseInstance;
 
 ## Functions Documentation
 
-### function _seek_page
+### function _switch_to_fd
 
 ```cpp
-void _seek_page(
-    pagenum_t pagenum
+void _switch_to_fd(
+    int fd
 )
 ```
 
-Seek page file pointer at offset matching with given page index. 
+Switch current database into given database. 
 
 **Parameters**: 
 
-  * **pagenum** page index. 
+  * **fd** Database file descriptor gained with file_open_database_file. 
+
+
+If current database_fd is equal to given fd, then do nothing. If not, change database_fd to given fd and re-read header_page from it.
 
 
 ### function _extend_capacity
@@ -75,10 +78,10 @@ Automatically check and size-up a page file.
 
 **Parameters**: 
 
-  * **newsize** extended size. default is 0, which means doubleing the reserved page count if there are no free page. 
+  * **newsize** extended size. default is 0, which means doubling the reserved page count if there are no free page. 
 
 
-Extend capacity if newsize if specified. Or if there are no space for the next free page, double the reserved page count.
+If newsize > page_num, reserve pages so that total page num is equivalent to newsize. If newsize = 0 and header page's free_page_idx is 0, double the reserved page count.
 
 
 ### function _flush_header
@@ -88,6 +91,9 @@ void _flush_header()
 ```
 
 Flush a header page as "pagenum 0". 
+
+Write header page into offset 0 of the current database file descriptor. 
+
 
 ### function file_open_database_file
 
@@ -109,10 +115,17 @@ Open existing database file or create one if not existed.
 ### function file_alloc_page
 
 ```cpp
-pagenum_t file_alloc_page()
+pagenum_t file_alloc_page(
+    int fd
+)
 ```
 
 Allocate an on-disk page from the free page list. 
+
+**Parameters**: 
+
+  * **fd** Database file descriptor gained with file_open_database_file. 
+
 
 **Return**: Allocated page index. 
 
@@ -120,6 +133,7 @@ Allocate an on-disk page from the free page list.
 
 ```cpp
 void file_free_page(
+    int fd,
     pagenum_t pagenum
 )
 ```
@@ -128,6 +142,7 @@ Free an on-disk page to the free page list.
 
 **Parameters**: 
 
+  * **fd** Database file descriptor gained with file_open_database_file. 
   * **pagenum** page index. 
 
 
@@ -135,6 +150,7 @@ Free an on-disk page to the free page list.
 
 ```cpp
 void file_read_page(
+    int fd,
     pagenum_t pagenum,
     page_t * dest
 )
@@ -144,6 +160,7 @@ Read an on-disk page into the in-memory page structure(dest)
 
 **Parameters**: 
 
+  * **fd** Database file descriptor gained with file_open_database_file. 
   * **pagenum** page index. 
   * **dest** the pointer of the page data. 
 
@@ -152,6 +169,7 @@ Read an on-disk page into the in-memory page structure(dest)
 
 ```cpp
 void file_write_page(
+    int fd,
     pagenum_t pagenum,
     const page_t * src
 )
@@ -161,6 +179,7 @@ Write an in-memory page(src) to the on-disk page.
 
 **Parameters**: 
 
+  * **fd** Database file descriptor gained with file_open_database_file. 
   * **pagenum** page index. 
   * **src** the pointer of the page data. 
 
@@ -196,10 +215,10 @@ constexpr int MAX_DATABASE_INSTANCE = 1024;
 
 typedef struct DatabaseInstance {
     char* file_path;
-    FILE* file_pointer;
+    int file_descriptor;
 } DatabaseInstance;
 
-void _seek_page(pagenum_t pagenum);
+void _switch_to_fd(int fd);
 
 void _extend_capacity(pagenum_t newsize);
 
@@ -207,13 +226,13 @@ void _flush_header();
 
 int64_t file_open_database_file(const char* path);
 
-pagenum_t file_alloc_page();
+pagenum_t file_alloc_page(int fd);
 
-void file_free_page(pagenum_t pagenum);
+void file_free_page(int fd, pagenum_t pagenum);
 
-void file_read_page(pagenum_t pagenum, page_t* dest);
+void file_read_page(int fd, pagenum_t pagenum, page_t* dest);
 
-void file_write_page(pagenum_t pagenum, const page_t* src);
+void file_write_page(int fd, pagenum_t pagenum, const page_t* src);
 
 void file_close_database_file();
 ```
@@ -221,4 +240,4 @@ void file_close_database_file();
 
 -------------------------------
 
-Updated on 2021-09-27 at 14:58:06 +0900
+Updated on 2021-09-27 at 20:57:40 +0900
