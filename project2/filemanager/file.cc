@@ -1,5 +1,9 @@
 
-#include <cstdio>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+
 #include <cstdlib>
 #include <cstring>
 #include <cassert>
@@ -8,17 +12,13 @@
 /// @brief current database instance number
 int database_instance_count = 0;
 /// @brief all database instances
-DatabaseInstance database_instances[MAX_DATABASE_INSTANCE + 1];
+DatabaseInstance database_instances[MAX_DATABASE_INSTANCE];
 
-/// @brief currently opened database file pointer
-FILE* database_file = nullptr;
+/// @brief currently opened database file descriptor
+int database_fd = 0;
+
 /// @brief currently opened database header page
 headerpage_t header_page;
-
-void _seek_page(pagenum_t pagenum) {
-	assert(database_file != nullptr);
-	fseek(database_file, pagenum * PAGE_SIZE, SEEK_SET);
-}
 
 void _extend_capacity(pagenum_t newsize = 0) {
 	if (
@@ -42,9 +42,7 @@ void _extend_capacity(pagenum_t newsize = 0) {
 			else
 				free_page.next_free_idx = 0;
 
-			_seek_page(free_page_index);
-			fwrite(&free_page, PAGE_SIZE, 1, database_file);
-			fflush(database_file);
+			pwrite64(database_fd, &free_page, PAGE_SIZE, free_page_index * PAGE_SIZE);
 		}
 
 		header_page.free_page_idx = header_page.page_num;
@@ -53,16 +51,14 @@ void _extend_capacity(pagenum_t newsize = 0) {
 }
 
 void _flush_header() {
-	assert(database_file != nullptr);
-	fseek(database_file, 0, SEEK_SET);
-	fwrite(&header_page, PAGE_SIZE, 1, database_file);
-	fflush(database_file);
+	assert(database_fd != 0);
+	pwrite64(database_fd, &header_page, PAGE_SIZE, 0);
 }
 
 int64_t file_open_database_file(const char* path) {
 	for (
-		int index = 1;
-		index <= database_instance_count;
+		int index = 0;
+		index < database_instance_count;
 		index++
 	) {
 		if (
@@ -83,8 +79,8 @@ int64_t file_open_database_file(const char* path) {
 	new_instance.file_path = reinterpret_cast<char*>(malloc(sizeof(char) * (strlen(path) + 1)));
 	strncpy(new_instance.file_path, path, strlen(path) + 1);
 
-	if ((database_file = fopen(path, "r+b")) == nullptr) {
-		database_file = fopen(path, "w+b");
+	if ((database_fd = open(path, O_RDWR | O_SYNC)) > 0) {
+		database_fd = open(path, O_RDWR | O_CREAT | O_SYNC);
 
 		header_page.free_page_idx = 0;
 		header_page.page_num = 1;
@@ -94,22 +90,21 @@ int64_t file_open_database_file(const char* path) {
 		_flush_header();
 	}
 	else {
-		fread(&header_page, PAGE_SIZE, 1, database_file);
+		read(database_fd, &header_page, PAGE_SIZE);
 	}
 
-	new_instance.file_pointer = database_file;
+	new_instance.file_descriptor = database_fd;
 	return database_instance_count;
 }
 
 pagenum_t file_alloc_page() {
-	assert(database_file != nullptr);
+	assert(database_fd != 0);
 	_extend_capacity();
 
 	pagenum_t free_page_idx = header_page.free_page_idx;
 	freepage_t free_page;
 
-	_seek_page(free_page_idx);
-	fread(&free_page, PAGE_SIZE, 1, database_file);
+	pread64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE);
 	header_page.free_page_idx = free_page.next_free_idx;
 
 	_flush_header();
@@ -118,13 +113,12 @@ pagenum_t file_alloc_page() {
 }
 
 void file_free_page(pagenum_t pagenum) {
-	assert(database_file != nullptr);
+	assert(database_fd != 0);
 	pagenum_t old_free_page_idx = header_page.free_page_idx;
 	freepage_t new_free_page;
 
 	new_free_page.next_free_idx = old_free_page_idx;
-	_seek_page(pagenum);
-	fwrite(&new_free_page, PAGE_SIZE, 1, database_file);
+	pwrite64(database_fd, &new_free_page, PAGE_SIZE, pagenum * PAGE_SIZE);
 	header_page.free_page_idx = pagenum;
 
 	_flush_header();
@@ -133,25 +127,22 @@ void file_free_page(pagenum_t pagenum) {
 }
 
 void file_read_page(pagenum_t pagenum, page_t* dest) {
-	_seek_page(pagenum);
-	fread(dest, PAGE_SIZE, 1, database_file);
+	pread64(database_fd, dest, PAGE_SIZE, pagenum * PAGE_SIZE);
 }
 
 void file_write_page(pagenum_t pagenum, const page_t* src) {
-	_seek_page(pagenum);
-	fwrite(src, PAGE_SIZE, 1, database_file);
-	fflush(database_file);
+	pwrite64(database_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE);
 }
 
 void file_close_database_file() {
 	for (
-		int index = 1;
-		index <= database_instance_count;
+		int index = 0;
+		index < database_instance_count;
 		index++
 	) {
-		fclose(database_instances[index].file_pointer);
+		close(database_instances[index].file_descriptor);
 	}
 
 	database_instance_count = 0;
-	database_file = nullptr;
+	database_fd = 0;
 }

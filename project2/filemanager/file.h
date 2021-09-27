@@ -12,8 +12,8 @@ constexpr int MAX_DATABASE_INSTANCE = 1024;
 typedef struct DatabaseInstance {
     /// @brief Database file path.
     char* file_path;
-    /// @brief Database file pointer.
-    FILE* file_pointer;
+    /// @brief Database file descriptor.
+    int file_descriptor;
 } DatabaseInstance;
 
 /*!
