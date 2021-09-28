@@ -9,7 +9,7 @@ Error.  [More...](#detailed-description)
 |                | Name           |
 | -------------- | -------------- |
 | int | **[print](/Namespaces/error#function-print)**(bool exit_flag =false)<br>Print error message of errno and exit if flag is set.  |
-| bool | **[check](/Namespaces/error#function-check)**(int value, bool exit_flag =false) |
+| bool | **[check](/Namespaces/error#function-check)**(int value, bool exit_flag =false)<br>If value < 0, then print error message.  |
 
 ## Detailed Description
 
@@ -49,6 +49,14 @@ inline bool check(
 )
 ```
 
+If value < 0, then print error message. 
+
+**Parameters**: 
+
+  * **exit_flag** if set to true, then print error message and terminate program with error code 1. 
+
+
+**Return**: true if check is success, and false if fails(for just printing and not terminating). 
 
 
 
@@ -56,4 +64,4 @@ inline bool check(
 
 -------------------------------
 
-Updated on 2021-09-29 at 00:54:48 +0900
+Updated on 2021-09-29 at 00:56:15 +0900
