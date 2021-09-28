@@ -1,6 +1,6 @@
 
-rm -rf wiki
-mkdir wiki
+rm -rf ../wiki
+mkdir ../wiki
 
 doxygen
 doxybook2 \
