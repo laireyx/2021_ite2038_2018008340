@@ -84,7 +84,7 @@ int file_open_database_file(const char* path) {
 	}
 
 	DatabaseInstance& new_instance = database_instances[database_instance_count++];
-	new_instance.file_path = reinterpret_cast<char*>(malloc(sizeof(char) * (strlen(path) + 1)));
+	new_instance.file_path = new char[strlen(path) + 1];
 	strncpy(new_instance.file_path, path, strlen(path) + 1);
 
 	if ((database_fd = open(path, O_RDWR | O_SYNC, 0644)) < 1) {
@@ -151,6 +151,7 @@ void file_close_database_file() {
 		index++
 	) {
 		close(database_instances[index].file_descriptor);
+		delete[] database_instances[index].file_path;
 	}
 
 	database_instance_count = 0;
