@@ -87,9 +87,7 @@ int file_open_database_file(const char* path) {
 	new_instance.file_path = new char[strlen(path) + 1];
 	strncpy(new_instance.file_path, path, strlen(path) + 1);
 
-	if ((database_fd = open(path, O_RDWR | O_SYNC, 0644)) < 1) {
-		database_fd = open(path, O_RDWR | O_CREAT | O_SYNC, 0644);
-
+	if ((database_fd = open(path, O_RDWR | O_SYNC | O_CREAT | O_EXCL, 0644)) > 0) {
 		header_page.free_page_idx = 0;
 		header_page.page_num = 1;
 
@@ -98,6 +96,7 @@ int file_open_database_file(const char* path) {
 		_flush_header();
 	}
 	else {
+		database_fd = open(path, O_RDWR | O_SYNC);
 		read(database_fd, &header_page, PAGE_SIZE);
 	}
 
