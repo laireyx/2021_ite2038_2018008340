@@ -23,7 +23,7 @@
 | void | **[_switch_to_fd](/Files/filemanager/file.h#function-_switch_to_fd)**(int fd)<br>Switch current database into given database.  |
 | void | **[_extend_capacity](/Files/filemanager/file.h#function-_extend_capacity)**(pagenum_t newsize)<br>Automatically check and size-up a page file.  |
 | void | **[_flush_header](/Files/filemanager/file.h#function-_flush_header)**()<br>Flush a header page as "pagenum 0".  |
-| int64_t | **[file_open_database_file](/Files/filemanager/file.h#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
+| int | **[file_open_database_file](/Files/filemanager/file.h#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
 | pagenum_t | **[file_alloc_page](/Files/filemanager/file.h#function-file_alloc_page)**(int fd)<br>Allocate an on-disk page from the free page list.  |
 | void | **[file_free_page](/Files/filemanager/file.h#function-file_free_page)**(int fd, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
 | void | **[file_read_page](/Files/filemanager/file.h#function-file_read_page)**(int fd, pagenum_t pagenum, <a href="/Classes/Page">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
@@ -98,7 +98,7 @@ Write header page into offset 0 of the current database file descriptor.
 ### function file_open_database_file
 
 ```cpp
-int64_t file_open_database_file(
+int file_open_database_file(
     const char * path
 )
 ```
@@ -224,7 +224,7 @@ void _extend_capacity(pagenum_t newsize);
 
 void _flush_header();
 
-int64_t file_open_database_file(const char* path);
+int file_open_database_file(const char* path);
 
 pagenum_t file_alloc_page(int fd);
 
@@ -240,4 +240,4 @@ void file_close_database_file();
 
 -------------------------------
 
-Updated on 2021-09-27 at 20:57:40 +0900
+Updated on 2021-09-28 at 10:05:21 +0900
