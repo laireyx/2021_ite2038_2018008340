@@ -12,11 +12,11 @@
 namespace error {
     /**
     * @brief   Print error message of errno and exit if flag is set.
-    * @details  If exit_flag = false, just print errno message.
-    *           If exit_flag = true, print errno message and exit.
+    * @details  If <code>exit_flag == true</code>, print errno message and exit.
+    *           If <code>exit_flag == false</code>, just print errno message.
     *
     * @param    exit_flag   if set to true, then print error message and terminate program with error code 1.
-    * @returns  -errno for return _perrno(); in some functions.
+    * @returns  -errno for <code>return error::print();</code> in some functions.
     */
     inline int print(bool exit_flag = false) {
         perror(strerror(errno));
@@ -29,7 +29,7 @@ namespace error {
     }
 
     /**
-     * @brief    If value < 0, then print error message.
+     * @brief    If <code>value < 0</code>, then print error message.
      *
      * @param    exit_flag   if set to true, then print error message and terminate program with error code 1.
      * @returns              true if check is success, and false if fails(for just printing and not terminating).

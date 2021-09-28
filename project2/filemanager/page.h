@@ -7,7 +7,7 @@ constexpr int PAGE_SIZE = 4096;
 /**
  * @class   Page
  * @brief   struct for abstract page.
- * @details This struct is empty for equalizing the size of all inherited pages.
+ * @details Actually this struct is empty for equalizing the size of all inherited pages.
  */
 struct Page { };
 
