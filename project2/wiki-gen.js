@@ -57,7 +57,7 @@ recursive(startPath, (dirPath, file) => {
 
   // Fix dashed link into underscored.
   fileContent = fileContent.replace(/\[(.+?)\]\((.+?)\)/g, (_, linkName, linkUrl) => {
-    const wrongLink = linkName.replace(/_/g, '-');
+    const wrongLink = linkName.toLowerCase().replace(/_/g, '-');
     return _.replace(wrongLink, linkName);
   });
 
