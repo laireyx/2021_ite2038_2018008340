@@ -8,6 +8,7 @@
   * [AllocatedPage](/Classes/AllocatedPage)
 * [Namespaces](/Namespaces/Namespaces)
   * [file_helper](/Namespaces/file_helper)
+  * [error](/Namespaces/error)
 * [Files](/Files/Files)
   * [filemanager](/Files/filemanager)
   * [errors.h](/Files/filemanager/errors.h)

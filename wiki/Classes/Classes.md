@@ -10,10 +10,11 @@
 * **class [FreePage](/Classes/FreePage)** <br>struct for the free page. 
 * **class [HeaderPage](/Classes/HeaderPage)** <br>struct for the header page. 
 * **class [Page](/Classes/Page)** <br>struct for abstract page. 
-* **namespace [file_helper](/Namespaces/file_helper)** 
+* **namespace [error](/Namespaces/error)** <br>Error. 
+* **namespace [file_helper](/Namespaces/file_helper)** <br>Filemanager helper. 
 
 
 
 -------------------------------
 
-Updated on 2021-09-29 at 00:36:58 +0900
+Updated on 2021-09-29 at 00:54:48 +0900

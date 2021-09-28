@@ -2,7 +2,7 @@
 
 # file_helper
 
-
+Filemanager helper.  [More...](#detailed-description)
 
 ## Functions
 
@@ -11,6 +11,12 @@
 | void | **[switch_to_fd](/Namespaces/file_helper#function-switch_to_fd)**(int fd)<br>Switch current database into given database.  |
 | void | **[extend_capacity](/Namespaces/file_helper#function-extend_capacity)**(pagenum_t newsize)<br>Automatically check and size-up a page file.  |
 | void | **[flush_header](/Namespaces/file_helper#function-flush_header)**()<br>Flush a header page as "pagenum 0".  |
+
+## Detailed Description
+
+Filemanager helper. 
+
+This namespace includes some helper functions which are used by filemanager API. Those functions are not a part of filemanager API, but frequently used part of it so I wrapped these functions. 
 
 
 ## Functions Documentation
@@ -68,4 +74,4 @@ Write header page into offset 0 of the current database file descriptor.
 
 -------------------------------
 
-Updated on 2021-09-29 at 00:36:58 +0900
+Updated on 2021-09-29 at 00:54:48 +0900

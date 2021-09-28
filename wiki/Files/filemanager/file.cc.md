@@ -8,7 +8,7 @@
 
 | Name           |
 | -------------- |
-| **[file_helper](/Namespaces/file_helper)**  |
+| **[file_helper](/Namespaces/file_helper)** <br>Filemanager helper.  |
 
 ## Functions
 
@@ -194,7 +194,7 @@ namespace file_helper {
         if(database_fd == fd) return;
 
         database_fd = fd;
-        CHECK(pread64(database_fd, &header_page, PAGE_SIZE, 0));
+        error::check(pread64(database_fd, &header_page, PAGE_SIZE, 0));
     }
 
     void extend_capacity(pagenum_t newsize = 0) {
@@ -219,7 +219,7 @@ namespace file_helper {
                 else
                     free_page.next_free_idx = 0;
 
-                CHECK(pwrite64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE));
+                error::check(pwrite64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE));
             }
 
             header_page.free_page_idx = header_page.page_num;
@@ -229,7 +229,7 @@ namespace file_helper {
 
     void flush_header() {
         assert(database_fd != 0);
-        CHECK(pwrite64(database_fd, &header_page, PAGE_SIZE, 0));
+        error::check(pwrite64(database_fd, &header_page, PAGE_SIZE, 0));
     }
 };
 
@@ -272,11 +272,11 @@ int file_open_database_file(const char* path) {
 
             file_helper::flush_header();
         } else {
-            return _perrno();
+            return error::print();
         }
     }
     else {
-        CHECK(read(database_fd, &header_page, PAGE_SIZE));
+        error::check(read(database_fd, &header_page, PAGE_SIZE));
     }
 
     return new_instance.file_descriptor = database_fd;
@@ -289,7 +289,7 @@ pagenum_t file_alloc_page(int fd) {
     pagenum_t free_page_idx = header_page.free_page_idx;
     freepage_t free_page;
 
-    CHECK(pread64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE));
+    error::check(pread64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE));
     header_page.free_page_idx = free_page.next_free_idx;
 
     file_helper::flush_header();
@@ -304,7 +304,7 @@ void file_free_page(int fd, pagenum_t pagenum) {
     freepage_t new_free_page;
 
     new_free_page.next_free_idx = old_free_page_idx;
-    CHECK(pwrite64(database_fd, &new_free_page, PAGE_SIZE, pagenum * PAGE_SIZE));
+    error::check(pwrite64(database_fd, &new_free_page, PAGE_SIZE, pagenum * PAGE_SIZE));
     header_page.free_page_idx = pagenum;
 
     file_helper::flush_header();
@@ -314,12 +314,12 @@ void file_free_page(int fd, pagenum_t pagenum) {
 
 void file_read_page(int fd, pagenum_t pagenum, page_t* dest) {
     file_helper::switch_to_fd(fd);
-    CHECK(pread64(database_fd, dest, PAGE_SIZE, pagenum * PAGE_SIZE));
+    error::check(pread64(database_fd, dest, PAGE_SIZE, pagenum * PAGE_SIZE));
 }
 
 void file_write_page(int fd, pagenum_t pagenum, const page_t* src) {
     file_helper::switch_to_fd(fd);
-    CHECK(pwrite64(database_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE));
+    error::check(pwrite64(database_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE));
 }
 
 void file_close_database_file() {
@@ -340,4 +340,4 @@ void file_close_database_file() {
 
 -------------------------------
 
-Updated on 2021-09-29 at 00:36:58 +0900
+Updated on 2021-09-29 at 00:54:48 +0900
