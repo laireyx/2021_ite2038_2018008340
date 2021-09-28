@@ -8,7 +8,7 @@
 
 | Name           |
 | -------------- |
-| **[file_helper](/Namespaces/namespacefile__helper)**  |
+| **[file_helper](/Namespaces/file__helper)**  |
 
 ## Functions
 
@@ -340,4 +340,4 @@ void file_close_database_file() {
 
 -------------------------------
 
-Updated on 2021-09-29 at 00:31:01 +0900
+Updated on 2021-09-29 at 00:31:18 +0900
