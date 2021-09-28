@@ -29,12 +29,11 @@ namespace error {
     }
 
     /**
-    * @def      check(value)
-    * @brief    If value < 0, then print error message.
-    *
-    * @param    exit_flag   if set to true, then print error message and terminate program with error code 1.
-    * @returns              true if check is success, and false if fails(for just printing and not terminating).
-    */
+     * @brief    If value < 0, then print error message.
+     *
+     * @param    exit_flag   if set to true, then print error message and terminate program with error code 1.
+     * @returns              true if check is success, and false if fails(for just printing and not terminating).
+     */
     inline bool check(int value, bool exit_flag = false) {
         if(value < 0) {
             print(exit_flag);
