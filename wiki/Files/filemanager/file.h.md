@@ -8,7 +8,7 @@
 
 | Name           |
 | -------------- |
-| **[file](/Namespaces/file)**  |
+| **[file_helper](/Namespaces/file_helper)**  |
 
 ## Functions
 
@@ -162,7 +162,7 @@ constexpr int INITIAL_DATABASE_CAPS = 2560;
 
 constexpr int MAX_DATABASE_INSTANCE = 1024;
 
-namespace file {
+namespace file_helper {
     void switch_to_fd(int fd);
 
     void extend_capacity(pagenum_t newsize);
@@ -186,4 +186,4 @@ void file_close_database_file();
 
 -------------------------------
 
-Updated on 2021-09-29 at 00:31:32 +0900
+Updated on 2021-09-29 at 00:34:11 +0900
