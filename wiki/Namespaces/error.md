@@ -9,7 +9,7 @@ Error.  [More...](#detailed-description)
 |                | Name           |
 | -------------- | -------------- |
 | int | **[print](/Namespaces/error#function-print)**(bool exit_flag =false)<br>Print error message of errno and exit if flag is set.  |
-| bool | **[check](/Namespaces/error#function-check)**(int value, bool exit_flag =false)<br>If value < 0, then print error message.  |
+| bool | **[check](/Namespaces/error#function-check)**(int value, bool exit_flag =false)<br>If <code>value &lt; 0</code>, then print error message.  |
 
 ## Detailed Description
 
@@ -35,9 +35,9 @@ Print error message of errno and exit if flag is set.
   * **exit_flag** if set to true, then print error message and terminate program with error code 1. 
 
 
-**Return**: -errno for return _perrno(); in some functions. 
+**Return**: -errno for <code>return <a href="/Namespaces/error#function-print">error::print()</a>;</code> in some functions. 
 
-If exit_flag = false, just print errno message. If exit_flag = true, print errno message and exit.
+If <code>exit&#95;flag == true</code>, print errno message and exit. If <code>exit&#95;flag == false</code>, just print errno message.
 
 
 ### function check
@@ -49,7 +49,7 @@ inline bool check(
 )
 ```
 
-If value < 0, then print error message. 
+If <code>value &lt; 0</code>, then print error message. 
 
 **Parameters**: 
 
@@ -64,4 +64,4 @@ If value < 0, then print error message.
 
 -------------------------------
 
-Updated on 2021-09-29 at 00:56:15 +0900
+Updated on 2021-09-29 at 01:06:06 +0900
