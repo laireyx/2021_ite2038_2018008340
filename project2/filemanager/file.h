@@ -9,8 +9,13 @@ constexpr int INITIAL_DATABASE_CAPS = 2560;
 /// @brief  Maximum number of database instances count.
 constexpr int MAX_DATABASE_INSTANCE = 1024;
 
+/**
+ * @brief   Filemanager helper
+ * @details This namespace includes some helper functions which are used by filemanager API.
+ *          Those functions are not a part of filemanager API, but frequently used part of it so I wrapped these functions.
+ */
 namespace file_helper {
-    /*!
+    /**
     * @brief   Switch current database into given database.
     * @details If current database_fd is equal to given fd, then do nothing.
     *          If not, change database_fd to given fd and re-read header_page from it.
@@ -19,7 +24,7 @@ namespace file_helper {
     */
     void switch_to_fd(int fd);
 
-    /*!
+    /**
     * @brief   Automatically check and size-up a page file.
     * @details If newsize > page_num, reserve pages so that total page num is equivalent to newsize.
     *          If newsize = 0 and header page's free_page_idx is 0, double the reserved page count.
@@ -28,7 +33,7 @@ namespace file_helper {
     */
     void extend_capacity(pagenum_t newsize);
 
-    /*!
+    /**
     * @brief   Flush a header page as "pagenum 0".
     * @details Write header page into offset 0 of the current database file descriptor.
     */
