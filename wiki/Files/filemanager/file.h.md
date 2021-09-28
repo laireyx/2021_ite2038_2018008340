@@ -4,25 +4,16 @@
 
 
 
-## Classes
+## Namespaces
 
-|                | Name           |
-| -------------- | -------------- |
-| class | **[DatabaseInstance](/Classes/DatabaseInstance)** <br>Database file instance.  |
-
-## Types
-
-|                | Name           |
-| -------------- | -------------- |
-| typedef struct <a href="/Classes/DatabaseInstance">DatabaseInstance</a> | **[DatabaseInstance](/Files/filemanager/file.h#typedef-databaseinstance)**  |
+| Name           |
+| -------------- |
+| **[file](/Namespaces/namespacefile)**  |
 
 ## Functions
 
 |                | Name           |
 | -------------- | -------------- |
-| void | **[_switch_to_fd](/Files/filemanager/file.h#function-_switch_to_fd)**(int fd)<br>Switch current database into given database.  |
-| void | **[_extend_capacity](/Files/filemanager/file.h#function-_extend_capacity)**(pagenum_t newsize)<br>Automatically check and size-up a page file.  |
-| void | **[_flush_header](/Files/filemanager/file.h#function-_flush_header)**()<br>Flush a header page as "pagenum 0".  |
 | int | **[file_open_database_file](/Files/filemanager/file.h#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
 | pagenum_t | **[file_alloc_page](/Files/filemanager/file.h#function-file_alloc_page)**(int fd)<br>Allocate an on-disk page from the free page list.  |
 | void | **[file_free_page](/Files/filemanager/file.h#function-file_free_page)**(int fd, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
@@ -34,66 +25,11 @@
 
 |                | Name           |
 | -------------- | -------------- |
+| constexpr int | **[INITIAL_DATABASE_CAPS](/Files/filemanager/file.h#variable-initial-database-caps)** <br>Initial number of page count in newly created database file.  |
 | constexpr int | **[MAX_DATABASE_INSTANCE](/Files/filemanager/file.h#variable-max-database-instance)** <br>Maximum number of database instances count.  |
-
-## Types Documentation
-
-### typedef DatabaseInstance
-
-```cpp
-typedef struct DatabaseInstance DatabaseInstance;
-```
-
 
 
 ## Functions Documentation
-
-### function _switch_to_fd
-
-```cpp
-void _switch_to_fd(
-    int fd
-)
-```
-
-Switch current database into given database. 
-
-**Parameters**: 
-
-  * **fd** Database file descriptor gained with file_open_database_file. 
-
-
-If current database_fd is equal to given fd, then do nothing. If not, change database_fd to given fd and re-read header_page from it.
-
-
-### function _extend_capacity
-
-```cpp
-void _extend_capacity(
-    pagenum_t newsize
-)
-```
-
-Automatically check and size-up a page file. 
-
-**Parameters**: 
-
-  * **newsize** extended size. default is 0, which means doubling the reserved page count if there are no free page. 
-
-
-If newsize > page_num, reserve pages so that total page num is equivalent to newsize. If newsize = 0 and header page's free_page_idx is 0, double the reserved page count.
-
-
-### function _flush_header
-
-```cpp
-void _flush_header()
-```
-
-Flush a header page as "pagenum 0". 
-
-Write header page into offset 0 of the current database file descriptor. 
-
 
 ### function file_open_database_file
 
@@ -124,7 +60,7 @@ Allocate an on-disk page from the free page list.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor gained with file_open_database_file. 
+  * **fd** Database file descriptor obatined with file_open_database_file. 
 
 
 **Return**: Allocated page index. 
@@ -142,7 +78,7 @@ Free an on-disk page to the free page list.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor gained with file_open_database_file. 
+  * **fd** Database file descriptor obatined with file_open_database_file. 
   * **pagenum** page index. 
 
 
@@ -160,7 +96,7 @@ Read an on-disk page into the in-memory page structure(dest)
 
 **Parameters**: 
 
-  * **fd** Database file descriptor gained with file_open_database_file. 
+  * **fd** Database file descriptor obatined with file_open_database_file. 
   * **pagenum** page index. 
   * **dest** the pointer of the page data. 
 
@@ -179,7 +115,7 @@ Write an in-memory page(src) to the on-disk page.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor gained with file_open_database_file. 
+  * **fd** Database file descriptor obatined with file_open_database_file. 
   * **pagenum** page index. 
   * **src** the pointer of the page data. 
 
@@ -194,6 +130,17 @@ Stop referencing the database file.
 
 
 ## Attributes Documentation
+
+### variable INITIAL_DATABASE_CAPS
+
+```cpp
+constexpr int INITIAL_DATABASE_CAPS = 2560;
+```
+
+Initial number of page count in newly created database file. 
+
+It means 10MiB(4B * 2560 = 10MiB). 
+
 
 ### variable MAX_DATABASE_INSTANCE
 
@@ -211,18 +158,17 @@ Maximum number of database instances count.
 
 #include "types.h"
 
+constexpr int INITIAL_DATABASE_CAPS = 2560;
+
 constexpr int MAX_DATABASE_INSTANCE = 1024;
 
-typedef struct DatabaseInstance {
-    char* file_path;
-    int file_descriptor;
-} DatabaseInstance;
+namespace file {
+    void switch_to_fd(int fd);
 
-void _switch_to_fd(int fd);
+    void extend_capacity(pagenum_t newsize);
 
-void _extend_capacity(pagenum_t newsize);
-
-void _flush_header();
+    void flush_header();
+};
 
 int file_open_database_file(const char* path);
 
@@ -240,4 +186,4 @@ void file_close_database_file();
 
 -------------------------------
 
-Updated on 2021-09-28 at 10:05:21 +0900
+Updated on 2021-09-29 at 00:31:01 +0900

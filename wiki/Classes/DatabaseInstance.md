@@ -7,13 +7,13 @@
 Database file instance. 
 
 
-`#include <file.h>`
+`#include <types.h>`
 
 ## Public Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| char * | **[file_path](/Classes/DatabaseInstance#variable-file_path)** <br>Database file path.  |
+| char * | **[file_path](/Classes/DatabaseInstance#variable-file_path)** <br>Real database file path(obtained by realpath(3)).  |
 | int | **[file_descriptor](/Classes/DatabaseInstance#variable-file_descriptor)** <br>Database file descriptor.  |
 
 ## Public Attributes Documentation
@@ -24,7 +24,7 @@ Database file instance.
 char * file_path;
 ```
 
-Database file path. 
+Real database file path(obtained by realpath(3)). 
 
 ### variable file_descriptor
 
@@ -36,4 +36,4 @@ Database file descriptor.
 
 -------------------------------
 
-Updated on 2021-09-28 at 10:05:21 +0900
+Updated on 2021-09-29 at 00:31:01 +0900

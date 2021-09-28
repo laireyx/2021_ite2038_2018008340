@@ -8,6 +8,7 @@
   * [AllocatedPage](/Classes/AllocatedPage)
 * [Files](/Files/Files)
   * [filemanager](/Files/filemanager)
+  * [errors.h](/Files/filemanager/errors.h)
   * [file.cc](/Files/filemanager/file.cc)
   * [file.h](/Files/filemanager/file.h)
   * [page.h](/Files/filemanager/page.h)
