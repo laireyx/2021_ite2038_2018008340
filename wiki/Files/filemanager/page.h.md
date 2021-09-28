@@ -17,7 +17,7 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| constexpr int | **[PAGE_SIZE](/Files/filemanager/page.h#variable-PAGE_SIZE)** <br>Size of each page(in bytes).  |
+| constexpr int | **[PAGE_SIZE](/Files/filemanager/page.h#variable-page_size)** <br>Size of each page(in bytes).  |
 
 
 
@@ -63,4 +63,4 @@ struct FreePage : public Page {
 
 -------------------------------
 
-Updated on 2021-09-29 at 01:15:36 +0900
+Updated on 2021-09-29 at 01:17:26 +0900

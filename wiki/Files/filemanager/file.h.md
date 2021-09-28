@@ -25,8 +25,8 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| constexpr int | **[INITIAL_DATABASE_CAPS](/Files/filemanager/file.h#variable-INITIAL_DATABASE_CAPS)** <br>Initial number of page count in newly created database file.  |
-| constexpr int | **[MAX_DATABASE_INSTANCE](/Files/filemanager/file.h#variable-MAX_DATABASE_INSTANCE)** <br>Maximum number of database instances count.  |
+| constexpr int | **[INITIAL_DATABASE_CAPS](/Files/filemanager/file.h#variable-initial_database_caps)** <br>Initial number of page count in newly created database file.  |
+| constexpr int | **[MAX_DATABASE_INSTANCE](/Files/filemanager/file.h#variable-max_database_instance)** <br>Maximum number of database instances count.  |
 
 
 ## Functions Documentation
@@ -186,4 +186,4 @@ void file_close_database_file();
 
 -------------------------------
 
-Updated on 2021-09-29 at 01:15:36 +0900
+Updated on 2021-09-29 at 01:17:26 +0900
