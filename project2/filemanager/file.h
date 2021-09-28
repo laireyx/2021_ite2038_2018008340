@@ -9,7 +9,7 @@ constexpr int INITIAL_DATABASE_CAPS = 2560;
 /// @brief  Maximum number of database instances count.
 constexpr int MAX_DATABASE_INSTANCE = 1024;
 
-namespace file {
+namespace file_helper {
     /*!
     * @brief   Switch current database into given database.
     * @details If current database_fd is equal to given fd, then do nothing.
