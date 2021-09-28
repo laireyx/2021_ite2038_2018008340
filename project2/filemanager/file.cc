@@ -63,7 +63,7 @@ void _flush_header() {
 	pwrite64(database_fd, &header_page, PAGE_SIZE, 0);
 }
 
-int64_t file_open_database_file(const char* path) {
+int file_open_database_file(const char* path) {
 	for (
 		int index = 0;
 		index < database_instance_count;
