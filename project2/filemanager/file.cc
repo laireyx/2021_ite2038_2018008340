@@ -4,10 +4,11 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include <cstdlib>
-#include <cstring>
-#include <cassert>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
 #include "file.h"
+#include "errors.h"
 
 /// @brief current database instance number
 int database_instance_count = 0;
@@ -25,7 +26,7 @@ void _switch_to_fd(int fd) {
 	if(database_fd == fd) return;
 
 	database_fd = fd;
-	pread64(database_fd, &header_page, PAGE_SIZE, 0);
+	CHECK(pread64(database_fd, &header_page, PAGE_SIZE, 0));
 }
 
 void _extend_capacity(pagenum_t newsize = 0) {
@@ -50,7 +51,7 @@ void _extend_capacity(pagenum_t newsize = 0) {
 			else
 				free_page.next_free_idx = 0;
 
-			pwrite64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE);
+			CHECK(pwrite64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE));
 		}
 
 		header_page.free_page_idx = header_page.page_num;
@@ -60,10 +61,13 @@ void _extend_capacity(pagenum_t newsize = 0) {
 
 void _flush_header() {
 	assert(database_fd != 0);
-	pwrite64(database_fd, &header_page, PAGE_SIZE, 0);
+	CHECK(pwrite64(database_fd, &header_page, PAGE_SIZE, 0));
 }
 
 int file_open_database_file(const char* path) {
+	
+	char* real_path = realpath(path, NULL);
+
 	for (
 		int index = 0;
 		index < database_instance_count;
@@ -72,32 +76,38 @@ int file_open_database_file(const char* path) {
 		if (
 			strcmp(
 				database_instances[index].file_path,
-				path
+				real_path
 			) == 0
 		) {
+			free(real_path);
 			return index;
 		}
 	}
 
 	if (database_instance_count >= MAX_DATABASE_INSTANCE) {
+		free(real_path);
 		return -1;
 	}
 
 	DatabaseInstance& new_instance = database_instances[database_instance_count++];
-	new_instance.file_path = new char[strlen(path) + 1];
-	strncpy(new_instance.file_path, path, strlen(path) + 1);
+	new_instance.file_path = real_path;
 
-	if ((database_fd = open(path, O_RDWR | O_SYNC | O_CREAT | O_EXCL, 0644)) > 0) {
-		header_page.free_page_idx = 0;
-		header_page.page_num = 1;
+	if ((database_fd = open(path, O_RDWR | O_SYNC)) < 1) {
+		if(errno == ENOENT) {
+			database_fd = open(path, O_RDWR | O_CREAT | O_SYNC, 0644);
 
-		_extend_capacity(2560);
+			header_page.free_page_idx = 0;
+			header_page.page_num = 1;
 
-		_flush_header();
+			_extend_capacity(2560);
+
+			_flush_header();
+		} else {
+			return _perrno();
+		}
 	}
 	else {
-		database_fd = open(path, O_RDWR | O_SYNC);
-		read(database_fd, &header_page, PAGE_SIZE);
+		CHECK(read(database_fd, &header_page, PAGE_SIZE));
 	}
 
 	return new_instance.file_descriptor = database_fd;
@@ -110,7 +120,7 @@ pagenum_t file_alloc_page(int fd) {
 	pagenum_t free_page_idx = header_page.free_page_idx;
 	freepage_t free_page;
 
-	pread64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE);
+	CHECK(pread64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE));
 	header_page.free_page_idx = free_page.next_free_idx;
 
 	_flush_header();
@@ -125,7 +135,7 @@ void file_free_page(int fd, pagenum_t pagenum) {
 	freepage_t new_free_page;
 
 	new_free_page.next_free_idx = old_free_page_idx;
-	pwrite64(database_fd, &new_free_page, PAGE_SIZE, pagenum * PAGE_SIZE);
+	CHECK(pwrite64(database_fd, &new_free_page, PAGE_SIZE, pagenum * PAGE_SIZE));
 	header_page.free_page_idx = pagenum;
 
 	_flush_header();
@@ -135,12 +145,12 @@ void file_free_page(int fd, pagenum_t pagenum) {
 
 void file_read_page(int fd, pagenum_t pagenum, page_t* dest) {
 	_switch_to_fd(fd);
-	pread64(database_fd, dest, PAGE_SIZE, pagenum * PAGE_SIZE);
+	CHECK(pread64(database_fd, dest, PAGE_SIZE, pagenum * PAGE_SIZE));
 }
 
 void file_write_page(int fd, pagenum_t pagenum, const page_t* src) {
 	_switch_to_fd(fd);
-	pwrite64(database_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE);
+	CHECK(pwrite64(database_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE));
 }
 
 void file_close_database_file() {
@@ -150,7 +160,7 @@ void file_close_database_file() {
 		index++
 	) {
 		close(database_instances[index].file_descriptor);
-		delete[] database_instances[index].file_path;
+		free(database_instances[index].file_path);
 	}
 
 	database_instance_count = 0;
