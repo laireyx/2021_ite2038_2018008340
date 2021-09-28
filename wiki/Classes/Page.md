@@ -19,8 +19,8 @@ class Page;
 
 struct for abstract page. 
 
-This struct is empty for equalizing the size of all inherited pages. 
+Actually this struct is empty for equalizing the size of all inherited pages. 
 
 -------------------------------
 
-Updated on 2021-09-29 at 00:56:15 +0900
+Updated on 2021-09-29 at 01:08:31 +0900
