@@ -1,6 +1,6 @@
 
 
-# filemanager/page.h
+# db/include/page.h
 
 
 
@@ -17,7 +17,7 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| constexpr int | **[PAGE_SIZE](/Files/filemanager/page.h#variable-page_size)** <br>Size of each page(in bytes).  |
+| constexpr int | **[PAGE_SIZE](/Files/db/include/page.h#variable-page_size)** <br>Size of each page(in bytes).  |
 
 
 
@@ -40,7 +40,7 @@ Size of each page(in bytes).
 
 constexpr int PAGE_SIZE = 4096;
 
-struct Page { };
+struct Page {};
 
 struct AllocatedPage : public Page {
     uint8_t reserved[PAGE_SIZE];
@@ -63,4 +63,4 @@ struct FreePage : public Page {
 
 -------------------------------
 
-Updated on 2021-09-29 at 01:17:26 +0900
+Updated on 2021-09-29 at 22:55:07 +0900

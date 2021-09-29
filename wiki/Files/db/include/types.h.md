@@ -1,6 +1,6 @@
 
 
-# filemanager/types.h
+# db/include/types.h
 
 
 
@@ -14,12 +14,12 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| typedef uint64_t | **[pagenum_t](/Files/filemanager/types.h#typedef-pagenum_t)**  |
-| typedef <a href="/Classes/Page">Page</a> | **[page_t](/Files/filemanager/types.h#typedef-page_t)**  |
-| typedef <a href="/Classes/AllocatedPage">AllocatedPage</a> | **[allocatedpage_t](/Files/filemanager/types.h#typedef-allocatedpage_t)**  |
-| typedef <a href="/Classes/HeaderPage">HeaderPage</a> | **[headerpage_t](/Files/filemanager/types.h#typedef-headerpage_t)**  |
-| typedef <a href="/Classes/FreePage">FreePage</a> | **[freepage_t](/Files/filemanager/types.h#typedef-freepage_t)**  |
-| typedef struct <a href="/Classes/DatabaseInstance">DatabaseInstance</a> | **[DatabaseInstance](/Files/filemanager/types.h#typedef-databaseinstance)**  |
+| typedef uint64_t | **[pagenum_t](/Files/db/include/types.h#typedef-pagenum_t)**  |
+| typedef <a href="/Classes/Page">Page</a> | **[page_t](/Files/db/include/types.h#typedef-page_t)**  |
+| typedef <a href="/Classes/AllocatedPage">AllocatedPage</a> | **[allocatedpage_t](/Files/db/include/types.h#typedef-allocatedpage_t)**  |
+| typedef <a href="/Classes/HeaderPage">HeaderPage</a> | **[headerpage_t](/Files/db/include/types.h#typedef-headerpage_t)**  |
+| typedef <a href="/Classes/FreePage">FreePage</a> | **[freepage_t](/Files/db/include/types.h#typedef-freepage_t)**  |
+| typedef struct <a href="/Classes/DatabaseInstance">DatabaseInstance</a> | **[DatabaseInstance](/Files/db/include/types.h#typedef-databaseinstance)**  |
 
 ## Types Documentation
 
@@ -93,4 +93,4 @@ typedef struct DatabaseInstance {
 
 -------------------------------
 
-Updated on 2021-09-29 at 01:17:26 +0900
+Updated on 2021-09-29 at 22:55:07 +0900

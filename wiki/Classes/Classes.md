@@ -12,9 +12,11 @@
 * **class [Page](/Classes/Page)** <br>struct for abstract page. 
 * **namespace [error](/Namespaces/error)** <br>Error. 
 * **namespace [file_helper](/Namespaces/file_helper)** <br>Filemanager helper. 
+* **struct [node](/Classes/node)** 
+* **struct [record](/Classes/record)** 
 
 
 
 -------------------------------
 
-Updated on 2021-09-29 at 01:17:26 +0900
+Updated on 2021-09-29 at 22:55:08 +0900

@@ -1,6 +1,6 @@
 
 
-# filemanager/file.cc
+# db/src/file.cc
 
 
 
@@ -14,21 +14,21 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| int | **[file_open_database_file](/Files/filemanager/file.cc#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
-| pagenum_t | **[file_alloc_page](/Files/filemanager/file.cc#function-file_alloc_page)**(int fd)<br>Allocate an on-disk page from the free page list.  |
-| void | **[file_free_page](/Files/filemanager/file.cc#function-file_free_page)**(int fd, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
-| void | **[file_read_page](/Files/filemanager/file.cc#function-file_read_page)**(int fd, pagenum_t pagenum, <a href="/Classes/Page">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
-| void | **[file_write_page](/Files/filemanager/file.cc#function-file_write_page)**(int fd, pagenum_t pagenum, const <a href="/Classes/Page">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
-| void | **[file_close_database_file](/Files/filemanager/file.cc#function-file_close_database_file)**()<br>Stop referencing the database file.  |
+| int | **[file_open_database_file](/Files/db/src/file.cc#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
+| pagenum_t | **[file_alloc_page](/Files/db/src/file.cc#function-file_alloc_page)**(int fd)<br>Allocate an on-disk page from the free page list.  |
+| void | **[file_free_page](/Files/db/src/file.cc#function-file_free_page)**(int fd, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
+| void | **[file_read_page](/Files/db/src/file.cc#function-file_read_page)**(int fd, pagenum_t pagenum, <a href="/Classes/Page">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
+| void | **[file_write_page](/Files/db/src/file.cc#function-file_write_page)**(int fd, pagenum_t pagenum, const <a href="/Classes/Page">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
+| void | **[file_close_database_file](/Files/db/src/file.cc#function-file_close_database_file)**()<br>Stop referencing the database file.  |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| int | **[database_instance_count](/Files/filemanager/file.cc#variable-database_instance_count)** <br>current database instance number  |
-| <a href="/Classes/DatabaseInstance">DatabaseInstance</a> | **[database_instances](/Files/filemanager/file.cc#variable-database_instances)** <br>all database instances  |
-| int | **[database_fd](/Files/filemanager/file.cc#variable-database_fd)** <br>currently opened database file descriptor  |
-| <a href="/Classes/HeaderPage">headerpage_t</a> | **[header_page](/Files/filemanager/file.cc#variable-header_page)** <br>currently opened database header page  |
+| int | **[database_instance_count](/Files/db/src/file.cc#variable-database_instance_count)** <br>current database instance number  |
+| <a href="/Classes/DatabaseInstance">DatabaseInstance</a> | **[database_instances](/Files/db/src/file.cc#variable-database_instances)** <br>all database instances  |
+| int | **[database_fd](/Files/db/src/file.cc#variable-database_fd)** <br>currently opened database file descriptor  |
+| <a href="/Classes/HeaderPage">headerpage_t</a> | **[header_page](/Files/db/src/file.cc#variable-header_page)** <br>currently opened database header page  |
 
 
 ## Functions Documentation
@@ -190,7 +190,7 @@ headerpage_t header_page;
 
 namespace file_helper {
     void switch_to_fd(int fd) {
-        assert(fd != 0);
+        assert(fd > 0);
         if(database_fd == fd) return;
 
         database_fd = fd;
@@ -228,42 +228,45 @@ namespace file_helper {
     }
 
     void flush_header() {
-        assert(database_fd != 0);
+        assert(database_fd > 0);
         error::check(pwrite64(database_fd, &header_page, PAGE_SIZE, 0));
     }
 };
 
 int file_open_database_file(const char* path) {
     
-    char* real_path = realpath(path, NULL);
+    char* real_path = NULL;
 
-    for (
-        int index = 0;
-        index < database_instance_count;
-        index++
-    ) {
-        if (
-            strcmp(
-                database_instances[index].file_path,
-                real_path
-            ) == 0
+    if((real_path = realpath(path, NULL)) > 0) {
+        for (
+            int instance_idx = 0;
+            instance_idx < database_instance_count;
+            instance_idx++
         ) {
-            free(real_path);
-            return index;
+            if (
+                strcmp(
+                    database_instances[instance_idx].file_path,
+                    real_path
+                ) == 0
+            ) {
+                free(real_path);
+                return database_instances[instance_idx].file_descriptor;
+            }
         }
-    }
 
-    if (database_instance_count >= MAX_DATABASE_INSTANCE) {
+        if (database_instance_count >= MAX_DATABASE_INSTANCE) {
+            free(real_path);
+            return -1;
+        }
+
         free(real_path);
-        return -1;
     }
 
     DatabaseInstance& new_instance = database_instances[database_instance_count++];
-    new_instance.file_path = real_path;
 
     if ((database_fd = open(path, O_RDWR | O_SYNC)) < 1) {
         if(errno == ENOENT) {
-            database_fd = open(path, O_RDWR | O_CREAT | O_SYNC, 0644);
+            error::check(database_fd = open(path, O_RDWR | O_CREAT | O_EXCL | O_SYNC, 0644));
 
             header_page.free_page_idx = 0;
             header_page.page_num = 1;
@@ -279,7 +282,9 @@ int file_open_database_file(const char* path) {
         error::check(read(database_fd, &header_page, PAGE_SIZE));
     }
 
-    return new_instance.file_descriptor = database_fd;
+    new_instance.file_path = realpath(path, NULL);
+
+    return (new_instance.file_descriptor = database_fd);
 }
 
 pagenum_t file_alloc_page(int fd) {
@@ -324,12 +329,12 @@ void file_write_page(int fd, pagenum_t pagenum, const page_t* src) {
 
 void file_close_database_file() {
     for (
-        int index = 0;
-        index < database_instance_count;
-        index++
+        int instance_idx = 0;
+        instance_idx < database_instance_count;
+        instance_idx++
     ) {
-        close(database_instances[index].file_descriptor);
-        free(database_instances[index].file_path);
+        close(database_instances[instance_idx].file_descriptor);
+        free(database_instances[instance_idx].file_path);
     }
 
     database_instance_count = 0;
@@ -340,4 +345,4 @@ void file_close_database_file() {
 
 -------------------------------
 
-Updated on 2021-09-29 at 01:17:26 +0900
+Updated on 2021-09-29 at 22:55:08 +0900
