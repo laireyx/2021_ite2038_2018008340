@@ -7,7 +7,7 @@ doxybook2 \
     --input doxygen/xml \
     --output ../wiki \
     --config .doxybook/config.json \
-    --summary-input home.md.tmpl \
+    --summary-input .doxybook/home.md.tmpl \
     --summary-output ../wiki/home.md
 
 node wiki-gen.js
