@@ -96,7 +96,7 @@ int file_open_database_file(const char* path) {
 
 	if ((database_fd = open(path, O_RDWR | O_SYNC)) < 1) {
 		if(errno == ENOENT) {
-			database_fd = open(path, O_RDWR | O_CREAT | O_SYNC, 0644);
+			error::check(database_fd = open(path, O_RDWR | O_CREAT | O_EXCL | O_SYNC, 0644));
 
 			header_page.free_page_idx = 0;
 			header_page.page_num = 1;
