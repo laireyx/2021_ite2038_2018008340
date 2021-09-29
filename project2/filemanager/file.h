@@ -3,7 +3,7 @@
 #include "types.h"
 
 /// @brief      Initial number of page count in newly created database file.
-/// @details    It means 10MiB(4B * 2560 = 10MiB).
+/// @details    It means 10MiB(4096B * 2560 = 10MiB).
 constexpr int INITIAL_DATABASE_CAPS = 2560;
 
 /// @brief  Maximum number of database instances count.

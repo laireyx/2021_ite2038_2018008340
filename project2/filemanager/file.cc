@@ -23,7 +23,7 @@ headerpage_t header_page;
 
 namespace file_helper {
 	void switch_to_fd(int fd) {
-		assert(fd != 0);
+		assert(fd > 0);
 		if(database_fd == fd) return;
 
 		database_fd = fd;
@@ -61,7 +61,7 @@ namespace file_helper {
 	}
 
 	void flush_header() {
-		assert(database_fd != 0);
+		assert(database_fd > 0);
 		error::check(pwrite64(database_fd, &header_page, PAGE_SIZE, 0));
 	}
 };
@@ -82,7 +82,7 @@ int file_open_database_file(const char* path) {
 			) == 0
 		) {
 			free(real_path);
-			return index;
+			return database_instances[index].file_descriptor;
 		}
 	}
 
