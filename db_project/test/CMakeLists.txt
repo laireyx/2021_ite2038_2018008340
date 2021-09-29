@@ -12,6 +12,7 @@ set(DB_TESTS
   basic_test.cc
   # Add your test files here
   # foo/bar/your_test.cc
+  test.cc
   )
 
 add_executable(db_test ${DB_TESTS})

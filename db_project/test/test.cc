@@ -1,11 +1,12 @@
-#include <sys/types.h>
+#include <gtest/gtest.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #include <cstdlib>
 #include <ctime>
-#include <gtest/gtest.h>
-#include "../file.h"
+
+#include "file.h"
 
 constexpr int test_count = 2559;
 
