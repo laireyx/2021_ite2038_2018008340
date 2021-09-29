@@ -51,7 +51,7 @@ class FileTest : public ::testing::Test {
    * TearDown(). The official document says that the former is actually
    * perferred due to some reasons. Checkout the document for the difference
    */
-  FileTest() { fd = file_open_database_file("test.db"); }
+  FileTest() : pathname("test.db") { fd = file_open_database_file(pathname.c_str()); }
 
   ~FileTest() {
     if (fd >= 0) {
@@ -60,6 +60,7 @@ class FileTest : public ::testing::Test {
   }
 
   int fd;                // file descriptor
+  std::string pathname;  // path for the file
 };
 
 /*
