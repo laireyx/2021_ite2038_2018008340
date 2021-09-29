@@ -68,31 +68,34 @@ namespace file_helper {
 
 int file_open_database_file(const char* path) {
 	
-	char* real_path = realpath(path, NULL);
+	char* real_path = NULL;
 
-	for (
-		int index = 0;
-		index < database_instance_count;
-		index++
-	) {
-		if (
-			strcmp(
-				database_instances[index].file_path,
-				real_path
-			) == 0
+	if((real_path = realpath(path, NULL)) > 0) {
+		for (
+			int instance_idx = 0;
+			instance_idx < database_instance_count;
+			instance_idx++
 		) {
-			free(real_path);
-			return database_instances[index].file_descriptor;
+			if (
+				strcmp(
+					database_instances[instance_idx].file_path,
+					real_path
+				) == 0
+			) {
+				free(real_path);
+				return database_instances[instance_idx].file_descriptor;
+			}
 		}
-	}
 
-	if (database_instance_count >= MAX_DATABASE_INSTANCE) {
+		if (database_instance_count >= MAX_DATABASE_INSTANCE) {
+			free(real_path);
+			return -1;
+		}
+
 		free(real_path);
-		return -1;
 	}
 
 	DatabaseInstance& new_instance = database_instances[database_instance_count++];
-	new_instance.file_path = real_path;
 
 	if ((database_fd = open(path, O_RDWR | O_SYNC)) < 1) {
 		if(errno == ENOENT) {
@@ -112,7 +115,9 @@ int file_open_database_file(const char* path) {
 		error::check(read(database_fd, &header_page, PAGE_SIZE));
 	}
 
-	return new_instance.file_descriptor = database_fd;
+	new_instance.file_path = realpath(path, NULL);
+
+	return (new_instance.file_descriptor = database_fd);
 }
 
 pagenum_t file_alloc_page(int fd) {
@@ -157,12 +162,12 @@ void file_write_page(int fd, pagenum_t pagenum, const page_t* src) {
 
 void file_close_database_file() {
 	for (
-		int index = 0;
-		index < database_instance_count;
-		index++
+		int instance_idx = 0;
+		instance_idx < database_instance_count;
+		instance_idx++
 	) {
-		close(database_instances[index].file_descriptor);
-		free(database_instances[index].file_path);
+		close(database_instances[instance_idx].file_descriptor);
+		free(database_instances[instance_idx].file_path);
 	}
 
 	database_instance_count = 0;

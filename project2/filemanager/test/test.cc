@@ -93,6 +93,13 @@ TEST_F(BasicFileManagerTest, PageIOTest) {
     file_free_page(database_fd, free_page_num);
 }
 
+TEST_F(BasicFileManagerTest, UniqueIdTest) {
+    EXPECT_EQ(database_fd, file_open_database_file("test.db"));
+    EXPECT_EQ(database_fd, file_open_database_file("./test.db"));
+
+    EXPECT_NE(database_fd, file_open_database_file("another_test.db"));
+}
+
 TEST_F(BasicFileManagerTest, SequentialAllocateTest) {
     int allocation_result[test_count] = { 0, };
 
