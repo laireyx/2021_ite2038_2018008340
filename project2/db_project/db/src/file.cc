@@ -55,6 +55,7 @@ namespace file_helper {
 				error::check(pwrite64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE));
 			}
 
+			error::check(fsync(database_fd));
 			header_page.free_page_idx = header_page.page_num;
 			header_page.page_num = newsize;
 		}
@@ -63,6 +64,7 @@ namespace file_helper {
 	void flush_header() {
 		assert(database_fd > 0);
 		error::check(pwrite64(database_fd, &header_page, PAGE_SIZE, 0));
+		error::check(fdatasync(database_fd));
 	}
 };
 
@@ -97,9 +99,9 @@ int file_open_database_file(const char* path) {
 
 	DatabaseInstance& new_instance = database_instances[database_instance_count++];
 
-	if ((database_fd = open(path, O_RDWR | O_SYNC)) < 1) {
+	if ((database_fd = open(path, O_RDWR)) < 1) {
 		if(errno == ENOENT) {
-			error::check(database_fd = open(path, O_RDWR | O_CREAT | O_EXCL | O_SYNC, 0644));
+			error::check(database_fd = open(path, O_RDWR | O_CREAT | O_EXCL, 0644));
 
 			header_page.free_page_idx = 0;
 			header_page.page_num = 1;
@@ -143,6 +145,7 @@ void file_free_page(int fd, pagenum_t pagenum) {
 
 	new_free_page.next_free_idx = old_free_page_idx;
 	error::check(pwrite64(database_fd, &new_free_page, PAGE_SIZE, pagenum * PAGE_SIZE));
+	error::check(fdatasync(database_fd));
 	header_page.free_page_idx = pagenum;
 
 	file_helper::flush_header();
@@ -158,6 +161,7 @@ void file_read_page(int fd, pagenum_t pagenum, page_t* dest) {
 void file_write_page(int fd, pagenum_t pagenum, const page_t* src) {
 	file_helper::switch_to_fd(fd);
 	error::check(pwrite64(database_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE));
+	error::check(fdatasync(database_fd));
 }
 
 void file_close_database_file() {

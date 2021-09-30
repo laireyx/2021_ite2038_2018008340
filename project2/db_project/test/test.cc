@@ -8,32 +8,32 @@
 
 #include "file.h"
 
-constexpr int test_count = 2559;
+constexpr int test_count = 128;
 
 class BasicFileManagerTest : public ::testing::Test {
 protected:
     int test_order[test_count];
     int database_fd = 0;
 
-    void SetUp() override {
-        database_fd = file_open_database_file("test.db");
-        srand(time(NULL));
+    BasicFileManagerTest() {
+      database_fd = file_open_database_file("test.db");
+      srand(time(NULL));
 
-        for(int i = 0; i < test_count; i++) {
-            test_order[i] = i + 1;
-        }
+      for (int i = 0; i < test_count; i++) {
+        test_order[i] = i + 1;
+      }
 
-        for (int i = 0; i < test_count; i++) {
-            int x, y, temp;
-            x = rand() % test_count;
-            y = rand() % test_count;
+      for (int i = 0; i < test_count; i++) {
+        int x, y, temp;
+        x = rand() % test_count;
+        y = rand() % test_count;
 
-            temp = test_order[x];
-            test_order[x] = test_order[y];
-            test_order[y] = temp;
-        }
+        temp = test_order[x];
+        test_order[x] = test_order[y];
+        test_order[y] = temp;
+      }
     }
-    void TearDown() override { }
+    ~BasicFileManagerTest() {}
 };
 
 TEST_F(BasicFileManagerTest, FileInitializationTest) {
