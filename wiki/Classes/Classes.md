@@ -14,6 +14,7 @@
 * **class [IntVectorTest](/Classes/IntVectorTest)** 
 * **class [Page](/Classes/Page)** <br>struct for abstract page. 
 * **namespace [error](/Namespaces/error)** <br>Error. 
+    * **class [Exception](/Classes/error::Exception)** 
 * **namespace [file_helper](/Namespaces/file_helper)** <br>Filemanager helper. 
 * **struct [node](/Classes/node)** 
 * **struct [record](/Classes/record)** 
@@ -23,4 +24,4 @@
 
 -------------------------------
 
-Updated on 2021-10-01 at 19:55:34 +0900
+Updated on 2021-10-01 at 23:25:36 +0900

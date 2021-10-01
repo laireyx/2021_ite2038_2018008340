@@ -10,6 +10,12 @@
 | -------------- |
 | **[error](/Namespaces/error)** <br>Error.  |
 
+## Classes
+
+|                | Name           |
+| -------------- | -------------- |
+| class | **[error::Exception](/Classes/error::Exception)**  |
+
 
 
 
@@ -23,22 +29,58 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <string>
 
 namespace error {
 
-inline int print(bool exit_flag = false) {
-    perror(strerror(errno));
+constexpr int SILENT            = 0x0001;
+constexpr int PRINT_ERROR       = 0x0002;
+constexpr int THROW_EXCEPTION   = 0x0004;
+constexpr int EXIT_PROGRAM      = 0x0008;
 
-    if (exit_flag) {
+class Exception {
+private:
+    std::string error_message;
+    
+    Exception(const Exception& rhs);
+    Exception& operator=(const Exception&);
+public:
+    Exception(std::string message) : error_message(message) { }
+    ~Exception() { }
+};
+
+inline int print(bool exit_flag = PRINT_ERROR) {
+    if(exit_flag & SILENT) {
+        return -errno;
+    }
+
+    if(exit_flag & PRINT_ERROR) {
+        perror("");
+    }
+    if(exit_flag & THROW_EXCEPTION) {
+        throw new Exception("Error");
+    }
+    if(exit_flag & EXIT_PROGRAM) {
         exit(1);
     }
 
     return -errno;
 }
 
-inline bool ok(int value, bool exit_flag = false) {
-    if (value < 0) {
-        print(exit_flag);
+inline bool ok(bool assertion, bool exit_flag = THROW_EXCEPTION) {
+    if (!assertion) {
+        if(exit_flag & SILENT) {
+            return false;
+        }
+        if(exit_flag & PRINT_ERROR) {
+            print(exit_flag);
+        }
+        if(exit_flag & THROW_EXCEPTION) {
+            throw new Exception("Error");
+        }
+        if(exit_flag & EXIT_PROGRAM) {
+            exit(1);
+        }
         return false;
     }
     return true;
@@ -50,4 +92,4 @@ inline bool ok(int value, bool exit_flag = false) {
 
 -------------------------------
 
-Updated on 2021-10-01 at 19:55:34 +0900
+Updated on 2021-10-01 at 23:25:36 +0900

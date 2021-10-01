@@ -14,6 +14,7 @@
   * [DatabaseInstance](/Classes/DatabaseInstance)
   * [BasicFileManagerTest](/Classes/BasicFileManagerTest)
   * [AllocatedPage](/Classes/AllocatedPage)
+  * [error::Exception](/Classes/error::Exception)
 ### [Namespaces](/Namespaces/Namespaces)
   * [testing](/Namespaces/testing)
   * [file_helper](/Namespaces/file_helper)
