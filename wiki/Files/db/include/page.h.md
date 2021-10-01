@@ -17,7 +17,7 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| constexpr int | **[PAGE_SIZE](/Modules/group__DiskSpaceManager#variable-page_size)** <br>Size of each page(in bytes).  |
+| constexpr int | **[PAGE_SIZE](/Modules/DiskSpaceManager#variable-page_size)** <br>Size of each page(in bytes).  |
 
 
 
@@ -64,4 +64,4 @@ struct FreePage : public Page {
 
 -------------------------------
 
-Updated on 2021-10-01 at 18:37:38 +0900
+Updated on 2021-10-01 at 18:38:11 +0900

@@ -2,7 +2,7 @@
 
 # Page
 
-**Module:** **[DiskSpaceManager](/Modules/group__DiskSpaceManager)**
+**Module:** **[DiskSpaceManager](/Modules/DiskSpaceManager)**
 
 
 
@@ -25,4 +25,4 @@ Actually this struct is empty for equalizing the size of all inherited pages.
 
 -------------------------------
 
-Updated on 2021-10-01 at 18:37:38 +0900
+Updated on 2021-10-01 at 18:38:11 +0900
