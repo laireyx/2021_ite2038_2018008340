@@ -1,3 +1,7 @@
+/**
+ * @addtogroup DiskSpaceManager
+ * @{
+ */
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -206,3 +210,4 @@ void file_close_database_file() {
 	database_instance_count = 0;
 	database_fd = 0;
 }
+/** @}*/
