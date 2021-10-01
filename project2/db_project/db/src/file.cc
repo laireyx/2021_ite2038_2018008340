@@ -1,8 +1,4 @@
 
-/**
- * @addtogroup DiskSpaceManager
- * @{
- */
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -44,10 +40,9 @@ void extend_capacity(pagenum_t newsize = 0) {
             newsize = header_page.page_num * 2;
         }
 
-        // from page number to new size, create a new free page and write it.
-        // Do it backward for reducing file size increasement
-        for (pagenum_t free_page_idx = newsize - 1;
-             free_page_idx != header_page.page_num; free_page_idx--) {
+		// from page number to new size, create a new free page and write it.
+        for (pagenum_t free_page_idx = header_page.page_num;
+             free_page_idx < newsize; free_page_idx++) {
             freepage_t free_page;
 
 			/// next free page index is next page index, unless it is the last page.
@@ -58,17 +53,8 @@ void extend_capacity(pagenum_t newsize = 0) {
 
             error::ok(pwrite64(database_fd, &free_page, PAGE_SIZE,
                                   free_page_idx * PAGE_SIZE));
-            error::ok(fsync(database_fd));
+        	error::ok(fsync(database_fd));
         }
-
-        // Once more
-        freepage_t first_free_page;
-
-        first_free_page.next_free_idx = header_page.page_num + 1;
-
-        error::ok(pwrite64(database_fd, &first_free_page, PAGE_SIZE,
-                           header_page.page_num * PAGE_SIZE));
-        error::ok(fsync(database_fd));
 
         header_page.free_page_idx = header_page.page_num;
         header_page.page_num = newsize;
@@ -81,7 +67,7 @@ void extend_capacity(pagenum_t newsize = 0) {
 void flush_header() {
     assert(database_fd > 0);
     error::ok(pwrite64(database_fd, &header_page, PAGE_SIZE, 0));
-    error::ok(fsync(database_fd));
+    error::ok(fdatasync(database_fd));
 }
 };
 
@@ -178,7 +164,7 @@ void file_free_page(int fd, pagenum_t pagenum) {
 	// Its just pushing the pagenum into free page stack.
 	new_free_page.next_free_idx = old_free_page_idx;
 	error::ok(pwrite64(database_fd, &new_free_page, PAGE_SIZE, pagenum * PAGE_SIZE));
-	error::ok(fsync(database_fd));
+	error::ok(fdatasync(database_fd));
 
 	// Set the first free page to freed page number.
 	header_page.free_page_idx = pagenum;
@@ -199,7 +185,7 @@ void file_write_page(int fd, pagenum_t pagenum, const page_t* src) {
         return;
     }
 	error::ok(pwrite64(database_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE));
-	error::ok(fsync(database_fd));
+	error::ok(fdatasync(database_fd));
 }
 
 void file_close_database_file() {
@@ -221,5 +207,3 @@ void file_close_database_file() {
 	database_instance_count = 0;
 	database_fd = 0;
 }
-
-/** @}*/
