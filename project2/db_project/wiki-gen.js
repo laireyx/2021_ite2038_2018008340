@@ -72,3 +72,27 @@ Object.keys(fileNameMapping).forEach(originalFile => {
     fs.mkdirSync(path.dirname(fileNameMapping[originalFile]), { recursive: true });
   fs.renameSync(originalFile, fileNameMapping[originalFile]);
 });
+
+const homePath = path.join(startPath, 'home.md');
+
+const homeFile = fs.readFileSync(homePath, { encoding: 'utf8' });
+const homeParts = homeFile.split(/\n(?=[^ ])/sg);
+
+const realignedParts = ['# DB Project wiki\n'];
+
+const remainingParts = homeParts.map(part => {
+  return part.replace('*', '###');
+}).filter(part => {
+  const partTitle = part.match(/### \[(.+?)\]/)[1];
+
+  if(partTitle === 'Modules') {
+    realignedParts.push(part);
+    realignedParts.push('***');
+  }
+
+  return partTitle !== 'Modules';
+});
+
+realignedParts.push(...remainingParts);
+
+fs.writeFileSync(homePath, realignedParts.join('\n'));
