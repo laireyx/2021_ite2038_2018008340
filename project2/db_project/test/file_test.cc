@@ -16,8 +16,9 @@ const char* ANOTHER_DATABASE_PATH = "test_another.db";
 
 class BasicFileManagerTest : public ::testing::Test {
    protected:
-    // Random indexes for test count
+    /// @brief Random indexes for test count
     int test_order[test_count];
+    /// @brief Test database fd
     int database_fd = 0;
 
     BasicFileManagerTest() {
@@ -43,7 +44,6 @@ class BasicFileManagerTest : public ::testing::Test {
 };
 
 /**
- * @def     TEST_F(BasicFileManagerTest, HandlesInitialization)
  * @brief   Tests file open/close APIs.
  * @details 1. Open a file and check the descriptor
  *          2. Check if the file's initial size is 10 MiB
@@ -66,7 +66,6 @@ TEST_F(BasicFileManagerTest, HandlesInitialization) {
 }
 
 /**
- * @def     TEST_F(BasicFileManagerTest, HandlesPageAllocation)
  * @brief   Tests page allocation and free
  * @details 1. Allocate 2 pages and free one of them, traverse the free page
  * list and check the existence/absence of the freed/allocated page
@@ -109,7 +108,6 @@ TEST_F(BasicFileManagerTest, HandlesPageAllocation) {
 }
 
 /**
- * @def     TEST_F(BasicFileManagerTest, CheckReadWriteOperation)
  * @brief   Tests page read/write operations
  * @details 1. Write/Read a page with some random content and check if the data
  * matches
@@ -142,7 +140,6 @@ TEST_F(BasicFileManagerTest, CheckReadWriteOperation) {
 }
 
 /**
- * @def     TEST_F(BasicFileManagerTest, UniqueIdTest)
  * @brief   Tests unique database fd
  * @details Create database files with different path, but same realpath to
  * check if database uses unique id for that file. Also checks real different
@@ -156,7 +153,6 @@ TEST_F(BasicFileManagerTest, UniqueIdTest) {
 }
 
 /**
- * @def     TEST_F(BasicFileManagerTest, SequentialAllocateTest)
  * @brief   Tests sequential allocation
  * @details Check if pages are correctly allocated and freed. it does not
  * include any expectation, so test procedure purely depends on filemanager's
@@ -177,7 +173,6 @@ TEST_F(BasicFileManagerTest, SequentialAllocateTest) {
 }
 
 /**
- * @def     TEST_F(BasicFileManagerTest, RandomAllocateTest)
  * @brief   Tests random allocation
  * @details This disk space manager uses LIFO for free page management.
  *          Allocate and free page randomly first then allocate again and check
