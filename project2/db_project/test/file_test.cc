@@ -1,3 +1,7 @@
+/**
+ * @addtogroup TestCode
+ * @{
+ */
 #include "file.h"
 
 #include <gtest/gtest.h>
@@ -198,3 +202,4 @@ TEST_F(BasicFileManagerTest, RandomAllocateTest) {
         file_free_page(database_fd, test_order[i]);
     }
 }
+/** @}*/
