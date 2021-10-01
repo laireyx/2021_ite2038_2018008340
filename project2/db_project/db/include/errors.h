@@ -41,7 +41,7 @@ inline int print(bool exit_flag = false) {
  * @returns              true if check is success, and false if fails(for just
  *                       printing and not terminating).
  */
-inline bool check(int value, bool exit_flag = false) {
+inline bool ok(int value, bool exit_flag = false) {
     if (value < 0) {
         print(exit_flag);
         return false;

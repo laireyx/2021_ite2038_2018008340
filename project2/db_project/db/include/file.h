@@ -30,7 +30,7 @@ namespace file_helper {
  * @param fd Database file descriptor obtained with
  * <code>file_open_database_file()</code>.
  */
-void switch_to_fd(int fd);
+bool switch_to_fd(int fd);
 
 /**
  * @brief   Automatically check and size-up a page file.
@@ -63,8 +63,9 @@ int file_open_database_file(const char* path);
  * @brief   Allocate an on-disk page from the free page list
  *
  * @param   fd  Database file descriptor obtained with
- * <code>file_open_database_file()</code>.
- * @return      Allocated page index.
+ *              <code>file_open_database_file()</code>.
+ * @return  >0  Page index number if allocation success.
+ *          0   Zero if allocation failed.
  */
 pagenum_t file_alloc_page(int fd);
 
