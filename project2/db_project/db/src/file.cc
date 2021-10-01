@@ -136,10 +136,12 @@ pagenum_t file_alloc_page(int fd) {
     }
 	file_helper::extend_capacity();
 
+	// Pop the first page from free page stack.
 	pagenum_t free_page_idx = header_page.free_page_idx;
 	freepage_t free_page;
 
 	error::ok(pread64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE));
+	// Move the first free page index to the next page.
 	header_page.free_page_idx = free_page.next_free_idx;
 
 	file_helper::flush_header();
@@ -152,14 +154,19 @@ void file_free_page(int fd, pagenum_t pagenum) {
         return;
     }
 
+	// Current first free page index
 	pagenum_t old_free_page_idx = header_page.free_page_idx;
+	// Newly freed page
 	freepage_t new_free_page;
 
+	// Next free page index of newly freed page is current first free page index.
+	// Its just pushing the pagenum into free page stack.
 	new_free_page.next_free_idx = old_free_page_idx;
 	error::ok(pwrite64(database_fd, &new_free_page, PAGE_SIZE, pagenum * PAGE_SIZE));
 	error::ok(fdatasync(database_fd));
-	header_page.free_page_idx = pagenum;
 
+	// Set the first free page to freed page number.
+	header_page.free_page_idx = pagenum;
 	file_helper::flush_header();
 
 	return;
@@ -186,13 +193,16 @@ void file_close_database_file() {
 		instance_idx < database_instance_count;
 		instance_idx++
 	) {
+		// Close file descriptor and free file path
 		close(database_instances[instance_idx].file_descriptor);
 		free(database_instances[instance_idx].file_path);
 
+		// Reset for accidently re-opening database file.
 		database_instances[instance_idx].file_descriptor = 0;
 		database_instances[instance_idx].file_path = NULL;
 	}
 
+	// Clear database instance count and current database fd.
 	database_instance_count = 0;
 	database_fd = 0;
 }
