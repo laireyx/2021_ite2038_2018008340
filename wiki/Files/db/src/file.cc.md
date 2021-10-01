@@ -14,21 +14,21 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| int | **[file_open_database_file](/Files/db/src/file.cc#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
-| pagenum_t | **[file_alloc_page](/Files/db/src/file.cc#function-file_alloc_page)**(int fd)<br>Allocate an on-disk page from the free page list.  |
-| void | **[file_free_page](/Files/db/src/file.cc#function-file_free_page)**(int fd, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
-| void | **[file_read_page](/Files/db/src/file.cc#function-file_read_page)**(int fd, pagenum_t pagenum, <a href="/Classes/Page">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
-| void | **[file_write_page](/Files/db/src/file.cc#function-file_write_page)**(int fd, pagenum_t pagenum, const <a href="/Classes/Page">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
-| void | **[file_close_database_file](/Files/db/src/file.cc#function-file_close_database_file)**()<br>Stop referencing the database file.  |
+| int | **[file_open_database_file](/Modules/DiskSpaceManager#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
+| pagenum_t | **[file_alloc_page](/Modules/DiskSpaceManager#function-file_alloc_page)**(int fd)<br>Allocate an on-disk page from the free page list.  |
+| void | **[file_free_page](/Modules/DiskSpaceManager#function-file_free_page)**(int fd, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
+| void | **[file_read_page](/Modules/DiskSpaceManager#function-file_read_page)**(int fd, pagenum_t pagenum, <a href="/Classes/Page">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
+| void | **[file_write_page](/Modules/DiskSpaceManager#function-file_write_page)**(int fd, pagenum_t pagenum, const <a href="/Classes/Page">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
+| void | **[file_close_database_file](/Modules/DiskSpaceManager#function-file_close_database_file)**()<br>Stop referencing the database file.  |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| int | **[database_instance_count](/Files/db/src/file.cc#variable-database_instance_count)** <br>current database instance number  |
-| <a href="/Classes/DatabaseInstance">DatabaseInstance</a> | **[database_instances](/Files/db/src/file.cc#variable-database_instances)** <br>all database instances  |
-| int | **[database_fd](/Files/db/src/file.cc#variable-database_fd)** <br>currently opened database file descriptor  |
-| <a href="/Classes/HeaderPage">headerpage_t</a> | **[header_page](/Files/db/src/file.cc#variable-header_page)** <br>currently opened database header page  |
+| int | **[database_instance_count](/Modules/DiskSpaceManager#variable-database_instance_count)** <br>current database instance number  |
+| <a href="/Classes/DatabaseInstance">DatabaseInstance</a> | **[database_instances](/Modules/DiskSpaceManager#variable-database_instances)** <br>all database instances  |
+| int | **[database_fd](/Modules/DiskSpaceManager#variable-database_fd)** <br>currently opened database file descriptor  |
+| <a href="/Classes/HeaderPage">headerpage_t</a> | **[header_page](/Modules/DiskSpaceManager#variable-header_page)** <br>currently opened database header page  |
 
 
 ## Functions Documentation
@@ -62,7 +62,7 @@ Allocate an on-disk page from the free page list.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code>file&#95;open&#95;database&#95;file()</code>. 
+  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
 
 
 **Return**: >0 <a href="/Classes/Page">Page</a> index number if allocation success. 0 Zero if allocation failed. 
@@ -80,7 +80,7 @@ Free an on-disk page to the free page list.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code>file&#95;open&#95;database&#95;file()</code>. 
+  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
   * **pagenum** page index. 
 
 
@@ -98,7 +98,7 @@ Read an on-disk page into the in-memory page structure(dest)
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code>file&#95;open&#95;database&#95;file()</code>. 
+  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
   * **pagenum** page index. 
   * **dest** the pointer of the page data. 
 
@@ -117,7 +117,7 @@ Write an in-memory page(src) to the on-disk page.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code>file&#95;open&#95;database&#95;file()</code>. 
+  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
   * **pagenum** page index. 
   * **src** the pointer of the page data. 
 
@@ -377,4 +377,4 @@ void file_close_database_file() {
 
 -------------------------------
 
-Updated on 2021-10-01 at 13:51:11 +0900
+Updated on 2021-10-01 at 18:39:51 +0900

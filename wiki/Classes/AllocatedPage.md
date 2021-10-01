@@ -2,6 +2,8 @@
 
 # AllocatedPage
 
+**Module:** **[DiskSpaceManager](/Modules/DiskSpaceManager)**
+
 
 
 struct for allocated page. 
@@ -29,4 +31,4 @@ Reserved area for normal allocated page.
 
 -------------------------------
 
-Updated on 2021-10-01 at 13:51:10 +0900
+Updated on 2021-10-01 at 18:39:50 +0900

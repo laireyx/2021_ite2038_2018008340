@@ -15,6 +15,8 @@
   * [testing](/Namespaces/testing)
   * [file_helper](/Namespaces/file_helper)
   * [error](/Namespaces/error)
+* [Modules](/Modules/Modules)
+  * [DiskSpaceManager](/Modules/DiskSpaceManager)
 * [Files](/Files/Files)
   * [test](/Files/test)
   * [basic_test.cc](/Files/test/basic_test.cc)

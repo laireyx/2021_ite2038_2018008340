@@ -1,6 +1,6 @@
 
 
-# db/include/file.h
+# DiskSpaceManager
 
 
 
@@ -9,6 +9,15 @@
 | Name           |
 | -------------- |
 | **[file_helper](/Namespaces/file_helper)** <br>Filemanager helper.  |
+
+## Classes
+
+|                | Name           |
+| -------------- | -------------- |
+| class | **[Page](/Classes/Page)** <br>struct for abstract page.  |
+| class | **[AllocatedPage](/Classes/AllocatedPage)** <br>struct for allocated page.  |
+| class | **[HeaderPage](/Classes/HeaderPage)** <br>struct for the header page.  |
+| class | **[FreePage](/Classes/FreePage)** <br>struct for the free page.  |
 
 ## Functions
 
@@ -28,13 +37,18 @@
 | constexpr int | **[INITIAL_DB_FILE_SIZE](/Modules/DiskSpaceManager#variable-initial_db_file_size)** <br>Initial size(in bytes) of newly created database file.  |
 | constexpr int | **[MAX_DATABASE_INSTANCE](/Modules/DiskSpaceManager#variable-max_database_instance)** <br>Maximum number of database instances count.  |
 | constexpr int | **[INITIAL_DATABASE_CAPS](/Modules/DiskSpaceManager#variable-initial_database_caps)** <br>Initial number of page count in newly created database file.  |
+| constexpr int | **[PAGE_SIZE](/Modules/DiskSpaceManager#variable-page_size)** <br>Size of each page(in bytes).  |
+| int | **[database_instance_count](/Modules/DiskSpaceManager#variable-database_instance_count)** <br>current database instance number  |
+| <a href="/Classes/DatabaseInstance">DatabaseInstance</a> | **[database_instances](/Modules/DiskSpaceManager#variable-database_instances)** <br>all database instances  |
+| int | **[database_fd](/Modules/DiskSpaceManager#variable-database_fd)** <br>currently opened database file descriptor  |
+| <a href="/Classes/HeaderPage">headerpage_t</a> | **[header_page](/Modules/DiskSpaceManager#variable-header_page)** <br>currently opened database header page  |
 
 
 ## Functions Documentation
 
 ### function file_open_database_file
 
-```cpp
+```
 int file_open_database_file(
     const char * path
 )
@@ -51,7 +65,7 @@ Open existing database file or create one if not existed.
 
 ### function file_alloc_page
 
-```cpp
+```
 pagenum_t file_alloc_page(
     int fd
 )
@@ -68,7 +82,7 @@ Allocate an on-disk page from the free page list.
 
 ### function file_free_page
 
-```cpp
+```
 void file_free_page(
     int fd,
     pagenum_t pagenum
@@ -85,7 +99,7 @@ Free an on-disk page to the free page list.
 
 ### function file_read_page
 
-```cpp
+```
 void file_read_page(
     int fd,
     pagenum_t pagenum,
@@ -104,7 +118,7 @@ Read an on-disk page into the in-memory page structure(dest)
 
 ### function file_write_page
 
-```cpp
+```
 void file_write_page(
     int fd,
     pagenum_t pagenum,
@@ -123,7 +137,7 @@ Write an in-memory page(src) to the on-disk page.
 
 ### function file_close_database_file
 
-```cpp
+```
 void file_close_database_file()
 ```
 
@@ -134,7 +148,7 @@ Stop referencing the database file.
 
 ### variable INITIAL_DB_FILE_SIZE
 
-```cpp
+```
 constexpr int INITIAL_DB_FILE_SIZE = 10 * 1024 * 1024;
 ```
 
@@ -145,7 +159,7 @@ It means 10MiB.
 
 ### variable MAX_DATABASE_INSTANCE
 
-```cpp
+```
 constexpr int MAX_DATABASE_INSTANCE = 1024;
 ```
 
@@ -153,7 +167,7 @@ Maximum number of database instances count.
 
 ### variable INITIAL_DATABASE_CAPS
 
-```cpp
+```
 constexpr int INITIAL_DATABASE_CAPS =
     INITIAL_DB_FILE_SIZE / MAX_DATABASE_INSTANCE;
 ```
@@ -163,42 +177,47 @@ Initial number of page count in newly created database file.
 Its value is 2560. 
 
 
+### variable PAGE_SIZE
 
-## Source code
-
-```cpp
-
-#pragma once
-
-#include "types.h"
-
-constexpr int INITIAL_DB_FILE_SIZE = 10 * 1024 * 1024;
-
-constexpr int MAX_DATABASE_INSTANCE = 1024;
-
-constexpr int INITIAL_DATABASE_CAPS =
-    INITIAL_DB_FILE_SIZE / MAX_DATABASE_INSTANCE;
-
-namespace file_helper {
-bool switch_to_fd(int fd);
-
-void extend_capacity(pagenum_t newsize);
-
-void flush_header();
-};  // namespace file_helper
-
-int file_open_database_file(const char* path);
-
-pagenum_t file_alloc_page(int fd);
-
-void file_free_page(int fd, pagenum_t pagenum);
-
-void file_read_page(int fd, pagenum_t pagenum, page_t* dest);
-
-void file_write_page(int fd, pagenum_t pagenum, const page_t* src);
-
-void file_close_database_file();
 ```
+constexpr int PAGE_SIZE = 4096;
+```
+
+Size of each page(in bytes). 
+
+### variable database_instance_count
+
+```
+int database_instance_count = 0;
+```
+
+current database instance number 
+
+### variable database_instances
+
+```
+DatabaseInstance database_instances;
+```
+
+all database instances 
+
+### variable database_fd
+
+```
+int database_fd = 0;
+```
+
+currently opened database file descriptor 
+
+### variable header_page
+
+```
+headerpage_t header_page;
+```
+
+currently opened database header page 
+
+
 
 
 -------------------------------

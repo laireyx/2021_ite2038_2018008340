@@ -17,7 +17,7 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| constexpr int | **[PAGE_SIZE](/Files/db/include/page.h#variable-page_size)** <br>Size of each page(in bytes).  |
+| constexpr int | **[PAGE_SIZE](/Modules/DiskSpaceManager#variable-page_size)** <br>Size of each page(in bytes).  |
 
 
 
@@ -35,6 +35,7 @@ Size of each page(in bytes).
 ## Source code
 
 ```cpp
+
 #pragma once
 #include <cstdint>
 
@@ -63,4 +64,4 @@ struct FreePage : public Page {
 
 -------------------------------
 
-Updated on 2021-10-01 at 13:51:10 +0900
+Updated on 2021-10-01 at 18:39:50 +0900

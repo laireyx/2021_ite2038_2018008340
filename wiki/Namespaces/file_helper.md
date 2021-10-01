@@ -2,6 +2,8 @@
 
 # file_helper
 
+**Module:** **[DiskSpaceManager](/Modules/DiskSpaceManager)**
+
 Filemanager helper.  [More...](#detailed-description)
 
 ## Functions
@@ -33,7 +35,7 @@ Switch current database into given database.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code>file&#95;open&#95;database&#95;file()</code>. 
+  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
 
 
 If current <code>database&#95;fd == fd</code>, then do nothing. If not, change database_fd to given fd and re-read header_page from it.
@@ -79,4 +81,4 @@ Write header page into offset 0 of the current database file descriptor.
 
 -------------------------------
 
-Updated on 2021-10-01 at 13:51:09 +0900
+Updated on 2021-10-01 at 18:39:50 +0900
