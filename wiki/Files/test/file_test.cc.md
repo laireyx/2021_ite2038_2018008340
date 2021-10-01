@@ -14,21 +14,21 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , HandlesInitialization )<br>Tests file open/close APIs.  |
-| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , HandlesPageAllocation )<br>Tests page allocation and free.  |
-| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , CheckReadWriteOperation )<br>Tests page read/write operations.  |
-| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , UniqueIdTest )<br>Tests unique database fd.  |
-| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , SequentialAllocateTest )<br>Tests sequential allocation.  |
-| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , RandomAllocateTest )<br>Tests random allocation.  |
+| | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , HandlesInitialization )<br>Tests file open/close APIs.  |
+| | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , HandlesPageAllocation )<br>Tests page allocation and free.  |
+| | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , CheckReadWriteOperation )<br>Tests page read/write operations.  |
+| | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , UniqueIdTest )<br>Tests unique database fd.  |
+| | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , SequentialAllocateTest )<br>Tests sequential allocation.  |
+| | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , RandomAllocateTest )<br>Tests random allocation.  |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| constexpr int | **[test_count](/Files/test/file_test.cc#variable-test_count)**  |
-| const char * | **[DATABASE_PATH](/Files/test/file_test.cc#variable-database_path)**  |
-| const char * | **[DATABASE_PATH_ALIAS](/Files/test/file_test.cc#variable-database_path_alias)**  |
-| const char * | **[ANOTHER_DATABASE_PATH](/Files/test/file_test.cc#variable-another_database_path)**  |
+| constexpr int | **[test_count](/Modules/TestCode#variable-test_count)**  |
+| const char * | **[DATABASE_PATH](/Modules/TestCode#variable-database_path)**  |
+| const char * | **[DATABASE_PATH_ALIAS](/Modules/TestCode#variable-database_path_alias)**  |
+| const char * | **[ANOTHER_DATABASE_PATH](/Modules/TestCode#variable-another_database_path)**  |
 
 
 ## Functions Documentation
@@ -159,6 +159,7 @@ const char * ANOTHER_DATABASE_PATH = "test_another.db";
 ## Source code
 
 ```cpp
+
 #include "file.h"
 
 #include <gtest/gtest.h>
@@ -328,4 +329,4 @@ TEST_F(BasicFileManagerTest, RandomAllocateTest) {
 
 -------------------------------
 
-Updated on 2021-10-01 at 23:25:36 +0900
+Updated on 2021-10-01 at 23:30:07 +0900
