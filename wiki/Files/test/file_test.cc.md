@@ -14,12 +14,12 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , HandlesInitialization ) |
-| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , HandlesPageAllocation ) |
-| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , CheckReadWriteOperation ) |
-| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , UniqueIdTest ) |
-| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , SequentialAllocateTest ) |
-| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , RandomAllocateTest ) |
+| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , HandlesInitialization )<br>Tests file open/close APIs.  |
+| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , HandlesPageAllocation )<br>Tests page allocation and free.  |
+| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , CheckReadWriteOperation )<br>Tests page read/write operations.  |
+| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , UniqueIdTest )<br>Tests unique database fd.  |
+| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , SequentialAllocateTest )<br>Tests sequential allocation.  |
+| | **[TEST_F](/Files/test/file_test.cc#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , RandomAllocateTest )<br>Tests random allocation.  |
 
 ## Attributes
 
@@ -42,6 +42,13 @@ TEST_F(
 )
 ```
 
+Tests file open/close APIs. 
+
+
+
+1. Open a file and check the descriptor
+    * Check if the file's initial size is 10 MiB 
+
 
 ### function TEST_F
 
@@ -51,6 +58,12 @@ TEST_F(
     HandlesPageAllocation 
 )
 ```
+
+Tests page allocation and free. 
+
+
+
+1. Allocate 2 pages and free one of them, traverse the free page list and check the existence/absence of the freed/allocated page 
 
 
 ### function TEST_F
@@ -62,6 +75,12 @@ TEST_F(
 )
 ```
 
+Tests page read/write operations. 
+
+
+
+1. Write/Read a page with some random content and check if the data matches 
+
 
 ### function TEST_F
 
@@ -71,6 +90,10 @@ TEST_F(
     UniqueIdTest 
 )
 ```
+
+Tests unique database fd. 
+
+Create database files with different path, but same realpath to check if database uses unique id for that file. Also checks real different file and assure that two different database fd should not be same. 
 
 
 ### function TEST_F
@@ -82,6 +105,10 @@ TEST_F(
 )
 ```
 
+Tests sequential allocation. 
+
+Check if pages are correctly allocated and freed. it does not include any expectation, so test procedure purely depends on filemanager's own error checking method. 
+
 
 ### function TEST_F
 
@@ -91,6 +118,10 @@ TEST_F(
     RandomAllocateTest 
 )
 ```
+
+Tests random allocation. 
+
+This disk space manager uses LIFO for free page management. Allocate and free page randomly first then allocate again and check if second allocation result is equal to first free result in reverse order. 
 
 
 
@@ -146,7 +177,6 @@ const char* ANOTHER_DATABASE_PATH = "test_another.db";
 
 class BasicFileManagerTest : public ::testing::Test {
    protected:
-    // Random indexes for test count
     int test_order[test_count];
     int database_fd = 0;
 
@@ -298,4 +328,4 @@ TEST_F(BasicFileManagerTest, RandomAllocateTest) {
 
 -------------------------------
 
-Updated on 2021-10-01 at 13:47:10 +0900
+Updated on 2021-10-01 at 13:51:10 +0900

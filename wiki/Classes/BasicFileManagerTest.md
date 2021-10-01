@@ -19,8 +19,8 @@ Inherits from testing::Test
 
 |                | Name           |
 | -------------- | -------------- |
-| int | **[test_order](/Classes/BasicFileManagerTest#variable-test_order)**  |
-| int | **[database_fd](/Classes/BasicFileManagerTest#variable-database_fd)**  |
+| int | **[test_order](/Classes/BasicFileManagerTest#variable-test_order)** <br>Random indexes for test count.  |
+| int | **[database_fd](/Classes/BasicFileManagerTest#variable-database_fd)** <br>Test database fd.  |
 
 ## Protected Functions Documentation
 
@@ -46,6 +46,7 @@ inline ~BasicFileManagerTest()
 int test_order;
 ```
 
+Random indexes for test count. 
 
 ### variable database_fd
 
@@ -53,7 +54,8 @@ int test_order;
 int database_fd = 0;
 ```
 
+Test database fd. 
 
 -------------------------------
 
-Updated on 2021-10-01 at 13:47:09 +0900
+Updated on 2021-10-01 at 13:51:10 +0900

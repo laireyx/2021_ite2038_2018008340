@@ -50,4 +50,4 @@ inline bool ok(int value, bool exit_flag = false) {
 
 -------------------------------
 
-Updated on 2021-10-01 at 13:47:10 +0900
+Updated on 2021-10-01 at 13:51:10 +0900
