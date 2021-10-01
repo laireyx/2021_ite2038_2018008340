@@ -1,3 +1,7 @@
+/**
+ * @addtogroup DiskSpaceManager
+ * @{
+ */
 #pragma once
 #include <cstdint>
 
@@ -46,3 +50,4 @@ struct FreePage : public Page {
     /// @brief Reserved area for next project.
     uint8_t reserved[PAGE_SIZE - 8];
 };
+/** @}*/

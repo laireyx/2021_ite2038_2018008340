@@ -5,8 +5,9 @@
     "linkLowercase": false,
     "linkAndInlineCodeAsHTML": true,
     "foldersToGenerate": [
+      "modules",
+      "namespaces",
       "classes",
-      "files",
-      "namespaces"
+      "files"
     ]
   }

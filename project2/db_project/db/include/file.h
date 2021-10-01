@@ -1,3 +1,7 @@
+/**
+ * @addtogroup DiskSpaceManager
+ * @{
+ */
 #pragma once
 
 #include "types.h"
@@ -102,3 +106,4 @@ void file_write_page(int fd, pagenum_t pagenum, const page_t* src);
  * @brief   Stop referencing the database file
  */
 void file_close_database_file();
+/** @}*/
