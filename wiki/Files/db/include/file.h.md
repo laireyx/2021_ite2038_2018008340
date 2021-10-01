@@ -64,7 +64,7 @@ Allocate an on-disk page from the free page list.
   * **fd** Database file descriptor obtained with <code>file&#95;open&#95;database&#95;file()</code>. 
 
 
-**Return**: Allocated page index. 
+**Return**: >0 <a href="/Classes/Page">Page</a> index number if allocation success. 0 Zero if allocation failed. 
 
 ### function file_free_page
 
@@ -179,7 +179,7 @@ constexpr int INITIAL_DATABASE_CAPS =
     INITIAL_DB_FILE_SIZE / MAX_DATABASE_INSTANCE;
 
 namespace file_helper {
-void switch_to_fd(int fd);
+bool switch_to_fd(int fd);
 
 void extend_capacity(pagenum_t newsize);
 
@@ -202,4 +202,4 @@ void file_close_database_file();
 
 -------------------------------
 
-Updated on 2021-09-30 at 19:53:44 +0900
+Updated on 2021-10-01 at 13:37:53 +0900

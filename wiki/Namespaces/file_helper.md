@@ -8,7 +8,7 @@ Filemanager helper.  [More...](#detailed-description)
 
 |                | Name           |
 | -------------- | -------------- |
-| void | **[switch_to_fd](/Namespaces/file_helper#function-switch_to_fd)**(int fd)<br>Switch current database into given database.  |
+| bool | **[switch_to_fd](/Namespaces/file_helper#function-switch_to_fd)**(int fd)<br>Switch current database into given database.  |
 | void | **[extend_capacity](/Namespaces/file_helper#function-extend_capacity)**(pagenum_t newsize)<br>Automatically check and size-up a page file.  |
 | void | **[flush_header](/Namespaces/file_helper#function-flush_header)**()<br>Flush a header page as "pagenum 0".  |
 
@@ -24,7 +24,7 @@ This namespace includes some helper functions which are used by filemanager API.
 ### function switch_to_fd
 
 ```cpp
-void switch_to_fd(
+bool switch_to_fd(
     int fd
 )
 ```
@@ -57,6 +57,11 @@ Automatically check and size-up a page file.
 If <code>newsize &gt; page&#95;num</code>, reserve pages so that total page num is equivalent to newsize. If <code>newsize = 0</code> and header page's free_page_idx is 0, double the reserved page count.
 
 
+next free page index is next page index, unless it is the last page.
+
+next free page index is next page index, unless it is the last page.
+
+
 ### function flush_header
 
 ```cpp
@@ -74,4 +79,4 @@ Write header page into offset 0 of the current database file descriptor.
 
 -------------------------------
 
-Updated on 2021-09-30 at 19:53:44 +0900
+Updated on 2021-10-01 at 13:37:53 +0900

@@ -23,4 +23,4 @@ Actually this struct is empty for equalizing the size of all inherited pages.
 
 -------------------------------
 
-Updated on 2021-09-30 at 19:53:44 +0900
+Updated on 2021-10-01 at 13:37:53 +0900
