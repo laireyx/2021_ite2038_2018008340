@@ -1,10 +1,8 @@
-# File manager wiki
+# DB Project wiki
 
 ### [Modules](/Modules/Modules)
   * [DiskSpaceManager](/Modules/DiskSpaceManager)
-
 ***
-
 ### [Classes](/Classes/Classes)
   * [record](/Classes/record)
   * [node](/Classes/node)
