@@ -34,7 +34,7 @@ bool switch_to_fd(int fd) {
     // Switch database fd.
     database_fd = fd;
     // Switch header page content with new database fd.
-    return error::ok(pread64(database_fd, &header_page, PAGE_SIZE, 0));
+    return error::ok(pread64(database_fd, &header_page, PAGE_SIZE, 0) == PAGE_SIZE);
 }
 
 void extend_capacity(pagenum_t newsize = 0) {
@@ -55,22 +55,22 @@ void extend_capacity(pagenum_t newsize = 0) {
                 free_page.next_free_idx = 0;
 
             error::ok(pwrite64(database_fd, &free_page, PAGE_SIZE,
-                                  free_page_idx * PAGE_SIZE));
-        	error::ok(fsync(database_fd));
+                                  free_page_idx * PAGE_SIZE) == PAGE_SIZE);
+        	error::ok(fsync(database_fd) == 0);
         }
 
         header_page.free_page_idx = header_page.page_num;
         header_page.page_num = newsize;
 
-		error::ok(pwrite64(database_fd, &header_page, PAGE_SIZE, 0));
-        error::ok(fsync(database_fd));
+		error::ok(pwrite64(database_fd, &header_page, PAGE_SIZE, 0) == PAGE_SIZE);
+        error::ok(fsync(database_fd) == 0);
     }
 }
 
 void flush_header() {
     assert(database_fd > 0);
-    error::ok(pwrite64(database_fd, &header_page, PAGE_SIZE, 0));
-    error::ok(fsync(database_fd));
+    error::ok(pwrite64(database_fd, &header_page, PAGE_SIZE, 0) == PAGE_SIZE);
+    error::ok(fsync(database_fd) == 0);
 }
 };
 
@@ -112,7 +112,7 @@ int file_open_database_file(const char* path) {
 	if ((database_fd = open(path, O_RDWR)) < 1) {
 		if(errno == ENOENT) {
 			// Create if not exists.
-			error::ok(database_fd = open(path, O_RDWR | O_CREAT | O_EXCL, 0644));
+			error::ok((database_fd = open(path, O_RDWR | O_CREAT | O_EXCL, 0644)) > 0);
 
 			// Initialize header page.
 			header_page.free_page_idx = 0;
@@ -126,7 +126,7 @@ int file_open_database_file(const char* path) {
 	}
 	else {
 		// Read header page.
-		error::ok(read(database_fd, &header_page, PAGE_SIZE));
+		error::ok(read(database_fd, &header_page, PAGE_SIZE) == PAGE_SIZE);
 	}
 
 	new_instance.file_path = realpath(path, NULL);
@@ -144,7 +144,7 @@ pagenum_t file_alloc_page(int fd) {
 	pagenum_t free_page_idx = header_page.free_page_idx;
 	freepage_t free_page;
 
-	error::ok(pread64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE));
+	error::ok(pread64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE) == PAGE_SIZE);
 	// Move the first free page index to the next page.
 	header_page.free_page_idx = free_page.next_free_idx;
 
@@ -166,8 +166,8 @@ void file_free_page(int fd, pagenum_t pagenum) {
 	// Next free page index of newly freed page is current first free page index.
 	// Its just pushing the pagenum into free page stack.
 	new_free_page.next_free_idx = old_free_page_idx;
-	error::ok(pwrite64(database_fd, &new_free_page, PAGE_SIZE, pagenum * PAGE_SIZE));
-	error::ok(fsync(database_fd));
+	error::ok(pwrite64(database_fd, &new_free_page, PAGE_SIZE, pagenum * PAGE_SIZE) == PAGE_SIZE);
+	error::ok(fsync(database_fd) == 0);
 
 	// Set the first free page to freed page number.
 	header_page.free_page_idx = pagenum;
@@ -180,15 +180,15 @@ void file_read_page(int fd, pagenum_t pagenum, page_t* dest) {
     if (!file_helper::switch_to_fd(fd)) {
         return;
     }
-	error::ok(pread64(database_fd, dest, PAGE_SIZE, pagenum * PAGE_SIZE));
+	error::ok(pread64(database_fd, dest, PAGE_SIZE, pagenum * PAGE_SIZE) == PAGE_SIZE);
 }
 
 void file_write_page(int fd, pagenum_t pagenum, const page_t* src) {
     if (!file_helper::switch_to_fd(fd)) {
         return;
     }
-	error::ok(pwrite64(database_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE));
-	error::ok(fsync(database_fd));
+	error::ok(pwrite64(database_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE) == PAGE_SIZE);
+	error::ok(fsync(database_fd) == 0);
 }
 
 void file_close_database_file() {
