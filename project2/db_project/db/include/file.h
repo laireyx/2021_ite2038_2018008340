@@ -6,17 +6,17 @@
 
 #include "types.h"
 
-/// @brief      Initial size(in bytes) of newly created database file.
+/// @brief      Initial size(in bytes) of newly created table file.
 /// @details    It means 10MiB.
-constexpr int INITIAL_DB_FILE_SIZE = 10 * 1024 * 1024;
+constexpr int INITIAL_TABLE_FILE_SIZE = 10 * 1024 * 1024;
 
-/// @brief      Maximum number of database instances count.
-constexpr int MAX_DATABASE_INSTANCE = 1024;
+/// @brief      Maximum number of table instances count.
+constexpr int MAX_TABLE_INSTANCE = 32;
 
-/// @brief      Initial number of page count in newly created database file.
+/// @brief      Initial number of page count in newly created table file.
 /// @details    Its value is 2560.
-constexpr int INITIAL_DATABASE_CAPS =
-    INITIAL_DB_FILE_SIZE / MAX_DATABASE_INSTANCE;
+constexpr int INITIAL_TABLE_CAPS =
+    INITIAL_TABLE_FILE_SIZE / MAX_TABLE_INSTANCE;
 
 /**
  * @brief   Filemanager helper
@@ -26,15 +26,15 @@ constexpr int INITIAL_DATABASE_CAPS =
  */
 namespace file_helper {
 /**
- * @brief   Switch current database into given database.
- * @details If current <code>database_fd == fd</code>, then do nothing.
- *          If not, change database_fd to given fd and re-read header_page from
+ * @brief   Switch current table into given table id.
+ * @details If current table_fd is already means given table id, then do nothing.
+ *          If not, change table_fd to given fd and re-read header_page from
  * it.
  *
- * @param fd Database file descriptor obtained with
- * <code>file_open_database_file()</code>.
+ * @param fd table file descriptor obtained with
+ * <code>file_open_table_file()</code>.
  */
-bool switch_to_fd(int fd);
+bool switch_to_fd(int64_t table_id);
 
 /**
  * @brief   Automatically check and size-up a page file.
@@ -49,61 +49,75 @@ void extend_capacity(pagenum_t newsize);
 
 /**
  * @brief   Flush a header page as "pagenum 0".
- * @details Write header page into offset 0 of the current database file
+ * @details Write header page into offset 0 of the current table file
  * descriptor.
  */
 void flush_header();
 };  // namespace file_helper
 
 /**
- * @brief   Open existing database file or create one if not existed.
+ * @brief   Initialize database management system.
  *
- * @param   path    Database file path.
- * @return          ID of the opened database file.
+ * @returns If success, return 0. Otherwise return non-zero value.
  */
-int file_open_database_file(const char* path);
+int init_db();
+
+/**
+ * @brief   Open existing table file or create one if not existed.
+ *
+ * @param   path    Table file path.
+ * @return          ID of the opened table file.
+ */
+int64_t file_open_table_file(const char* path);
 
 /**
  * @brief   Allocate an on-disk page from the free page list
  *
- * @param   fd  Database file descriptor obtained with
- *              <code>file_open_database_file()</code>.
+ * @param   fd  table file descriptor obtained with
+ *              <code>file_open_table_file()</code>.
  * @return  >0  Page index number if allocation success.
  *          0   Zero if allocation failed.
  */
-pagenum_t file_alloc_page(int fd);
+pagenum_t file_alloc_page(int64_t table_id);
 
 /**
  * @brief   Free an on-disk page to the free page list
  *
- * @param   fd      Database file descriptor obtained with
- * <code>file_open_database_file()</code>.
+ * @param   fd      table file descriptor obtained with
+ *                  <code>file_open_table_file()</code>.
  * @param   pagenum page index.
  */
-void file_free_page(int fd, pagenum_t pagenum);
+void file_free_page(int64_t table_id, pagenum_t pagenum);
 
 /**
  * @brief   Read an on-disk page into the in-memory page structure(dest)
  *
- * @param   fd      Database file descriptor obtained with
- * <code>file_open_database_file()</code>.
+ * @param   fd      table file descriptor obtained with
+ *                  <code>file_open_table_file()</code>.
  * @param   pagenum page index.
  * @param   dest    the pointer of the page data.
  */
-void file_read_page(int fd, pagenum_t pagenum, page_t* dest);
+void file_read_page(int64_t table_id, pagenum_t pagenum, page_t* dest);
 
 /**
  * @brief   Write an in-memory page(src) to the on-disk page
  *
- * @param   fd      Database file descriptor obtained with
- * <code>file_open_database_file()</code>.
+ * @param   fd      table file descriptor obtained with
+ *                  <code>file_open_table_file()</code>.
  * @param   pagenum page index.
  * @param   src     the pointer of the page data.
  */
-void file_write_page(int fd, pagenum_t pagenum, const page_t* src);
+void file_write_page(int64_t table_id, pagenum_t pagenum, const page_t* src);
 
 /**
- * @brief   Stop referencing the database file
+ * @brief   Stop referencing the table files
  */
-void file_close_database_file();
+void file_close_table_files();
+
+/**
+ * @brief   Shutdown database management system.
+ *
+ * @returns If success, return 0. Otherwise return non-zero value.
+ */
+int shutdown_db();
 /** @}*/
