@@ -4,6 +4,7 @@
 #include "file.h"
 #include "page.h"
 
+<<<<<<< HEAD
 namespace tree_helper {
 
 leafpage_t* make_leaf(int table_id, int64_t key, const value_t value, uint16_t val_size, uint64_t parent_page_idx = 0) {
@@ -28,12 +29,20 @@ leafpage_t* create_tree(int table_id, int64_t key, const value_t value, uint16_t
 }
 
 std::shared_ptr<leafpage_t> find_leaf(int table_id, int64_t key) {
+=======
+leafpage_t* find_leaf(int table_id, int64_t key) {
+>>>>>>> 715b42a7554ea194e67fe75556e0805216eaeef4
     auto& instance = file_helper::get_table(table_id);
 
     headerpage_t& header_page = instance.header_page;
 
+<<<<<<< HEAD
     std::shared_ptr<leafpage_t> ret_page = std::make_shared<leafpage_t>();
     internalpage_t* current_page = reinterpret_cast<internalpage_t*>(ret_page.get());
+=======
+    leafpage_t* ret_page = new leafpage_t;
+    internalpage_t* current_page = reinterpret_cast<internalpage_t*>(ret_page);
+>>>>>>> 715b42a7554ea194e67fe75556e0805216eaeef4
 
     if (!header_page.root_page_idx) {
         return nullptr;
@@ -75,25 +84,48 @@ const value_t find_by_key(int table_id, int64_t key,
     }
 }
 
+<<<<<<< HEAD
 leafpage_t* insert_node(int table_id, int64_t key, const value_t value, uint16_t val_size) {
+=======
+int insert_node(int table_id, int64_t key, const char* value, uint16_t val_size,
+                leafpage_t* ret_page) {
+>>>>>>> 715b42a7554ea194e67fe75556e0805216eaeef4
     auto& instance = file_helper::get_table(table_id);
 
     headerpage_t& header_page = instance.header_page;
 
+<<<<<<< HEAD
+=======
+    // record * pointer;
+>>>>>>> 715b42a7554ea194e67fe75556e0805216eaeef4
     // node * leaf;
 
     /* The current implementation ignores
      * duplicates.
      */
 
+<<<<<<< HEAD
     if (find_by_key(table_id, key) > 0) return nullptr;
+=======
+    if (find_by_key(table_id, key) > 0) return 0;
+
+    /* Create a new record for the
+     * value.
+     */
+    // pointer = make_record(value);
+>>>>>>> 715b42a7554ea194e67fe75556e0805216eaeef4
 
     /* Case: the tree does not exist yet.
      * Start a new tree.
      */
 
+<<<<<<< HEAD
     if (header_page.root_page_idx == 0)
         return tree_helper::create_tree(table_id, key, value, val_size);
+=======
+    // if (root == NULL)
+    //    return start_new_tree(key, pointer);
+>>>>>>> 715b42a7554ea194e67fe75556e0805216eaeef4
 
     /* Case: the tree already exists.
      * (Rest of function body.)
@@ -112,6 +144,10 @@ leafpage_t* insert_node(int table_id, int64_t key, const value_t value, uint16_t
     /* Case:  leaf must be split.
      */
 
+<<<<<<< HEAD
     return nullptr;
+=======
+    return 0;
+>>>>>>> 715b42a7554ea194e67fe75556e0805216eaeef4
     // return insert_into_leaf_after_splitting(root, leaf, key, pointer);
 }
