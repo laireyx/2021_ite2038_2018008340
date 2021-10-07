@@ -26,31 +26,20 @@ constexpr int INITIAL_TABLE_CAPS =
  */
 namespace file_helper {
 /**
- * @brief   Switch current table into given table id.
- * @details If current table_fd is already means given table id, then do nothing.
- *          If not, change table_fd to given fd and re-read header_page from
- * it.
- *
- * @param fd table file descriptor obtained with
- * <code>file_open_table_file()</code>.
- */
-bool switch_to_fd(int64_t table_id);
-
-/**
  * @brief   Automatically check and size-up a page file.
  * @details If <code>newsize > page_num</code>, reserve pages so that total page
- * num is equivalent to newsize. If <code>newsize = 0</code> and header page's
- * free_page_idx is 0, double the reserved page count.
+ *          num is equivalent to newsize. If <code>newsize = 0</code> and header page's
+ *          free_page_idx is 0, double the reserved page count.
  *
- * @param   newsize extended size. default is 0, which means doubling the
- * reserved page count if there are no free page.
+ * @param   table_id    Target table id.
+ * @param   newsize     extended size. default is 0, which means doubling the
+ *                      reserved page count if there are no free page.
  */
-void extend_capacity(pagenum_t newsize);
+void extend_capacity(int table_id, pagenum_t newsize);
 
 /**
  * @brief   Flush a header page as "pagenum 0".
  * @details Write header page into offset 0 of the current table file
- * descriptor.
  */
 void flush_header();
 };  // namespace file_helper
@@ -68,12 +57,12 @@ int init_db();
  * @param   path    Table file path.
  * @return          ID of the opened table file.
  */
-int64_t file_open_table_file(const char* path);
+tableid_t file_open_table_file(const char* path);
 
 /**
  * @brief   Allocate an on-disk page from the free page list
  *
- * @param   fd  table file descriptor obtained with
+ * @param   fd  table id obtained with
  *              <code>file_open_table_file()</code>.
  * @return  >0  Page index number if allocation success.
  *          0   Zero if allocation failed.
@@ -83,7 +72,7 @@ pagenum_t file_alloc_page(int64_t table_id);
 /**
  * @brief   Free an on-disk page to the free page list
  *
- * @param   fd      table file descriptor obtained with
+ * @param   fd      table id obtained with
  *                  <code>file_open_table_file()</code>.
  * @param   pagenum page index.
  */
@@ -92,7 +81,7 @@ void file_free_page(int64_t table_id, pagenum_t pagenum);
 /**
  * @brief   Read an on-disk page into the in-memory page structure(dest)
  *
- * @param   fd      table file descriptor obtained with
+ * @param   fd      table id obtained with
  *                  <code>file_open_table_file()</code>.
  * @param   pagenum page index.
  * @param   dest    the pointer of the page data.
@@ -102,7 +91,7 @@ void file_read_page(int64_t table_id, pagenum_t pagenum, page_t* dest);
 /**
  * @brief   Write an in-memory page(src) to the on-disk page
  *
- * @param   fd      table file descriptor obtained with
+ * @param   fd      table id obtained with
  *                  <code>file_open_table_file()</code>.
  * @param   pagenum page index.
  * @param   src     the pointer of the page data.

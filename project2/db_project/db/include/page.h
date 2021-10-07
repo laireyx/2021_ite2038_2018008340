@@ -11,6 +11,9 @@ constexpr int PAGE_SIZE = 4096;
 /// @brief  Size of page header(in bytes).
 constexpr int PAGE_HEADER_SIZE = 128;
 
+/// @brief  Maximum number of page branches.
+constexpr int MAX_PAGE_BRANCHES = 248;
+
 /**
  * @class   Page
  * @brief   struct for abstract page.
@@ -32,7 +35,7 @@ struct HeaderPage : public Page {
     uint64_t root_page_idx;
 
     /// @property Reserved area for next project.
-    uint8_t reserved[PAGE_SIZE - 16];
+    uint8_t reserved[PAGE_SIZE - 24];
 };
 
 /**
@@ -60,7 +63,7 @@ struct PageHeader {
     uint32_t key_num;
 
     /// @brief Reserved area for page header.
-    uint8_t reserved[PAGE_HEADER_SIZE - 16 - 16];
+    uint8_t reserved[PAGE_HEADER_SIZE - 16];
 };
 
 /**
@@ -77,25 +80,37 @@ struct PageSlot {
 };
 
 /**
+ * @class   PageBranch
+ * @brief   page slot for internal node.
+ */
+struct PageBranch {
+    /// @brief The page key.
+    uint64_t key;
+    /// @brief The page index.
+    uint16_t page_idx;
+};
+
+/**
  * @class   AllocatedPage
  * @brief   struct for allocated page.
  */
-struct AllocatedPage : public Page { };
+struct AllocatedPage : public Page {
+    /// @brief Page header.
+    PageHeader page_header;
+};
 
 /**
  * @class   InternalPage
  * @brief   struct for allocated internal page.
  */
 struct InternalPage : public AllocatedPage {
-    /// @brief Page header.
-    PageHeader page_header;
     /// @brief Reserved area for normal allocated page header.
-    uint8_t reserved_header[8];
+    ///uint8_t reserved_header[8];
     /// @brief Additional page index for leftmost children.
-    uint64_t leftmost_children_idx;
+    ///uint64_t leftmost_children_idx;
 
-    /// @brief Reserved area for normal allocated page.
-    uint8_t reserved[PAGE_SIZE - PAGE_HEADER_SIZE];
+    /// @brief Page branches.
+    PageBranch page_branches[MAX_PAGE_BRANCHES];
 };
 
 /**
@@ -106,12 +121,16 @@ struct LeafPage : public AllocatedPage {
     /// @brief Page header.
     PageHeader page_header;
     /// @brief Amount of free space in this leaf page.
-    uint64_t free_space;
+    ///uint64_t free_space;
     /// @brief The right sibling page index.
-    uint64_t next_sibling_idx;
+    ///uint64_t next_sibling_idx;
 
     /// @brief Reserved area for normal allocated page.
     uint8_t reserved[PAGE_SIZE - PAGE_HEADER_SIZE];
 };
+
+namespace page_helper {
+    PageSlot* get_page_slot(LeafPage* page);
+}
 
 /** @}*/

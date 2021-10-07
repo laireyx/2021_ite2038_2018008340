@@ -3,6 +3,7 @@
 #include <cstdint>
 
 typedef uint64_t pagenum_t;
+typedef uint64_t tableid_t;
 
 #include "page.h"
 
@@ -23,4 +24,6 @@ typedef struct TableInstance {
     char* file_path;
     /// @brief Table file descriptor.
     int file_descriptor;
+    /// @brief Table header page.
+    headerpage_t header_page;
 } TableInstance;

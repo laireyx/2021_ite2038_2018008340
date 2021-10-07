@@ -14,7 +14,7 @@
 
 constexpr int test_count = 128;
 
-const char* TABHE_PATH = "test.db";
+const char* TABLE_PATH = "test.db";
 const char* TABLE_PATH_ALIAS = "./test.db";
 const char* ANOTHER_TABLE_PATH = "test_another.db";
 
@@ -119,8 +119,10 @@ TEST_F(BasicFileManagerTest, HandlesPageAllocation) {
 TEST_F(BasicFileManagerTest, CheckReadWriteOperation) {
     int free_page_num = file_alloc_page(table_id);
 
+    ASSERT_EQ(sizeof(internalpage_t), 4096);
+
     internalpage_t page;
-    uint8_t* page_data = reinterpret_cast<uint8_t*>(page.reserved);
+    uint8_t* page_data = reinterpret_cast<uint8_t*>(page.page_branches);
 
     // Generate random values for write
     uint8_t random_values[PAGE_SIZE - PAGE_HEADER_SIZE] = {};
