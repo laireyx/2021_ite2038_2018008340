@@ -105,9 +105,9 @@ struct AllocatedPage : public Page {
  */
 struct InternalPage : public AllocatedPage {
     /// @brief Reserved area for normal allocated page header.
-    ///uint8_t reserved_header[8];
+    /// uint8_t reserved_header[8];
     /// @brief Additional page index for leftmost children.
-    ///uint64_t leftmost_children_idx;
+    /// uint64_t leftmost_children_idx;
 
     /// @brief Page branches.
     PageBranch page_branches[MAX_PAGE_BRANCHES];
@@ -121,16 +121,16 @@ struct LeafPage : public AllocatedPage {
     /// @brief Page header.
     PageHeader page_header;
     /// @brief Amount of free space in this leaf page.
-    ///uint64_t free_space;
+    /// uint64_t free_space;
     /// @brief The right sibling page index.
-    ///uint64_t next_sibling_idx;
+    /// uint64_t next_sibling_idx;
 
     /// @brief Reserved area for normal allocated page.
     uint8_t reserved[PAGE_SIZE - PAGE_HEADER_SIZE];
 };
 
 namespace page_helper {
-    PageSlot* get_page_slot(LeafPage* page);
+PageSlot* get_page_slot(LeafPage* page);
 }
 
 /** @}*/

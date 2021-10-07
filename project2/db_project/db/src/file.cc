@@ -20,8 +20,8 @@ TableInstance table_instances[MAX_TABLE_INSTANCE];
 
 namespace file_helper {
 void extend_capacity(int table_id, pagenum_t newsize = 0) {
-	int table_fd = table_instances[table_id].file_descriptor;
-	headerpage_t& header_page = table_instances[table_id].header_page;
+    int table_fd = table_instances[table_id].file_descriptor;
+    headerpage_t& header_page = table_instances[table_id].header_page;
 
     if (newsize > header_page.page_num || header_page.free_page_idx == 0) {
         if (newsize == 0) {
@@ -53,8 +53,8 @@ void extend_capacity(int table_id, pagenum_t newsize = 0) {
 }
 
 void flush_header(int table_id) {
-	int table_fd = table_instances[table_id].file_descriptor;
-	headerpage_t& header_page = table_instances[table_id].header_page;
+    int table_fd = table_instances[table_id].file_descriptor;
+    headerpage_t& header_page = table_instances[table_id].header_page;
 
     error::ok(pwrite64(table_fd, &header_page, PAGE_SIZE, 0) == PAGE_SIZE);
     error::ok(fsync(table_fd) == 0);
@@ -66,118 +66,113 @@ int init_db() {
 }
 
 tableid_t file_open_table_file(const char* pathname) {
-	
-	char* real_path = NULL;
+    char* real_path = NULL;
 
-	// If table instance is already full, then return error.
-	if (table_instance_count >= MAX_TABLE_INSTANCE) {
-		return -1;
-	}
+    // If table instance is already full, then return error.
+    if (table_instance_count >= MAX_TABLE_INSTANCE) {
+        return -1;
+    }
 
-	// Check if table file is already in table instance array.
-	if((real_path = realpath(pathname, NULL)) > 0) {
-		for (
-			int instance_idx = 0;
-			instance_idx < table_instance_count;
-			instance_idx++
-		) {
-			if (
-				strcmp(
-					table_instances[instance_idx].file_path,
-					real_path
-				) == 0
-			) {
-				// If exists, then return it.
-				free(real_path);
-				return instance_idx;
-			}
-		}
+    // Check if table file is already in table instance array.
+    if ((real_path = realpath(pathname, NULL)) > 0) {
+        for (int instance_idx = 0; instance_idx < table_instance_count;
+             instance_idx++) {
+            if (strcmp(table_instances[instance_idx].file_path, real_path) ==
+                0) {
+                // If exists, then return it.
+                free(real_path);
+                return instance_idx;
+            }
+        }
 
-		free(real_path);
-	}
+        free(real_path);
+    }
 
-	// Reserve a new area in table instance array.
-	TableInstance& new_instance = table_instances[table_instance_count];
+    // Reserve a new area in table instance array.
+    TableInstance& new_instance = table_instances[table_instance_count];
 
-	int& table_fd = new_instance.file_descriptor;
-	headerpage_t& header_page = new_instance.header_page;
+    int& table_fd = new_instance.file_descriptor;
+    headerpage_t& header_page = new_instance.header_page;
 
-	// Check if file exists.
-	if ((table_fd = open(pathname, O_RDWR)) < 1) {
-		if(errno == ENOENT) {
-			// Create if not exists.
-			error::ok((table_fd = open(pathname, O_RDWR | O_CREAT | O_EXCL, 0644)) > 0);
+    // Check if file exists.
+    if ((table_fd = open(pathname, O_RDWR)) < 1) {
+        if (errno == ENOENT) {
+            // Create if not exists.
+            error::ok((table_fd = open(pathname, O_RDWR | O_CREAT | O_EXCL,
+                                       0644)) > 0);
 
-			// Initialize header page.
-			header_page.free_page_idx = 0;
-			header_page.page_num = 1;
+            // Initialize header page.
+            header_page.free_page_idx = 0;
+            header_page.page_num = 1;
 
-			// Initialize free pages.
-			file_helper::extend_capacity(table_instance_count, 2560);
-		} else {
-			return error::print();
-		}
-	}
-	else {
-		// Read header page.
-		error::ok(read(table_fd, &header_page, PAGE_SIZE) == PAGE_SIZE);
-	}
+            // Initialize free pages.
+            file_helper::extend_capacity(table_instance_count, 2560);
+        } else {
+            return error::print();
+        }
+    } else {
+        // Read header page.
+        error::ok(read(table_fd, &header_page, PAGE_SIZE) == PAGE_SIZE);
+    }
 
-	new_instance.file_path = realpath(pathname, NULL);
+    new_instance.file_path = realpath(pathname, NULL);
 
-	return table_instance_count++;
+    return table_instance_count++;
 }
 
 pagenum_t file_alloc_page(int64_t table_id) {
-	int table_fd = table_instances[table_id].file_descriptor;
-	headerpage_t &header_page = table_instances[table_id].header_page;
-	file_helper::extend_capacity(table_id);
+    int table_fd = table_instances[table_id].file_descriptor;
+    headerpage_t& header_page = table_instances[table_id].header_page;
+    file_helper::extend_capacity(table_id);
 
-	// Pop the first page from free page stack.
-	pagenum_t free_page_idx = header_page.free_page_idx;
-	freepage_t free_page;
+    // Pop the first page from free page stack.
+    pagenum_t free_page_idx = header_page.free_page_idx;
+    freepage_t free_page;
 
-	error::ok(pread64(table_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE) == PAGE_SIZE);
-	// Move the first free page index to the next page.
-	header_page.free_page_idx = free_page.next_free_idx;
+    error::ok(pread64(table_fd, &free_page, PAGE_SIZE,
+                      free_page_idx * PAGE_SIZE) == PAGE_SIZE);
+    // Move the first free page index to the next page.
+    header_page.free_page_idx = free_page.next_free_idx;
 
-	file_helper::flush_header(table_fd);
+    file_helper::flush_header(table_fd);
 
-	return free_page_idx;
+    return free_page_idx;
 }
 
 void file_free_page(int64_t table_id, pagenum_t pagenum) {
+    int table_fd = table_instances[table_id].file_descriptor;
+    headerpage_t& header_page = table_instances[table_id].header_page;
 
-	int table_fd = table_instances[table_id].file_descriptor;
-	headerpage_t &header_page = table_instances[table_id].header_page;
+    // Current first free page index
+    pagenum_t old_free_page_idx = header_page.free_page_idx;
+    // Newly freed page
+    freepage_t new_free_page;
 
-	// Current first free page index
-	pagenum_t old_free_page_idx = header_page.free_page_idx;
-	// Newly freed page
-	freepage_t new_free_page;
+    // Next free page index of newly freed page is current first free page
+    // index. Its just pushing the pagenum into free page stack.
+    new_free_page.next_free_idx = old_free_page_idx;
+    error::ok(pwrite64(table_fd, &new_free_page, PAGE_SIZE,
+                       pagenum * PAGE_SIZE) == PAGE_SIZE);
+    error::ok(fsync(table_fd) == 0);
 
-	// Next free page index of newly freed page is current first free page index.
-	// Its just pushing the pagenum into free page stack.
-	new_free_page.next_free_idx = old_free_page_idx;
-	error::ok(pwrite64(table_fd, &new_free_page, PAGE_SIZE, pagenum * PAGE_SIZE) == PAGE_SIZE);
-	error::ok(fsync(table_fd) == 0);
+    // Set the first free page to freed page number.
+    header_page.free_page_idx = pagenum;
+    file_helper::flush_header(table_id);
 
-	// Set the first free page to freed page number.
-	header_page.free_page_idx = pagenum;
-	file_helper::flush_header(table_id);
-
-	return;
+    return;
 }
 
 void file_read_page(int64_t table_id, pagenum_t pagenum, page_t* dest) {
-	int table_fd = table_instances[table_id].file_descriptor;
-	error::ok(pread64(table_fd, dest, PAGE_SIZE, pagenum * PAGE_SIZE) == PAGE_SIZE);
+    int table_fd = table_instances[table_id].file_descriptor;
+    error::ok(pread64(table_fd, dest, PAGE_SIZE, pagenum * PAGE_SIZE) ==
+              PAGE_SIZE);
 }
 
 void file_write_page(int64_t table_id, pagenum_t pagenum, const page_t* src) {
-	int table_fd = table_instances[table_id].file_descriptor;
-	error::ok(pwrite64(table_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE) == PAGE_SIZE);
-	error::ok(fsync(table_fd) == 0);
+    int table_fd = table_instances[table_id].file_descriptor;
+    error::ok(pwrite64(table_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE) ==
+              PAGE_SIZE);
+    error::ok(fsync(table_fd) == 0);
 }
 
 void file_close_table_files() {

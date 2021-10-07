@@ -28,8 +28,8 @@ namespace file_helper {
 /**
  * @brief   Automatically check and size-up a page file.
  * @details If <code>newsize > page_num</code>, reserve pages so that total page
- *          num is equivalent to newsize. If <code>newsize = 0</code> and header page's
- *          free_page_idx is 0, double the reserved page count.
+ *          num is equivalent to newsize. If <code>newsize = 0</code> and header
+ * page's free_page_idx is 0, double the reserved page count.
  *
  * @param   table_id    Target table id.
  * @param   newsize     extended size. default is 0, which means doubling the
