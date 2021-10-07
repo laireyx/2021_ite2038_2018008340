@@ -26,6 +26,14 @@ constexpr int INITIAL_TABLE_CAPS =
  */
 namespace file_helper {
 /**
+ * @brief   Get table instance
+ * @details Get the reference of the table instance ojbect corresponds with the
+ * given table id.
+ *
+ * @param   table_id    Target table id
+ */
+TableInstance& get_table(int table_id);
+/**
  * @brief   Automatically check and size-up a page file.
  * @details If <code>newsize > page_num</code>, reserve pages so that total page
  *          num is equivalent to newsize. If <code>newsize = 0</code> and header

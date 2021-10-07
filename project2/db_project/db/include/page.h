@@ -77,7 +77,7 @@ struct PageSlot {
     uint16_t value_size;
     /// @brief The value offset(in bytes).
     uint16_t value_offset;
-};
+} __attribute__((packed));
 
 /**
  * @class   PageBranch
@@ -131,6 +131,9 @@ struct LeafPage : public AllocatedPage {
 
 namespace page_helper {
 PageSlot* get_page_slot(LeafPage* page);
+const char* get_leaf_value(LeafPage* page, int value_idx, uint16_t* val_size);
+const char* get_leaf_value(LeafPage* page, uint16_t value_offset,
+                           uint16_t value_size);
 }
 
 /** @}*/
