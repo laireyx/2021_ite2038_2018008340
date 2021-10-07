@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#include "page.h"
 #include "types.h"
 
 /// @brief      Initial size(in bytes) of newly created table file.
@@ -19,12 +20,33 @@ constexpr int INITIAL_TABLE_CAPS =
     INITIAL_TABLE_FILE_SIZE / MAX_TABLE_INSTANCE;
 
 /**
+ * @class   TableInstance
+ * @brief   Table file instance.
+ */
+typedef struct TableInstance {
+    /// @brief Real table file path(obtained by realpath(3)).
+    char* file_path;
+    /// @brief Table file descriptor.
+    int file_descriptor;
+    /// @brief Table header page.
+    headerpage_t header_page;
+} TableInstance;
+
+/**
  * @brief   Filemanager helper
  * @details This namespace includes some helper functions which are used by
  * filemanager API. Those functions are not a part of filemanager API, but
  * frequently used part of it so I wrapped these functions.
  */
 namespace file_helper {
+/**
+ * @brief   Get table instance
+ * @details Get the reference of the table instance ojbect corresponds with the
+ * given table id.
+ *
+ * @param   table_id    Target table id
+ */
+TableInstance& get_table(int table_id);
 /**
  * @brief   Automatically check and size-up a page file.
  * @details If <code>newsize > page_num</code>, reserve pages so that total page

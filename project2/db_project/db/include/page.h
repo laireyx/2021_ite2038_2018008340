@@ -3,6 +3,8 @@
  * @{
  */
 #pragma once
+#include "types.h"
+
 #include <cstdint>
 
 /// @brief  Size of each page(in bytes).
@@ -77,7 +79,7 @@ struct PageSlot {
     uint16_t value_size;
     /// @brief The value offset(in bytes).
     uint16_t value_offset;
-};
+} __attribute__((packed));
 
 /**
  * @class   PageBranch
@@ -130,7 +132,23 @@ struct LeafPage : public AllocatedPage {
 };
 
 namespace page_helper {
+
 PageSlot* get_page_slot(LeafPage* page);
+const value_t get_leaf_value(LeafPage* page, int value_idx, uint16_t* value_size);
+const value_t get_leaf_value(LeafPage* page, uint16_t value_offset,
+                           uint16_t value_size);
+
+bool is_leaf_full(LeafPage* page, uint16_t value_size);
+bool add_leaf_value(LeafPage* page, int64_t key, const value_t value, uint16_t value_size);
+
 }
+
+typedef Page page_t;
+typedef PageHeader pageheader_t;
+typedef HeaderPage headerpage_t;
+typedef FreePage freepage_t;
+typedef AllocatedPage allocatedpage_t;
+typedef InternalPage internalpage_t;
+typedef LeafPage leafpage_t;
 
 /** @}*/
