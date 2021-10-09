@@ -11,12 +11,12 @@ tableid_t open_table(const char* pathname) {
 }
 
 int db_insert(tableid_t table_id, int64_t key, const char* value,
-              uint16_t val_size) {
+              uint16_t value_size) {
     return 0;
 }
 
 int db_find(tableid_t table_id, int64_t key, char* ret_val,
-            uint16_t* val_size) {
+            uint16_t* value_size) {
     return 0;
 }
 

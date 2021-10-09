@@ -31,17 +31,18 @@ tableid_t open_table(const char* pathname);
  *          negative value otherwise.
  */
 int db_insert(tableid_t table_id, int64_t key, const char* value,
-              uint16_t val_size);
+              uint16_t value_size);
 
 /**
  * @brief   Find the record corresponding the input key.
- * @details If found, ret_val and val_size will be set to matching value and its
- * size.
+ * @details If found, ret_val and value_size will be set to matching value and
+ * its size.
  *
  * @returns 0 if success.
  *          negative value otherwise.
  */
-int db_find(tableid_t table_id, int64_t key, char* ret_val, uint16_t* val_size);
+int db_find(tableid_t table_id, int64_t key, char* ret_val,
+            uint16_t* value_size);
 
 /**
  * @brief   Find the matching record and delete it if found.

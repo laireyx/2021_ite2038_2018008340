@@ -63,7 +63,7 @@ void extend_capacity(int table_id, pagenum_t newsize);
  * @brief   Flush a header page as "pagenum 0".
  * @details Write header page into offset 0 of the current table file
  */
-void flush_header();
+void flush_header(int table_id);
 };  // namespace file_helper
 
 /**

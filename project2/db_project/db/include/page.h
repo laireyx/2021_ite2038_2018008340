@@ -65,7 +65,15 @@ struct PageHeader {
     uint32_t key_num;
 
     /// @brief Reserved area for page header.
-    uint8_t reserved[PAGE_HEADER_SIZE - 16];
+    uint8_t reserved[PAGE_HEADER_SIZE - 16 - 16];
+
+    struct ReservedFooter {
+        /// @brief Can be free space(in leaf page).
+        uint64_t footer_1;
+        /// @brief Can be leftmost children idx(in internal page) or next
+        /// sibling idx(in leaf page).
+        uint64_t footer_2;
+    } reserved_footer;
 };
 
 /**
@@ -134,13 +142,20 @@ struct LeafPage : public AllocatedPage {
 namespace page_helper {
 
 PageSlot* get_page_slot(LeafPage* page);
-const value_t get_leaf_value(LeafPage* page, int value_idx, uint16_t* value_size);
+const value_t get_leaf_value(LeafPage* page, int value_idx,
+                             uint16_t* value_size = nullptr);
 const value_t get_leaf_value(LeafPage* page, uint16_t value_offset,
                            uint16_t value_size);
 
-bool is_leaf_full(LeafPage* page, uint16_t value_size);
-bool add_leaf_value(LeafPage* page, int64_t key, const value_t value, uint16_t value_size);
+bool has_enough_space(LeafPage* page, uint16_t value_size);
+uint64_t* get_free_space(LeafPage* page);
+uint64_t* get_sibling_idx(LeafPage* page);
 
+bool add_leaf_value(LeafPage* page, int64_t key, const char* value,
+                    uint16_t value_size);
+
+bool add_internal_key(InternalPage* page, int64_t key, pagenum_t page_idx);
+uint64_t* get_leftmost_child_idx(InternalPage* page);
 }
 
 typedef Page page_t;
