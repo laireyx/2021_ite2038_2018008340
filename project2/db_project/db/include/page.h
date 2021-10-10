@@ -110,14 +110,20 @@ struct AllocatedPage : public Page {
 };
 
 /**
+ * @class   AllocatedFullPage
+ * @brief   struct for any allocated page.
+ * @details You should use this struct for read & write allocated page.
+ */
+struct AllocatedFullPage : public AllocatedPage {
+    /// @brief Reserved area for normal allocated page.
+    uint8_t reserved[PAGE_SIZE - PAGE_HEADER_SIZE];
+};
+
+/**
  * @class   InternalPage
  * @brief   struct for allocated internal page.
  */
 struct InternalPage : public AllocatedPage {
-    /// @brief Reserved area for normal allocated page header.
-    /// uint8_t reserved_header[8];
-    /// @brief Additional page index for leftmost children.
-    /// uint64_t leftmost_children_idx;
 
     /// @brief Page branches.
     PageBranch page_branches[MAX_PAGE_BRANCHES];
@@ -128,23 +134,17 @@ struct InternalPage : public AllocatedPage {
  * @brief   struct for allocated leaf page.
  */
 struct LeafPage : public AllocatedPage {
-    /// @brief Page header.
-    PageHeader page_header;
-    /// @brief Amount of free space in this leaf page.
-    /// uint64_t free_space;
-    /// @brief The right sibling page index.
-    /// uint64_t next_sibling_idx;
 
     /// @brief Reserved area for normal allocated page.
     uint8_t reserved[PAGE_SIZE - PAGE_HEADER_SIZE];
-};
+} __attribute__((packed));
 
 namespace page_helper {
 
 PageSlot* get_page_slot(LeafPage* page);
-const value_t get_leaf_value(LeafPage* page, int value_idx,
+char* get_leaf_value(LeafPage* page, int value_idx,
                              uint16_t* value_size = nullptr);
-const value_t get_leaf_value(LeafPage* page, uint16_t value_offset,
+char* get_leaf_value(LeafPage* page, uint16_t value_offset,
                            uint16_t value_size);
 
 bool has_enough_space(LeafPage* page, uint16_t value_size);
@@ -162,7 +162,7 @@ typedef Page page_t;
 typedef PageHeader pageheader_t;
 typedef HeaderPage headerpage_t;
 typedef FreePage freepage_t;
-typedef AllocatedPage allocatedpage_t;
+typedef AllocatedFullPage allocatedpage_t;
 typedef InternalPage internalpage_t;
 typedef LeafPage leafpage_t;
 

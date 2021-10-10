@@ -10,7 +10,7 @@ PageSlot* get_page_slot(LeafPage* page) {
     return reinterpret_cast<PageSlot*>(page->reserved);
 }
 
-const value_t get_leaf_value(LeafPage* page, int value_idx,
+char* get_leaf_value(LeafPage* page, int value_idx,
                              uint16_t* value_size) {
     PageSlot* leaf_slot = get_page_slot(page);
 
@@ -20,13 +20,13 @@ const value_t get_leaf_value(LeafPage* page, int value_idx,
                           leaf_slot[value_idx].value_size);
 }
 
-const value_t get_leaf_value(LeafPage* page, uint16_t value_offset,
+char* get_leaf_value(LeafPage* page, uint16_t value_offset,
                            uint16_t value_size) {
-    value_t ret_val(new char[value_size]);
+    char* ret_val = new char[value_size];
 
-    memcpy(ret_val.get(),
+    memcpy(ret_val,
            page->reserved + (PAGE_SIZE - PAGE_HEADER_SIZE) -
-               (value_offset - value_size),
+               (value_offset + value_size),
            value_size);
 
     return ret_val;
@@ -51,7 +51,7 @@ bool add_leaf_value(LeafPage* page, int64_t key, const char* value,
         return false;
     }
 
-    uint16_t* free_space_amount = reinterpret_cast<uint16_t*>(page->page_header.reserved + PAGE_HEADER_SIZE - 16 - 16);
+    uint64_t* free_space_amount = get_free_space(page);
     PageSlot* leaf_slot = get_page_slot(page);
 
     uint16_t value_offset = 0;
@@ -64,7 +64,7 @@ bool add_leaf_value(LeafPage* page, int64_t key, const char* value,
     leaf_slot[page->page_header.key_num].value_offset = value_offset;
 
     memcpy(page->reserved + (PAGE_SIZE - PAGE_HEADER_SIZE) -
-               (value_offset - value_size),
+               (value_offset + value_size),
            value, value_size);
 
     page->page_header.key_num++;
