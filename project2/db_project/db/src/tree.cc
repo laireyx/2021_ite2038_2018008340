@@ -167,13 +167,12 @@ pagenum_t insert_into_node(int table_id, pagenum_t parent_page_idx,
     return parent_page_idx;
 }
 
-pagenum_t insert_into_node_after_splitting(int table_id, pagenum_t page_idx,
-                                           int left_index, int64_t key,
+pagenum_t insert_into_node_after_splitting(int table_id, pagenum_t page_idx, int64_t key,
                                            pagenum_t right_page_idx) {
     pagenum_t new_page_idx;
     internalpage_t page, new_page;
 
-    PageBranch* temp_branches = new PageBranch[249];
+    std::vector<PageBranch> temp_branches;
 
     file_read_page(table_id, page_idx, &page);
 
@@ -184,13 +183,17 @@ pagenum_t insert_into_node_after_splitting(int table_id, pagenum_t page_idx,
     new_page_idx = make_node(table_id);
     file_read_page(table_id, new_page_idx, &new_page);
 
-    for (int i = 0, j = 0; j < 248; i++, j++) {
-        if (i == j && key < page.page_branches[j].key) {
-            temp_branches[i].key = key;
-            temp_branches[i].page_idx = right_page_idx;
-            i++;
+    bool key_inserted = false;
+    for (int i = 0; i < 249; i++) {
+        if (!key_inserted && (i == 248 || key < page.page_branches[i].key)) {
+            PageBranch new_branch;
+
+            new_branch.key = key;
+            new_branch.page_idx = right_page_idx;
+            temp_branches.push_back(new_branch);
+            key_inserted = true;
         }
-        temp_branches[i] = page.page_branches[j];
+        temp_branches.push_back(page.page_branches[i]);
     }
 
     page.page_header.key_num = 0;
@@ -216,9 +219,10 @@ pagenum_t insert_into_node_after_splitting(int table_id, pagenum_t page_idx,
      * the old node to the left and the new to the right.
      */
 
-    delete[] temp_branches;
+    file_write_page(table_id, page_idx, &page);
+    file_write_page(table_id, new_page_idx, &new_page);
 
-    return insert_into_parent(table_id, page_idx, page.page_branches[123].key,
+    return insert_into_parent(table_id, page_idx, new_page.page_branches[0].key,
                               new_page_idx);
 }
 
@@ -274,8 +278,7 @@ pagenum_t insert_into_parent(int table_id, pagenum_t left_page_idx, int64_t key,
      * to preserve the B+ tree properties.
      */
 
-    return insert_into_node_after_splitting(table_id, parent_page_idx,
-                                            left_index, key, right_page_idx);
+    return insert_into_node_after_splitting(table_id, parent_page_idx, key, right_page_idx);
 }
 
 pagenum_t insert_into_leaf_after_splitting(int table_id,

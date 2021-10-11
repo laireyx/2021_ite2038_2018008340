@@ -52,7 +52,7 @@ TEST_F(BasicTableTest, SequentialInsertTest) {
         ASSERT_TRUE(db_find(table_id, i + 1, reinterpret_cast<char*>(return_value), &value_size) < 0);
     }
 
-    for(int i = 250; i < 251; i++) {
+    for(int i = 250; i < 256; i++) {
         uint8_t temp_value[1024] = {};
         uint8_t return_value[1024] = {};
         uint16_t value_size;

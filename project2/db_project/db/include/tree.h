@@ -15,8 +15,7 @@ pagenum_t insert_into_node(int table_id, pagenum_t parent_page_idx,
                            int left_index, int64_t key,
                            pagenum_t right_page_idx);
 pagenum_t insert_into_node_after_splitting(int table_id,
-                                           pagenum_t parent_page_idx,
-                                           int left_index, int64_t key,
+                                           pagenum_t parent_page_idx, int64_t key,
                                            pagenum_t right_page_idx);
 pagenum_t insert_into_parent(int table_id, pagenum_t left_page_idx, int64_t key,
                              pagenum_t right_page_idx);
