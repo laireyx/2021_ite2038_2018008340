@@ -23,7 +23,7 @@ class BasicFileManagerTest : public ::testing::Test {
     /// @brief Random indexes for test count
     int test_order[test_count];
     /// @brief Test table id
-    int table_id = 0;
+    tableid_t table_id = 0;
 
     BasicFileManagerTest() {
         table_id = file_open_table_file(TABLE_PATH);

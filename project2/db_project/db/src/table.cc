@@ -5,10 +5,6 @@
 
 #include <cstring>
 
-namespace table_helper {
-bool switch_to_id(int64_t table_id) { return true; }
-}  // namespace table_helper
-
 tableid_t open_table(const char* pathname) {
     return file_open_table_file(pathname);
 }

@@ -153,6 +153,7 @@ uint64_t* get_sibling_idx(LeafPage* page);
 
 bool add_leaf_value(LeafPage* page, int64_t key, const char* value,
                     uint16_t value_size);
+bool remove_leaf_value(LeafPage* page, int64_t key);
 
 bool add_internal_key(InternalPage* page, int64_t key, pagenum_t page_idx);
 uint64_t* get_leftmost_child_idx(InternalPage* page);

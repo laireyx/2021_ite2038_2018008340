@@ -46,7 +46,7 @@ namespace file_helper {
  *
  * @param   table_id    Target table id
  */
-TableInstance& get_table(int table_id);
+TableInstance& get_table(tableid_t table_id);
 /**
  * @brief   Automatically check and size-up a page file.
  * @details If <code>newsize > page_num</code>, reserve pages so that total page
@@ -57,13 +57,13 @@ TableInstance& get_table(int table_id);
  * @param   newsize     extended size. default is 0, which means doubling the
  *                      reserved page count if there are no free page.
  */
-void extend_capacity(int table_id, pagenum_t newsize);
+void extend_capacity(tableid_t table_id, pagenum_t newsize);
 
 /**
  * @brief   Flush a header page as "pagenum 0".
  * @details Write header page into offset 0 of the current table file
  */
-void flush_header(int table_id);
+void flush_header(tableid_t table_id);
 };  // namespace file_helper
 
 /**

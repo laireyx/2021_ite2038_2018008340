@@ -19,12 +19,12 @@ int table_instance_count = 0;
 TableInstance table_instances[MAX_TABLE_INSTANCE];
 
 namespace file_helper {
-TableInstance& get_table(int table_id) {
+TableInstance& get_table(tableid_t table_id) {
     error::ok(table_id < table_instance_count);
     return table_instances[table_id];
 }
 
-void extend_capacity(int table_id, pagenum_t newsize = 0) {
+void extend_capacity(tableid_t table_id, pagenum_t newsize = 0) {
     auto& instance = get_table(table_id);
 
     int table_fd = instance.file_descriptor;
@@ -59,7 +59,7 @@ void extend_capacity(int table_id, pagenum_t newsize = 0) {
     }
 }
 
-void flush_header(int table_id) {
+void flush_header(tableid_t table_id) {
     auto& instance = get_table(table_id);
 
     int table_fd = instance.file_descriptor;
@@ -111,6 +111,7 @@ tableid_t file_open_table_file(const char* pathname) {
                                        0644)) > 0);
 
             // Initialize header page.
+            header_page.root_page_idx = 0;
             header_page.free_page_idx = 0;
             header_page.page_num = 1;
 

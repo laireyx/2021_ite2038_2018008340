@@ -1,9 +1,8 @@
 #include "page.h"
 #include "types.h"
 
-#include <memory>
-
-#include <string.h>
+#include <vector>
+#include <cstring>
 
 namespace page_helper {
 PageSlot* get_page_slot(LeafPage* page) {
@@ -25,8 +24,7 @@ char* get_leaf_value(LeafPage* page, uint16_t value_offset,
     char* ret_val = new char[value_size];
 
     memcpy(ret_val,
-           page->reserved + (PAGE_SIZE - PAGE_HEADER_SIZE) -
-               (value_offset + value_size),
+           page->reserved + (value_offset - PAGE_HEADER_SIZE),
            value_size);
 
     return ret_val;
@@ -54,21 +52,44 @@ bool add_leaf_value(LeafPage* page, int64_t key, const char* value,
     uint64_t* free_space_amount = get_free_space(page);
     PageSlot* leaf_slot = get_page_slot(page);
 
-    uint16_t value_offset = 0;
+    uint16_t value_offset = PAGE_SIZE - value_size;
 
     leaf_slot[page->page_header.key_num].key = key;
     leaf_slot[page->page_header.key_num].value_size = value_size;
     if(page->page_header.key_num > 0) {
-        value_offset = leaf_slot[page->page_header.key_num - 1].value_offset + value_size;
+        value_offset = leaf_slot[page->page_header.key_num - 1].value_offset - value_size;
     }
     leaf_slot[page->page_header.key_num].value_offset = value_offset;
 
-    memcpy(page->reserved + (PAGE_SIZE - PAGE_HEADER_SIZE) -
-               (value_offset + value_size),
+    memcpy(page->reserved + (value_offset - PAGE_HEADER_SIZE),
            value, value_size);
 
     page->page_header.key_num++;
     *free_space_amount -= value_size + sizeof(PageSlot);
+
+    return true;
+}
+
+bool remove_leaf_value(LeafPage* page, int64_t key) {
+    PageSlot* leaf_slot = get_page_slot(page);
+
+    uint16_t start_offset;
+    uint16_t offset_shift;
+
+    for(int i = 0; i < page->page_header.key_num; i++) {
+        if(leaf_slot[i].key == key) {
+            start_offset = leaf_slot[i].value_offset;
+            offset_shift = leaf_slot[i].value_size;
+            for(int j = i + 1; j < page->page_header.key_num; j++) {
+                leaf_slot[j - 1].key = leaf_slot[j].key;
+                leaf_slot[j - 1].value_offset = leaf_slot[j].value_offset + offset_shift;
+                leaf_slot[j - 1].value_size = leaf_slot[j].value_size;
+            }
+            break;
+        }
+    }
+
+    memmove(page->reserved + offset_shift, page->reserved, start_offset - PAGE_HEADER_SIZE);
 
     return true;
 }
