@@ -21,7 +21,7 @@ class BasicTableTest : public ::testing::Test {
     int test_order[test_count];
 
     BasicTableTest() {
-        srand(time(NULL));
+        srand(12345);
 
         // Generate random indexes
         for (int i = 0; i < test_count; i++) {
@@ -50,6 +50,7 @@ TEST_F(BasicTableTest, RandomInsertTest) {
     uint8_t temp_value[1024][1024] = {};
 
     for(int i = 0; i < 1024; i++) {
+
         for(int j = 0; j < 1024; j++) {
             temp_value[test_order[i]][j] = rand() % 256;
         }
@@ -60,7 +61,7 @@ TEST_F(BasicTableTest, RandomInsertTest) {
     for(int i = 0; i < 1024; i++) {
         uint16_t value_size;
         uint8_t return_value[1024] = {};
-
+        
         ASSERT_FALSE(db_find(table_id, i, reinterpret_cast<char*>(return_value), &value_size) < 0);
         ASSERT_EQ(value_size, 1024);
         ASSERT_EQ(memcmp(temp_value[i], return_value, 1024), 0);

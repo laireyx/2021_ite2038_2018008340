@@ -16,14 +16,9 @@ int db_insert(tableid_t table_id, int64_t key, const char* value,
 
 int db_find(tableid_t table_id, int64_t key, char* ret_val,
             uint16_t* value_size) {
-    char* find_result = find_by_key(table_id, key, value_size);
-    if(find_result == nullptr) {
+    if(!find_by_key(table_id, key, ret_val, value_size)) {
         return -1;
     }
-
-    memcpy(ret_val, find_result, *value_size);
-    delete[] find_result;
-
     return 0;
 }
 

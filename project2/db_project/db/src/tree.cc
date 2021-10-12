@@ -87,13 +87,13 @@ pagenum_t find_leaf(tableid_t table_id, int64_t key) {
     return current_page_idx;
 }
 
-char* find_by_key(tableid_t table_id, int64_t key,
-                        uint16_t* value_size) {
+bool find_by_key(tableid_t table_id, int64_t key, char* value,
+                 uint16_t* value_size) {
     int i = 0;
     leafpage_t leaf_page;
     pagenum_t leaf_page_idx = find_leaf(table_id, key);
 
-    if (!leaf_page_idx) return nullptr;
+    if (!leaf_page_idx) return false;
     file_read_page(table_id, leaf_page_idx, &leaf_page);
 
     PageSlot* leaf_slot = page_helper::get_page_slot(&leaf_page);
@@ -103,9 +103,10 @@ char* find_by_key(tableid_t table_id, int64_t key,
     }
 
     if (i == leaf_page.page_header.key_num)
-        return nullptr;
+        return false;
     else {
-        return page_helper::get_leaf_value(&leaf_page, i, value_size);
+        page_helper::get_leaf_value(&leaf_page, i, value, value_size);
+        return true;
     }
 }
 
@@ -299,22 +300,19 @@ pagenum_t insert_into_leaf_after_splitting(tableid_t table_id,
 
     // Make a temporary page slot.
     for (int i = 0; i < leaf_page.page_header.key_num; i++) {
-        temp.push_back(std::make_pair(
-            leaf_slot[i],
-            page_helper::get_leaf_value(&leaf_page, i)
-        ));
+        char* temp_value = new char[MAX_VALUE_SIZE];
+        page_helper::get_leaf_value(&leaf_page, i, temp_value);
+
+        temp.emplace_back(leaf_slot[i], temp_value);
     }
     PageSlot new_slot;
-    char* value_copy = new char[value_size];
-    memcpy(value_copy, value, value_size);
+    char* new_value = new char[value_size];
 
     new_slot.key = key;
     new_slot.value_size = value_size;
+    memcpy(new_value, value, value_size);
 
-    temp.push_back(std::make_pair(
-        new_slot,
-        value_copy
-    ));
+    temp.emplace_back(new_slot, new_value);
 
     std::sort(temp.begin(), temp.end(), [](const std::pair<PageSlot, const char*>& a, const std::pair<PageSlot, const char*>& b) {
         return a.first.key < b.first.key;
@@ -353,7 +351,7 @@ pagenum_t insert_into_leaf_after_splitting(tableid_t table_id,
     file_write_page(table_id, leaf_page_idx, &leaf_page);
     file_write_page(table_id, new_leaf_page_idx, &new_leaf_page);
 
-    for(auto& temp_pair : temp) {
+    for(auto& temp_pair: temp) {
         delete[] temp_pair.second;
     }
 
@@ -374,10 +372,7 @@ pagenum_t insert_node(tableid_t table_id, int64_t key, const char* value,
      * duplicates.
      */
 
-    char* existing_check;
-
-    if ((existing_check = find_by_key(table_id, key)) != nullptr) {
-        delete[] existing_check;
+    if (find_by_key(table_id, key)) {
         return 0;
     }
 
@@ -403,23 +398,20 @@ pagenum_t insert_node(tableid_t table_id, int64_t key, const char* value,
         PageSlot* leaf_slot = page_helper::get_page_slot(&leaf_page);
 
         for (int i = 0; i < leaf_page.page_header.key_num; i++) {
-            temp.push_back(std::make_pair(
-                leaf_slot[i],
-                page_helper::get_leaf_value(&leaf_page, i)
-            ));
+            char* temp_value = new char[MAX_VALUE_SIZE];
+            page_helper::get_leaf_value(&leaf_page, i, temp_value);
+
+            temp.emplace_back(leaf_slot[i], temp_value);
         }
 
         PageSlot new_slot;
-        char* value_copy = new char[value_size];
-        memcpy(value_copy, value, value_size);
+        char* new_value = new char[value_size];
 
         new_slot.key = key;
         new_slot.value_size = value_size;
+        memcpy(new_value, value, value_size);
 
-        temp.push_back(std::make_pair(
-            new_slot,
-            value_copy
-        ));
+        temp.emplace_back(new_slot, new_value);
 
         std::sort(temp.begin(), temp.end(), [](const std::pair<PageSlot, const char*>& a, const std::pair<PageSlot, const char*>& b) {
             return a.first.key < b.first.key;
@@ -430,13 +422,10 @@ pagenum_t insert_node(tableid_t table_id, int64_t key, const char* value,
 
         for(auto& temp_pair : temp) {
             page_helper::add_leaf_value(&leaf_page, temp_pair.first.key, temp_pair.second, temp_pair.first.value_size);
+            delete[] temp_pair.second;
         }
 
         file_write_page(table_id, leaf_page_idx, &leaf_page);
-
-        for(auto& temp_pair : temp) {
-            delete[] temp_pair.second;
-        }
         return leaf_page_idx;
     }
 
@@ -445,6 +434,81 @@ pagenum_t insert_node(tableid_t table_id, int64_t key, const char* value,
 
     return insert_into_leaf_after_splitting(table_id, leaf_page_idx, key, value,
                                             value_size);
+}
+
+pagenum_t adjust_root(tableid_t table_id) {
+    auto& instance = file_helper::get_table(table_id);
+
+    headerpage_t& header_page = instance.header_page;
+    allocatedpage_t root_page;
+
+    file_read_page(table_id, header_page.root_page_idx, &root_page);
+
+    /* Case: nonempty root.
+     * Key and pointer have already been deleted,
+     * so nothing to be done.
+     */
+
+    if (root_page.page_header.key_num > 0) return header_page.root_page_idx;
+
+    /* Case: empty root.
+     */
+
+    // If it has a child, promote
+    // the first (only) child
+    // as the new root.
+
+    if (!root_page.page_header.is_leaf_page) {
+        header_page.root_page_idx = *page_helper::get_leftmost_child_idx(
+            reinterpret_cast<internalpage_t*>(&root_page));
+    }
+
+    file_helper::flush_header(table_id);
+
+    return header_page.root_page_idx;
+}
+
+pagenum_t coalesce_internal_nodes(tableid_t table_id, pagenum_t left_page_idx,
+                                  pagenum_t right_page_idx) {
+    auto& instance = file_helper::get_table(table_id);
+
+    headerpage_t& header_page = instance.header_page;
+
+    int64_t old_key;
+    internalpage_t parent_page;
+    internalpage_t left_page, right_page;
+    PageSlot* right_slot;
+
+    file_read_page(table_id, left_page_idx, &left_page);
+    file_read_page(table_id, right_page_idx, &right_page);
+    file_read_page(table_id, left_page.page_header.parent_page_idx,
+                   &parent_page);
+
+    for (int i = 0; i < right_page.page_header.key_num; i++) {
+        allocatedpage_t child_page;
+        page_helper::add_internal_key(&left_page,
+                                      right_page.page_branches[i].key,
+                                      right_page.page_branches[i].page_idx);
+
+        file_read_page(table_id, right_page.page_branches[i].page_idx,
+                       &child_page);
+        child_page.page_header.parent_page_idx = left_page_idx;
+        file_write_page(table_id, right_page.page_branches[i].page_idx,
+                        &child_page);
+    }
+
+    for (int i = 0; i < parent_page.page_header.key_num; i++) {
+        if (parent_page.page_branches[i].page_idx == right_page_idx) {
+            delete_internal_key(table_id, left_page.page_header.parent_page_idx,
+                                parent_page.page_branches[i].key);
+            break;
+        }
+    }
+
+    file_write_page(table_id, left_page_idx, &left_page);
+    file_free_page(table_id, right_page_idx);
+
+    return header_page.root_page_idx;
 }
 
 pagenum_t coalesce_leaf_nodes(tableid_t table_id, pagenum_t left_page_idx, pagenum_t right_page_idx) {
@@ -471,9 +535,9 @@ pagenum_t coalesce_leaf_nodes(tableid_t table_id, pagenum_t left_page_idx, pagen
     right_slot = page_helper::get_page_slot(&right_page);
 
     for (int i = 0; i < right_page.page_header.key_num; i++) {
-        char* right_slot_value = page_helper::get_leaf_value(&right_page, i);
+        char right_slot_value[MAX_VALUE_SIZE];
+        page_helper::get_leaf_value(&right_page, i, right_slot_value);
         page_helper::add_leaf_value(&left_page, right_slot[i].key, right_slot_value, right_slot[i].value_size);
-        delete[] right_slot_value;
     }
     *page_helper::get_sibling_idx(&left_page) = *page_helper::get_sibling_idx(&right_page);
 
@@ -496,10 +560,11 @@ pagenum_t delete_internal_key(tableid_t table_id, pagenum_t internal_page_idx, i
 
     headerpage_t& header_page = instance.header_page;
 
-    int capacity;
+    int64_t seperate_key;
+    bool left_sibling = false;
 
-    pagenum_t sibling_page_idx;
-    leafpage_t internal_page, sibling_page;
+    pagenum_t sibling_page_idx = 0;
+    internalpage_t internal_page, sibling_page;
 
     pagenum_t parent_page_idx;
     internalpage_t parent_page;
@@ -507,6 +572,8 @@ pagenum_t delete_internal_key(tableid_t table_id, pagenum_t internal_page_idx, i
     // Remove key and pointer from node.
 
     file_read_page(table_id, internal_page_idx, &internal_page);
+    page_helper::remove_internal_key(&internal_page, key);
+    file_write_page(table_id, internal_page_idx, &internal_page);
 
     /* Case:  deletion from the root. 
      */
@@ -527,7 +594,7 @@ pagenum_t delete_internal_key(tableid_t table_id, pagenum_t internal_page_idx, i
      * (The simple case.)
      */
 
-    if (*page_helper::get_free_space(&leaf_page) <= (PAGE_SIZE - PAGE_HEADER_SIZE) / 2)
+    if (internal_page.page_header.key_num >= 124)
         return header_page.root_page_idx;
 
     /* Case:  node falls below minimum.
@@ -542,25 +609,76 @@ pagenum_t delete_internal_key(tableid_t table_id, pagenum_t internal_page_idx, i
      * to the neighbor.
      */
 
-    sibling_page_idx = *page_helper::get_sibling_idx(&leaf_page);
-    if(sibling_page_idx == 0) {
-        sibling_page_idx = parent_page.page_branches[parent_page.page_header.key_num - 2].page_idx;
+    file_read_page(table_id, internal_page.page_header.parent_page_idx,
+                   &parent_page);
+    if (*page_helper::get_leftmost_child_idx(&parent_page) ==
+        internal_page_idx) {
+        seperate_key = parent_page.page_branches[0].key;
+        sibling_page_idx = parent_page.page_branches[0].page_idx;
     }
+    for (int i = 0; i < parent_page.page_header.key_num - 1; i++) {
+        if (parent_page.page_branches[i].page_idx == internal_page_idx) {
+            seperate_key = parent_page.page_branches[i - 1].key;
+            sibling_page_idx = parent_page.page_branches[i - 1].page_idx;
+        }
+    }
+
+    if(sibling_page_idx == 0) {
+        seperate_key =
+            parent_page.page_branches[parent_page.page_header.key_num - 2].key;
+        sibling_page_idx = parent_page.page_branches[parent_page.page_header.key_num - 2].page_idx;
+        left_sibling = true;
+    }
+
     file_read_page(table_id, sibling_page_idx, &sibling_page);
 
     /* Coalescence. */
 
-    if (*page_helper::get_free_space(&leaf_page) + *page_helper::get_free_space(&sibling_page) >= PAGE_SIZE - PAGE_HEADER_SIZE) {
-        if(*page_helper::get_sibling_idx(&leaf_page) == 0)
-            return coalesce_nodes(table_id, parent_page.page_branches[parent_page.page_header.key_num - 2].page_idx, leaf_page_idx);
+    if (internal_page.page_header.key_num + sibling_page.page_header.key_num <=
+        248) {
+        if (!left_sibling)
+            return coalesce_internal_nodes(table_id, internal_page_idx,
+                                           sibling_page_idx);
         else
-            return coalesce_nodes(table_id, leaf_page_idx, sibling_page_idx);
+            return coalesce_internal_nodes(table_id, sibling_page_idx,
+                                           internal_page_idx);
+    } else {
+        if (!left_sibling) {
+            page_helper::add_internal_key(
+                &internal_page, seperate_key,
+                *page_helper::get_leftmost_child_idx(&sibling_page));
+
+            *page_helper::get_leftmost_child_idx(&sibling_page) =
+                sibling_page.page_branches[0].page_idx;
+            for (int i = 0; i < sibling_page.page_header.key_num - 1; i++) {
+                sibling_page.page_branches[i] =
+                    sibling_page.page_branches[i + 1];
+            }
+
+            sibling_page.page_header.key_num--;
+        } else {
+            for (int i = internal_page.page_header.key_num; i > 0; i--) {
+                internal_page.page_branches[i] =
+                    internal_page.page_branches[i - 1];
+            }
+            internal_page.page_branches[0].key = seperate_key;
+            internal_page.page_branches[0].page_idx =
+                *page_helper::get_leftmost_child_idx(&internal_page);
+            *page_helper::get_leftmost_child_idx(&internal_page) =
+                sibling_page.page_branches[sibling_page.page_header.key_num - 1]
+                    .page_idx;
+
+            page_helper::remove_internal_key(
+                &sibling_page,
+                sibling_page.page_branches[sibling_page.page_header.key_num - 1]
+                    .key);
+        }
+
+        file_write_page(table_id, internal_page_idx, &internal_page);
+        file_write_page(table_id, sibling_page_idx, &sibling_page);
     }
 
-    /* Redistribution. */
-
-    else
-        return redistribute_nodes(root, n, neighbor, neighbor_index, k_prime_index, k_prime);
+    return header_page.root_page_idx;
 }
 
 pagenum_t delete_leaf_key(tableid_t table_id, pagenum_t leaf_page_idx, int64_t key) {
@@ -569,7 +687,8 @@ pagenum_t delete_leaf_key(tableid_t table_id, pagenum_t leaf_page_idx, int64_t k
 
     headerpage_t& header_page = instance.header_page;
 
-    int capacity;
+    int seperate_key_idx;
+    bool left_sibling = false;
 
     pagenum_t sibling_page_idx;
     leafpage_t leaf_page, sibling_page;
@@ -582,6 +701,7 @@ pagenum_t delete_leaf_key(tableid_t table_id, pagenum_t leaf_page_idx, int64_t k
     file_read_page(table_id, parent_page_idx, &parent_page);
 
     page_helper::remove_leaf_value(&leaf_page, key);
+    file_write_page(table_id, leaf_page_idx, &leaf_page);
 
     if (leaf_page_idx == header_page.root_page_idx)
         return adjust_root(header_page.root_page_idx);
@@ -596,14 +716,74 @@ pagenum_t delete_leaf_key(tableid_t table_id, pagenum_t leaf_page_idx, int64_t k
     file_read_page(table_id, sibling_page_idx, &sibling_page);
 
     if (*page_helper::get_free_space(&leaf_page) + *page_helper::get_free_space(&sibling_page) >= PAGE_SIZE - PAGE_HEADER_SIZE) {
-        if(*page_helper::get_sibling_idx(&leaf_page) == 0)
-            return coalesce_leaf_nodes(table_id, parent_page.page_branches[parent_page.page_header.key_num - 2].page_idx, leaf_page_idx);
-        else
+        if (!left_sibling)
             return coalesce_leaf_nodes(table_id, leaf_page_idx, sibling_page_idx);
+        else
+            return coalesce_leaf_nodes(table_id, sibling_page_idx,
+                                       leaf_page_idx);
+    } else {
+        if (!left_sibling) {
+            std::vector<std::pair<PageSlot, const char*>> temp;
+
+            PageSlot temp_slot;
+            PageSlot* sibling_slot = page_helper::get_page_slot(&sibling_page);
+
+            while (*page_helper::get_free_space(&sibling_page) >=
+                   REDISTRIBUTE_THRESHOLD) {
+                char* temp_value = new char[MAX_VALUE_SIZE];
+                page_helper::get_leaf_value(&sibling_page, 0, temp_value);
+
+                temp.emplace_back(sibling_slot[0], temp_value);
+                page_helper::remove_leaf_value(&sibling_page,
+                                               sibling_slot[0].key);
+            }
+
+            for (auto& temp_pair : temp) {
+                page_helper::add_leaf_value(&leaf_page, temp_pair.first.key,
+                                            temp_pair.second,
+                                            temp_pair.first.value_size);
+                delete[] temp_pair.second;
+            }
+        } else {
+            std::vector<std::pair<PageSlot, const char*>> temp;
+
+            PageSlot* leaf_slot = page_helper::get_page_slot(&leaf_page);
+            PageSlot* sibling_slot = page_helper::get_page_slot(&sibling_page);
+
+            while (*page_helper::get_free_space(&sibling_page) >=
+                   REDISTRIBUTE_THRESHOLD) {
+                char* temp_value = new char[MAX_VALUE_SIZE];
+                page_helper::get_leaf_value(&sibling_page, 0, temp_value);
+
+                temp.emplace_back(sibling_slot[0], temp_value);
+                page_helper::remove_leaf_value(&sibling_page,
+                                               sibling_slot[0].key);
+            }
+
+            for (int i = 0; i < leaf_page.page_header.key_num; i++) {
+                char* temp_value = new char[MAX_VALUE_SIZE];
+                page_helper::get_leaf_value(&leaf_page, i, temp_value);
+
+                temp.emplace_back(leaf_slot[i], temp_value);
+            }
+
+            leaf_page.page_header.key_num = 0;
+            *page_helper::get_free_space(&leaf_page) =
+                PAGE_SIZE - PAGE_HEADER_SIZE;
+
+            for (auto& temp_pair : temp) {
+                page_helper::add_leaf_value(&leaf_page, temp_pair.first.key,
+                                            temp_pair.second,
+                                            temp_pair.first.value_size);
+                delete[] temp_pair.second;
+            }
+        }
+
+        file_write_page(table_id, leaf_page_idx, &leaf_page);
+        file_write_page(table_id, sibling_page_idx, &sibling_page);
     }
 
-    else
-        return redistribute_nodes(root, n, neighbor, neighbor_index, k_prime_index, k_prime);
+    return header_page.root_page_idx;
 }
 
 pagenum_t delete_node(tableid_t table_id, int64_t key) {
