@@ -67,13 +67,6 @@ void flush_header(tableid_t table_id);
 };  // namespace file_helper
 
 /**
- * @brief   Initialize database management system.
- *
- * @returns If success, return 0. Otherwise return non-zero value.
- */
-int init_db();
-
-/**
  * @brief   Open existing table file or create one if not existed.
  *
  * @param   path    Table file path.
@@ -124,11 +117,4 @@ void file_write_page(int64_t table_id, pagenum_t pagenum, const page_t* src);
  * @brief   Stop referencing the table files
  */
 void file_close_table_files();
-
-/**
- * @brief   Shutdown database management system.
- *
- * @returns If success, return 0. Otherwise return non-zero value.
- */
-int shutdown_db();
 /** @}*/

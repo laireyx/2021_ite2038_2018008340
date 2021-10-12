@@ -5,16 +5,65 @@
 constexpr int REDISTRIBUTE_THRESHOLD = 2500;
 constexpr int MAX_VALUE_SIZE = 1024;
 
-pagenum_t make_leaf(uint64_t parent_page_idx = 0);
+/**
+ * @brief Allocate and make a leaf page.
+ *
+ * @param table_id          Table id.
+ * @param parent_page_idx   Parent page index.
+ * @returns Created page index.
+ */
+pagenum_t make_leaf(tableid_t table_id, pagenum_t parent_page_idx = 0);
+/**
+ * @brief Allocate and make an internal page.
+ *
+ * @param table_id          Table id.
+ * @param parent_page_idx   Parent page index.
+ * @returns Created page index.
+ */
+pagenum_t make_node(tableid_t table_id, pagenum_t parent_page_idx = 0);
+
+/**
+ * @brief Create a new tree.
+ * @details Create a new leaf page for root page and set initial record.
+ *
+ * @param table_id      Table id.
+ * @param key           Initial record key.
+ * @param value         Initial record value.
+ * @param value_size    Initial record value size.
+ * @returns Root page index.
+ */
 pagenum_t create_tree(tableid_t table_id, int64_t key, const char* value,
                       uint16_t value_size);
 
-pagenum_t find_leaf(tableid_t table_id, int64_t key, pagenum_t* leaf_page_idx);
+/**
+ * @brief Find a leaf node which continas
+ *
+ * @param table_id      Table id.
+ * @param key           Key to query with.
+ * @returns Page index if found.
+ *          <code>0</code> if the key does not exist.
+ */
+pagenum_t find_leaf(tableid_t table_id, int64_t key);
+/**
+ * @brief Find a record with key
+ *
+ * @param table_id      Table id.
+ * @param key           Key to query with.
+ * @param value         If the record is found successful, then this value is
+ * set to record value. Caller should allocate enough(MAX_VALUE_SIZE) memory for
+ * it.
+ * @param value_size    If the record is found successful, then this value is
+ * set to record size.
+ * @return <code>true</code> if found successful. <code>false</code> otherwise.
+ */
 bool find_by_key(tableid_t table_id, int64_t key, char* value = nullptr,
                  uint16_t* value_size = nullptr);
 
-pagenum_t make_node();
-pagenum_t make_leaf(void);
+/**
+ * @brief Insert a <code>(key, right_page_idx)</code> tuple in parent page.
+ *
+ * @param
+ */
 pagenum_t insert_into_node(tableid_t table_id, pagenum_t parent_page_idx,
                            pagenum_t left_page_idx, int64_t key,
                            pagenum_t right_page_idx);

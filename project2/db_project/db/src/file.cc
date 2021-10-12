@@ -70,10 +70,6 @@ void flush_header(tableid_t table_id) {
 }
 };
 
-int init_db() {
-	return 0;
-}
-
 tableid_t file_open_table_file(const char* pathname) {
     char* real_path = NULL;
 
@@ -211,10 +207,5 @@ void file_close_table_files() {
 
     // Clear table instance count.
     table_instance_count = 0;
-}
-
-int shutdown_db() {
-	file_close_table_files();
-	return 0;
 }
 /** @}*/

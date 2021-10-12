@@ -15,6 +15,13 @@ bool switch_to_id(int64_t table_id);
 }  // namespace table_helper
 
 /**
+ * @brief   Initialize database management system.
+ *
+ * @returns If success, return 0. Otherwise return non-zero value.
+ */
+int init_db();
+
+/**
  * @brief   Open existing data file using ‘pathname’ or create one if not
  * existed.
  *
@@ -51,3 +58,10 @@ int db_find(tableid_t table_id, int64_t key, char* ret_val,
  *          negative value otherwise.
  */
 int db_delete(tableid_t table_id, int64_t key);
+
+/**
+ * @brief   Shutdown database management system.
+ *
+ * @returns If success, return 0. Otherwise return non-zero value.
+ */
+int shutdown_db();

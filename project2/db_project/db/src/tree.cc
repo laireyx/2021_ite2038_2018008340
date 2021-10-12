@@ -8,7 +8,7 @@
 #include "file.h"
 #include "page.h"
 
-pagenum_t make_node(tableid_t table_id, pagenum_t parent_page_idx = 0) {
+pagenum_t make_node(tableid_t table_id, pagenum_t parent_page_idx) {
     allocatedpage_t page = {};
     pagenum_t page_idx = file_alloc_page(table_id);
 
@@ -21,7 +21,7 @@ pagenum_t make_node(tableid_t table_id, pagenum_t parent_page_idx = 0) {
     return page_idx;
 }
 
-pagenum_t make_leaf(tableid_t table_id, pagenum_t parent_page_idx = 0) {
+pagenum_t make_leaf(tableid_t table_id, pagenum_t parent_page_idx) {
     leafpage_t leaf_page;
     pagenum_t leaf_page_idx = make_node(table_id, parent_page_idx);
 
@@ -150,26 +150,24 @@ pagenum_t insert_into_new_root(tableid_t table_id, pagenum_t left_page_idx,
 pagenum_t insert_into_node(tableid_t table_id, pagenum_t parent_page_idx,
                            pagenum_t left_page_idx, int64_t key,
                            pagenum_t right_page_idx) {
+    int insert_position;
     internalpage_t parent_page;
 
     file_read_page(table_id, parent_page_idx, &parent_page);
 
-    page_helper::add_internal_key(&parent_page, key, right_page_idx);
-    std::sort(parent_page.page_branches,
-        parent_page.page_branches + parent_page.page_header.key_num,
-        [](const PageBranch& a, const PageBranch& b) {
-            return a.key < b.key;
-        });
-    /// @todo use this.
-    /*int i = parent_page.page_header.key_num;
-    for (; i >= 0; i--) {
-        if(i == 0 || parent_page.page_branches[i - 1].page_idx == left_page_idx) {
-            parent_page.page_branches[i].key = key;
-            parent_page.page_branches[i].page_idx = right_page_idx;
+    insert_position = parent_page.page_header.key_num++;
+
+    while (insert_position > 0) {
+        if (parent_page.page_branches[insert_position - 1].page_idx ==
+            left_page_idx)
             break;
-        }
-        parent_page.page_branches[i] = parent_page.page_branches[i - 1];
-    }*/
+        parent_page.page_branches[insert_position] =
+            parent_page.page_branches[insert_position - 1];
+        insert_position--;
+    }
+
+    page_helper::set_internal_key(&parent_page, insert_position, key,
+                                  right_page_idx);
 
     file_write_page(table_id, parent_page_idx, &parent_page);
 
@@ -248,7 +246,6 @@ pagenum_t insert_into_parent(tableid_t table_id, pagenum_t left_page_idx, int64_
     file_read_page(table_id, left_page_idx, &left_page);
     file_read_page(table_id, header_page.root_page_idx, &root_page);
 
-    /* Case: new root. */
     if (left_page.page_header.parent_page_idx == 0) {
         return insert_into_new_root(table_id, left_page_idx, key,
                                     right_page_idx);
@@ -258,24 +255,9 @@ pagenum_t insert_into_parent(tableid_t table_id, pagenum_t left_page_idx, int64_
     file_read_page(table_id, parent_page_idx,
                    &parent_page);
 
-    /* Case: leaf or node. (Remainder of
-     * function body.)
-     */
-
-    /* Find the parent's pointer to the left
-     * node.
-     */
-
-    /* Simple case: the new key fits into the node.
-     */
-
     if (parent_page.page_header.key_num < 248)
         return insert_into_node(table_id, parent_page_idx, left_page_idx, key,
                                 right_page_idx);
-
-    /* Harder case:  split a node in order
-     * to preserve the B+ tree properties.
-     */
 
     return insert_into_node_after_splitting(table_id, parent_page_idx, key, right_page_idx);
 }
@@ -298,7 +280,6 @@ pagenum_t insert_into_leaf_after_splitting(tableid_t table_id,
         make_leaf(table_id, leaf_page.page_header.parent_page_idx);
     file_read_page(table_id, new_leaf_page_idx, &new_leaf_page);
 
-    // Make a temporary page slot.
     for (int i = 0; i < leaf_page.page_header.key_num; i++) {
         char* temp_value = new char[MAX_VALUE_SIZE];
         page_helper::get_leaf_value(&leaf_page, i, temp_value);
@@ -338,7 +319,7 @@ pagenum_t insert_into_leaf_after_splitting(tableid_t table_id,
     new_key = temp[split_start].first.key;
     for (int i = split_start; i < total_values_num; i++) {
         page_helper::add_leaf_value(&new_leaf_page, temp[i].first.key,
-                                    temp[i].second, value_size);
+                                    temp[i].second, temp[i].first.value_size);
     }
 
     uint64_t* leaf_sibling_idx = page_helper::get_sibling_idx(&leaf_page);
@@ -351,7 +332,7 @@ pagenum_t insert_into_leaf_after_splitting(tableid_t table_id,
     file_write_page(table_id, leaf_page_idx, &leaf_page);
     file_write_page(table_id, new_leaf_page_idx, &new_leaf_page);
 
-    for(auto& temp_pair: temp) {
+    for (auto& temp_pair : temp) {
         delete[] temp_pair.second;
     }
 
@@ -506,6 +487,8 @@ pagenum_t coalesce_internal_nodes(tableid_t table_id, pagenum_t left_page_idx,
     }
 
     file_write_page(table_id, left_page_idx, &left_page);
+    file_write_page(table_id, left_page.page_header.parent_page_idx,
+                    &parent_page);
     file_free_page(table_id, right_page_idx);
 
     return header_page.root_page_idx;
@@ -549,6 +532,8 @@ pagenum_t coalesce_leaf_nodes(tableid_t table_id, pagenum_t left_page_idx, pagen
     }
 
     file_write_page(table_id, left_page_idx, &left_page);
+    file_write_page(table_id, left_page.page_header.parent_page_idx,
+                    &parent_page);
     file_free_page(table_id, right_page_idx);
 
     return header_page.root_page_idx;
@@ -579,8 +564,7 @@ pagenum_t delete_internal_key(tableid_t table_id, pagenum_t internal_page_idx, i
      */
 
     if (internal_page_idx == header_page.root_page_idx)
-        return adjust_root(header_page.root_page_idx);
-
+        return adjust_root(table_id);
 
     /* Case:  deletion from a node below the root.
      * (Rest of function body.)
@@ -704,14 +688,22 @@ pagenum_t delete_leaf_key(tableid_t table_id, pagenum_t leaf_page_idx, int64_t k
     file_write_page(table_id, leaf_page_idx, &leaf_page);
 
     if (leaf_page_idx == header_page.root_page_idx)
-        return adjust_root(header_page.root_page_idx);
+        return adjust_root(table_id);
 
-    if (*page_helper::get_free_space(&leaf_page) <= (PAGE_SIZE - PAGE_HEADER_SIZE) / 2)
+    if (*page_helper::get_free_space(&leaf_page) < REDISTRIBUTE_THRESHOLD)
         return leaf_page_idx;
 
     sibling_page_idx = *page_helper::get_sibling_idx(&leaf_page);
     if(sibling_page_idx == 0) {
-        sibling_page_idx = parent_page.page_branches[parent_page.page_header.key_num - 2].page_idx;
+        if (parent_page.page_header.key_num < 2) {
+            sibling_page_idx =
+                *page_helper::get_leftmost_child_idx(&parent_page);
+        } else {
+            sibling_page_idx =
+                parent_page.page_branches[parent_page.page_header.key_num - 2]
+                    .page_idx;
+        }
+        left_sibling = true;
     }
     file_read_page(table_id, sibling_page_idx, &sibling_page);
 
@@ -723,39 +715,36 @@ pagenum_t delete_leaf_key(tableid_t table_id, pagenum_t leaf_page_idx, int64_t k
                                        leaf_page_idx);
     } else {
         if (!left_sibling) {
-            std::vector<std::pair<PageSlot, const char*>> temp;
 
             PageSlot temp_slot;
             PageSlot* sibling_slot = page_helper::get_page_slot(&sibling_page);
 
-            while (*page_helper::get_free_space(&sibling_page) >=
+            while (*page_helper::get_free_space(&leaf_page) >=
                    REDISTRIBUTE_THRESHOLD) {
                 char* temp_value = new char[MAX_VALUE_SIZE];
                 page_helper::get_leaf_value(&sibling_page, 0, temp_value);
-
-                temp.emplace_back(sibling_slot[0], temp_value);
                 page_helper::remove_leaf_value(&sibling_page,
                                                sibling_slot[0].key);
-            }
 
-            for (auto& temp_pair : temp) {
-                page_helper::add_leaf_value(&leaf_page, temp_pair.first.key,
-                                            temp_pair.second,
-                                            temp_pair.first.value_size);
-                delete[] temp_pair.second;
+                page_helper::add_leaf_value(&leaf_page, sibling_slot[0].key,
+                                            temp_value,
+                                            sibling_slot[0].value_size);
+                delete[] temp_value;
             }
         } else {
             std::vector<std::pair<PageSlot, const char*>> temp;
 
             PageSlot* leaf_slot = page_helper::get_page_slot(&leaf_page);
             PageSlot* sibling_slot = page_helper::get_page_slot(&sibling_page);
+            uint16_t temp_free_space = *page_helper::get_free_space(&leaf_page);
 
-            while (*page_helper::get_free_space(&sibling_page) >=
-                   REDISTRIBUTE_THRESHOLD) {
+            while (temp_free_space >= REDISTRIBUTE_THRESHOLD) {
                 char* temp_value = new char[MAX_VALUE_SIZE];
                 page_helper::get_leaf_value(&sibling_page, 0, temp_value);
 
                 temp.emplace_back(sibling_slot[0], temp_value);
+                temp_free_space -= sibling_slot[0].value_size;
+
                 page_helper::remove_leaf_value(&sibling_page,
                                                sibling_slot[0].key);
             }

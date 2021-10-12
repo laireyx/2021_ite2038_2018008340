@@ -13,7 +13,7 @@
 #include <cstring>
 #include <ctime>
 
-constexpr int test_count = 1024;
+constexpr int test_count = 5;
 
 class BasicTableTest : public ::testing::Test {
    protected:
@@ -41,16 +41,55 @@ class BasicTableTest : public ::testing::Test {
     ~BasicTableTest() { file_close_table_files(); }
 };
 
+/**
+ * @brief   Tests database insertion API.
+ * @details 1. Open a database and write 1024 random values in random order.
+ *          2. Find the value using the key and compare it to the value.
+ */
+TEST_F(BasicTableTest, RandomDeletionTest) {
+    tableid_t table_id = open_table("test3.db");
+    // Check if the file is opened
+    ASSERT_TRUE(table_id >=
+                0);  // change the condition to your design's behavior
+
+    uint8_t temp_value[test_count][1024] = {};
+
+    for (int i = 0; i < test_count; i++) {
+        for (int j = 0; j < 900; j++) {
+            temp_value[test_order[i]][j] = rand() % 256;
+        }
+
+        ASSERT_EQ(
+            db_insert(table_id, i,
+                      reinterpret_cast<char*>(temp_value[test_order[i]]), 900),
+            0);
+    }
+
+    for (int i = 0; i < test_count; i++) {
+        uint16_t value_size;
+        uint8_t return_value[1024] = {};
+
+        ASSERT_EQ(db_delete(table_id, test_count - 1 - i), 0);
+        ASSERT_TRUE(db_find(table_id, test_count - 1 - i,
+                            reinterpret_cast<char*>(return_value),
+                            &value_size) < 0);
+    }
+}
+
+/**
+ * @brief   Tests database insertion API.
+ * @details 1. Open a database and write 1024 random values in random order.
+ *          2. Find the value using the key and compare it to the value.
+ */
 TEST_F(BasicTableTest, RandomInsertTest) {
     tableid_t table_id = open_table("test2.db");
     // Check if the file is opened
     ASSERT_TRUE(table_id >=
                 0);  // change the condition to your design's behavior
 
-    uint8_t temp_value[1024][1024] = {};
+    uint8_t temp_value[test_count][1024] = {};
 
-    for(int i = 0; i < 1024; i++) {
-
+    for (int i = 0; i < test_count; i++) {
         for(int j = 0; j < 1024; j++) {
             temp_value[test_order[i]][j] = rand() % 256;
         }
@@ -58,21 +97,16 @@ TEST_F(BasicTableTest, RandomInsertTest) {
         ASSERT_EQ(db_insert(table_id, test_order[i], reinterpret_cast<char*>(temp_value[test_order[i]]), 1024), 0);
     }
 
-    for(int i = 0; i < 1024; i++) {
+    for (int i = 0; i < test_count; i++) {
         uint16_t value_size;
         uint8_t return_value[1024] = {};
-        
+
         ASSERT_FALSE(db_find(table_id, i, reinterpret_cast<char*>(return_value), &value_size) < 0);
         ASSERT_EQ(value_size, 1024);
         ASSERT_EQ(memcmp(temp_value[i], return_value, 1024), 0);
     }
 }
 
-/**
- * @brief   Tests file open/close APIs.
- * @details 1. Open a file and check the descriptor
- *          2. Check if the file's initial size is 10 MiB
- */
 TEST_F(BasicTableTest, SequentialInsertTest) {
     tableid_t table_id = open_table("test.db");
     // Check if the file is opened

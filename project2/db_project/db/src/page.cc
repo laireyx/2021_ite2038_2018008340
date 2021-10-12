@@ -22,7 +22,8 @@ void get_leaf_value(LeafPage* page, int value_idx, char* value,
 void get_leaf_value(LeafPage* page, uint16_t value_offset, uint16_t value_size,
                     char* value) {
     if (value)
-        memcpy(value, reinterpret_cast<uint8_t*>(page) + value_offset, value_size);
+        memcpy(value, reinterpret_cast<uint8_t*>(page) + value_offset,
+               value_size);
 }
 
 bool has_enough_space(LeafPage* page, uint16_t value_size) {
@@ -84,7 +85,20 @@ bool remove_leaf_value(LeafPage* page, int64_t key) {
     }
 
     page->page_header.key_num--;
+    *get_free_space(page) += offset_shift + sizeof(PageSlot);
     memmove(page->reserved + offset_shift, page->reserved, start_offset - PAGE_HEADER_SIZE);
+
+    return true;
+}
+
+bool set_internal_key(InternalPage* page, int position, int64_t key,
+                      pagenum_t page_idx) {
+    if (position >= 248 || position < 0) {
+        return false;
+    }
+
+    page->page_branches[position].key = key;
+    page->page_branches[position].page_idx = page_idx;
 
     return true;
 }
