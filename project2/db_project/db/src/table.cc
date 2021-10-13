@@ -7,7 +7,7 @@
 
 int init_db() { return 0; }
 
-tableid_t open_table(const char* pathname) {
+tableid_t open_table(char* pathname) {
     return file_open_table_file(pathname);
 }
 

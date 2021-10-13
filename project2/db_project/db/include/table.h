@@ -28,7 +28,7 @@ int init_db();
  * @returns unique table id which represents the own table in this database.
  *          return negative value otherwise.
  */
-tableid_t open_table(const char* pathname);
+tableid_t open_table(char* pathname);
 
 /**
  * @brief   Insert input (key, value) record with its size to data file at the
