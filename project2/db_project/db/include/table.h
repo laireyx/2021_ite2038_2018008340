@@ -37,7 +37,7 @@ tableid_t open_table(const char* pathname);
  * @returns 0 if success.
  *          negative value otherwise.
  */
-int db_insert(tableid_t table_id, int64_t key, const char* value,
+int db_insert(tableid_t table_id, int64_t key, char* value,
               uint16_t value_size);
 
 /**

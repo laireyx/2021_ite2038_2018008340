@@ -11,7 +11,7 @@ tableid_t open_table(const char* pathname) {
     return file_open_table_file(pathname);
 }
 
-int db_insert(tableid_t table_id, int64_t key, const char* value,
+int db_insert(tableid_t table_id, int64_t key, char* value,
               uint16_t value_size) {
     return insert_node(table_id, key, value, value_size) != 0 ? 0 : -1;
 }
