@@ -13,7 +13,7 @@
 #include <cstring>
 #include <ctime>
 
-constexpr int test_count = 5;
+constexpr int test_count = 1024;
 
 class BasicTableTest : public ::testing::Test {
    protected:
@@ -52,25 +52,36 @@ TEST_F(BasicTableTest, RandomDeletionTest) {
     ASSERT_TRUE(table_id >=
                 0);  // change the condition to your design's behavior
 
+    uint8_t temp_size[test_count] = {};
     uint8_t temp_value[test_count][1024] = {};
 
     for (int i = 0; i < test_count; i++) {
-        for (int j = 0; j < 900; j++) {
+        temp_size[test_order[i]] = rand() % 1024;
+        for (int j = 0; j < temp_size[test_order[i]]; j++) {
             temp_value[test_order[i]][j] = rand() % 256;
         }
 
-        ASSERT_EQ(
-            db_insert(table_id, i,
-                      reinterpret_cast<char*>(temp_value[test_order[i]]), 900),
-            0);
+        ASSERT_EQ(db_insert(table_id, test_order[i],
+                            reinterpret_cast<char*>(temp_value[test_order[i]]),
+                            temp_size[test_order[i]]),
+                  0);
     }
 
     for (int i = 0; i < test_count; i++) {
         uint16_t value_size;
         uint8_t return_value[1024] = {};
 
-        ASSERT_EQ(db_delete(table_id, test_count - 1 - i), 0);
-        ASSERT_TRUE(db_find(table_id, test_count - 1 - i,
+        if (db_find(table_id, 504, reinterpret_cast<char*>(return_value),
+                    &value_size) < 0) {
+            std::cerr << i << std::endl;
+        }
+
+        if (i == 973) {
+            std::cerr << i << std::endl;
+        }
+
+        ASSERT_EQ(db_delete(table_id, test_order[i]), 0);
+        ASSERT_TRUE(db_find(table_id, test_order[i],
                             reinterpret_cast<char*>(return_value),
                             &value_size) < 0);
     }

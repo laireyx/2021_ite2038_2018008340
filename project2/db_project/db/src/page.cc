@@ -1,8 +1,10 @@
 #include "page.h"
-#include "types.h"
 
-#include <vector>
 #include <cstring>
+#include <iostream>
+#include <vector>
+
+#include "types.h"
 
 namespace page_helper {
 PageSlot* get_page_slot(LeafPage* page) {
@@ -76,6 +78,12 @@ bool remove_leaf_value(LeafPage* page, int64_t key) {
             start_offset = leaf_slot[i].value_offset;
             offset_shift = leaf_slot[i].value_size;
             for(int j = i + 1; j < page->page_header.key_num; j++) {
+                memmove(reinterpret_cast<uint8_t*>(page) +
+                            leaf_slot[j].value_offset + offset_shift,
+                        reinterpret_cast<uint8_t*>(page) +
+                            leaf_slot[j].value_offset,
+                        leaf_slot[j].value_size);
+
                 leaf_slot[j - 1].key = leaf_slot[j].key;
                 leaf_slot[j - 1].value_offset = leaf_slot[j].value_offset + offset_shift;
                 leaf_slot[j - 1].value_size = leaf_slot[j].value_size;
@@ -83,10 +91,8 @@ bool remove_leaf_value(LeafPage* page, int64_t key) {
             break;
         }
     }
-
     page->page_header.key_num--;
     *get_free_space(page) += offset_shift + sizeof(PageSlot);
-    memmove(page->reserved + offset_shift, page->reserved, start_offset - PAGE_HEADER_SIZE);
 
     return true;
 }
