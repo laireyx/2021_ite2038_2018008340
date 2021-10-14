@@ -81,8 +81,9 @@ pagenum_t insert_node(tableid_t table_id, int64_t key, const char* value,
                       uint16_t value_size);
 
 pagenum_t adjust_root(tableid_t table_id);
-pagenum_t coalesce_internal_nodes(tableid_t table_id,
-                                  pagenum_t internal_page_idx,
+pagenum_t coalesce_internal_nodes(tableid_t table_id, pagenum_t left_page_idx,
+                                  int64_t seperate_key,
+                                  int seperate_key_idx,
                                   pagenum_t right_page_idx);
 pagenum_t coalesce_leaf_nodes(tableid_t table_id, pagenum_t left_page_idx, pagenum_t right_page_idx);
 pagenum_t delete_internal_key(tableid_t table_id, pagenum_t internal_page_idx, int64_t key);
