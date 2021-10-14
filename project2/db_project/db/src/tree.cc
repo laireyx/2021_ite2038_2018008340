@@ -629,7 +629,7 @@ pagenum_t delete_internal_key(tableid_t table_id, pagenum_t internal_page_idx, i
 
     /* Coalescence. */
 
-    if (internal_page.page_header.key_num + sibling_page.page_header.key_num <=
+    if (internal_page.page_header.key_num + sibling_page.page_header.key_num <
         248) {
         if (!left_sibling)
             return coalesce_internal_nodes(table_id, internal_page_idx,
@@ -660,6 +660,16 @@ pagenum_t delete_internal_key(tableid_t table_id, pagenum_t internal_page_idx, i
             page_helper::remove_internal_key(&sibling_page,
                                              sibling_page.page_branches[0].key);
         } else {
+            for (int i = internal_page.page_header.key_num; i > 0; i--) {
+                internal_page.page_branches[i] =
+                    internal_page.page_branches[i - 1];
+            }
+            internal_page.page_branches[0].key = seperate_key;
+            internal_page.page_branches[0].page_idx =
+                *page_helper::get_leftmost_child_idx(&internal_page);
+
+            internal_page.page_header.key_num++;
+
             parent_page.page_branches[seperate_key_idx].key =
                 sibling_page.page_branches[sibling_page.page_header.key_num - 1]
                     .key;
@@ -672,14 +682,6 @@ pagenum_t delete_internal_key(tableid_t table_id, pagenum_t internal_page_idx, i
             leftmost_child_page.page_header.parent_page_idx = internal_page_idx;
             file_write_page(table_id, *page_helper::get_leftmost_child_idx(&internal_page), &leftmost_child_page);
             
-            for (int i = internal_page.page_header.key_num; i > 0; i--) {
-                internal_page.page_branches[i] =
-                    internal_page.page_branches[i - 1];
-            }
-            internal_page.page_branches[0].key = seperate_key;
-            internal_page.page_branches[0].page_idx =
-                *page_helper::get_leftmost_child_idx(&internal_page);
-
             page_helper::remove_internal_key(
                 &sibling_page,
                 sibling_page.page_branches[sibling_page.page_header.key_num - 1]
@@ -813,6 +815,8 @@ pagenum_t delete_leaf_key(tableid_t table_id, pagenum_t leaf_page_idx, int64_t k
                     &sibling_page,
                     sibling_slot[sibling_page.page_header.key_num - 1].key);
             }
+
+            std::reverse(temp.begin(), temp.end());
 
             for (int i = 0; i < leaf_page.page_header.key_num; i++) {
                 char* temp_value = new char[MAX_VALUE_SIZE];

@@ -13,7 +13,7 @@
 #include <cstring>
 #include <ctime>
 
-constexpr int test_count = 10000;
+constexpr int test_count = 300000;
 
 class BasicTableTest : public ::testing::Test {
    protected:
@@ -69,13 +69,16 @@ TEST_F(BasicTableTest, RandomDeletionTest) {
         uint16_t value_size;
         uint8_t return_value[128] = {};
 
-        if(db_find(table_id, test_order[5328],
+        if(db_find(table_id, test_order[95255],
                             reinterpret_cast<char*>(return_value),
                             &value_size) < 0) {
             std::cerr << i << "\n";
         }
 
-        if(i >= 4335) {
+        if(i >= 64614) {
+            db_find(table_id, test_order[95255],
+                            reinterpret_cast<char*>(return_value),
+                            &value_size);
             std::cerr << i << "\n";
         }
 
