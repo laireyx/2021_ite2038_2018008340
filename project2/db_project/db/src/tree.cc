@@ -1,9 +1,12 @@
+/**
+ * @addtogroup Disk based B+ tree
+ * @{
+ */
 #include "tree.h"
 
 #include <vector>
 #include <utility>
 #include <algorithm>
-#include <iostream>
 
 #include "errors.h"
 #include "file.h"
@@ -317,7 +320,7 @@ pagenum_t insert_into_leaf_after_splitting(tableid_t table_id,
     int split_start = 0;
     int acc_len = 0;
     for (; split_start < leaf_page.page_header.key_num + 1; split_start++) {
-        acc_len += temp[split_start].first.value_size;
+        acc_len += temp[split_start].first.value_size + sizeof(PageSlot);
         if (acc_len >= (PAGE_SIZE - PAGE_HEADER_SIZE) / 2) {
             break;
         }
@@ -455,11 +458,18 @@ pagenum_t adjust_root(tableid_t table_id) {
     // as the new root.
 
     if (!root_page.page_header.is_leaf_page) {
+        file_free_page(table_id, header_page.root_page_idx);
+
         header_page.root_page_idx = *page_helper::get_leftmost_child_idx(
             reinterpret_cast<internalpage_t*>(&root_page));
         file_read_page(table_id, header_page.root_page_idx, &new_root_page);
         new_root_page.page_header.parent_page_idx = 0;
         file_write_page(table_id, header_page.root_page_idx, &new_root_page);
+    } else {
+        file_free_page(table_id, header_page.root_page_idx);
+        header_page.root_page_idx = 0;
+        file_helper::flush_header(table_id);
+        return 1;
     }
 
     file_helper::flush_header(table_id);
@@ -809,7 +819,8 @@ pagenum_t delete_leaf_key(tableid_t table_id, pagenum_t leaf_page_idx, int64_t k
                     temp_value);
                 temp_free_space -=
                     sibling_slot[sibling_page.page_header.key_num - 1]
-                        .value_size;
+                        .value_size +
+                    sizeof(PageSlot);
 
                 page_helper::remove_leaf_value(
                     &sibling_page,
@@ -857,3 +868,4 @@ pagenum_t delete_node(tableid_t table_id, int64_t key) {
 
     return 0;
 }
+/** @}*/

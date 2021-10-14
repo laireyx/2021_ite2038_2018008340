@@ -1,3 +1,7 @@
+/**
+ * @addtogroup TableManager
+ * @{
+ */
 #pragma once
 
 #include "types.h"
@@ -65,3 +69,4 @@ int db_delete(tableid_t table_id, int64_t key);
  * @returns If success, return 0. Otherwise return non-zero value.
  */
 int shutdown_db();
+/** @}*/

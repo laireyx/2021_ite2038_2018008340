@@ -48,14 +48,14 @@ void extend_capacity(tableid_t table_id, pagenum_t newsize = 0) {
 
             error::ok(pwrite64(table_fd, &free_page, PAGE_SIZE,
                                   free_page_idx * PAGE_SIZE) == PAGE_SIZE);
-        	error::ok(fsync(table_fd) == 0);
+            // error::ok(fsync(table_fd) == 0);
         }
 
         header_page.free_page_idx = header_page.page_num;
         header_page.page_num = newsize;
 
 		error::ok(pwrite64(table_fd, &header_page, PAGE_SIZE, 0) == PAGE_SIZE);
-        error::ok(fsync(table_fd) == 0);
+                // error::ok(fsync(table_fd) == 0);
     }
 }
 
@@ -66,7 +66,7 @@ void flush_header(tableid_t table_id) {
     headerpage_t& header_page = instance.header_page;
 
     error::ok(pwrite64(table_fd, &header_page, PAGE_SIZE, 0) == PAGE_SIZE);
-    error::ok(fsync(table_fd) == 0);
+    // error::ok(fsync(table_fd) == 0);
 }
 };
 
@@ -164,7 +164,7 @@ void file_free_page(int64_t table_id, pagenum_t pagenum) {
     new_free_page.next_free_idx = old_free_page_idx;
     error::ok(pwrite64(table_fd, &new_free_page, PAGE_SIZE,
                        pagenum * PAGE_SIZE) == PAGE_SIZE);
-    error::ok(fsync(table_fd) == 0);
+    // error::ok(fsync(table_fd) == 0);
 
     // Set the first free page to freed page number.
     header_page.free_page_idx = pagenum;
@@ -187,7 +187,7 @@ void file_write_page(int64_t table_id, pagenum_t pagenum, const page_t* src) {
     int table_fd = instance.file_descriptor;
     error::ok(pwrite64(table_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE) ==
               PAGE_SIZE);
-    error::ok(fsync(table_fd) == 0);
+    // error::ok(fsync(table_fd) == 0);
 }
 
 void file_close_table_files() {

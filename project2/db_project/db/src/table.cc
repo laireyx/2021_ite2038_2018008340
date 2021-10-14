@@ -1,3 +1,7 @@
+/**
+ * @addtogroup TableManager
+ * @{
+ */
 #include "table.h"
 
 #include "file.h"
@@ -35,3 +39,4 @@ int shutdown_db() {
     file_close_table_files();
     return 0;
 }
+/** @}*/
