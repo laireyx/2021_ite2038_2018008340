@@ -27,7 +27,7 @@ Switch current table into given table id.
 
 **Parameters**: 
 
-  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
+  * **table_id** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
 
 
 If current table_fd is already means given table id, then do nothing. If not, change table_fd to given fd and re-read header_page from it.
@@ -39,4 +39,4 @@ If current table_fd is already means given table id, then do nothing. If not, ch
 
 -------------------------------
 
-Updated on 2021-10-15 at 13:42:29 +0900
+Updated on 2021-10-15 at 15:44:16 +0900

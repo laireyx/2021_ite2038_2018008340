@@ -94,7 +94,6 @@ Get leaf value.
   * **value_offset** Value offset. 
   * **value_size** Value size. 
   * **value** The value will be set into this pointer if not null. 
-  * **value_size** The value size will be set into this pointer if not null. 
 
 
 Get a leaf value using exact offset and size. Usually it does not called from the outside, and just help the other function. Then copies the value and its size into given pointer, which is given by caller.
@@ -265,4 +264,4 @@ In internal page, <code>page-&gt;page&#95;header.reserved&#95;footer.footer&#95;
 
 -------------------------------
 
-Updated on 2021-10-15 at 13:42:29 +0900
+Updated on 2021-10-15 at 15:44:16 +0900

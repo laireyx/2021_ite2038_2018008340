@@ -68,8 +68,11 @@ If <code>assertion = false</code>, then throw error.
 
 **Parameters**: 
 
-  * **assertion** if <code>assertion = true</code>, then return silently. if <code>assertion = false</code>, then throw <a href="/Classes/error::Exception">Exception</a>. 
+  * **assertion** if <code>assertion = true</code>, then return silently. if <code>assertion = false</code>, then process with <code>exit&#95;flag</code>. 
+  * **exit_flag** if set to true, then print error message and terminate program with error code 1. 
 
+
+**Return**: <code>true</code> if assertion success, <code>false</code> otherwise. 
 
 
 ## Attributes Documentation
@@ -111,4 +114,4 @@ If set, immediately exit program with exit(1);.
 
 -------------------------------
 
-Updated on 2021-10-15 at 13:42:29 +0900
+Updated on 2021-10-15 at 15:44:16 +0900

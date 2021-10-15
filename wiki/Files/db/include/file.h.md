@@ -82,7 +82,7 @@ Allocate an on-disk page from the free page list.
 
 **Parameters**: 
 
-  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
+  * **table_id** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
 
 
 **Return**: >0 <a href="/Classes/Page">Page</a> index number if allocation success. 0 Zero if allocation failed. 
@@ -100,7 +100,7 @@ Free an on-disk page to the free page list.
 
 **Parameters**: 
 
-  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
+  * **table_id** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
 
 
@@ -118,7 +118,7 @@ Read an on-disk page into the in-memory page structure(dest)
 
 **Parameters**: 
 
-  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
+  * **table_id** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
   * **dest** the pointer of the page data. 
 
@@ -137,7 +137,7 @@ Write an in-memory page(src) to the on-disk page.
 
 **Parameters**: 
 
-  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
+  * **table_id** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
   * **src** the pointer of the page data. 
 
@@ -230,4 +230,4 @@ void file_close_table_files();
 
 -------------------------------
 
-Updated on 2021-10-15 at 13:42:30 +0900
+Updated on 2021-10-15 at 15:44:16 +0900

@@ -15,9 +15,9 @@
 | bool | **[find_by_key](/Modules/based B+ tree#function-find_by_key)**(tableid_t table_id, int64_t key, char * value =nullptr, uint16_t * value_size =nullptr)<br>Find a record with key.  |
 | pagenum_t | **[insert_into_node](/Modules/based B+ tree#function-insert_into_node)**(tableid_t table_id, pagenum_t parent_page_idx, pagenum_t left_page_idx, int64_t key, pagenum_t right_page_idx)<br>Insert a <code>(key, right&#95;page&#95;idx)</code> tuple in parent page.  |
 | pagenum_t | **[insert_into_node_after_splitting](/Modules/based B+ tree#function-insert_into_node_after_splitting)**(tableid_t table_id, pagenum_t parent_page_idx, int64_t key, pagenum_t right_page_idx)<br>Insert a <code>(key, right&#95;page&#95;idx)</code> tuple in parent page, and split it into two pages.  |
-| pagenum_t | **[insert_into_parent](/Modules/based B+ tree#function-insert_into_parent)**(tableid_t table_id, pagenum_t left_page_idx, int64_t key, pagenum_t right_page_idx)<br>Choose right method between <code>insert&#95;into&#95;node</code> and <code>insert&#95;into&#95;node&#95;after&#95;splitting</code> and call it.  |
+| pagenum_t | **[insert_into_parent](/Modules/based B+ tree#function-insert_into_parent)**(tableid_t table_id, pagenum_t left_page_idx, int64_t key, pagenum_t right_page_idx)<br>Choose right method between just inserting and <code>insert&#95;into&#95;node&#95;after&#95;splitting</code> and call it.  |
 | pagenum_t | **[insert_into_leaf_after_splitting](/Modules/based B+ tree#function-insert_into_leaf_after_splitting)**(tableid_t table_id, pagenum_t leaf_page_idx, int64_t key, const char * value, uint16_t value_size)<br>Insert <code>(key, value)</code>into leaf node and split it into two pages.  |
-| pagenum_t | **[insert_node](/Modules/based B+ tree#function-insert_node)**(tableid_t table_id, int64_t key, const char * value, uint16_t value_size)<br>Choose right method between <code>insert&#95;into&#95;node</code> and <code>insert&#95;into&#95;node&#95;after&#95;splitting</code> and call it.  |
+| pagenum_t | **[insert_node](/Modules/based B+ tree#function-insert_node)**(tableid_t table_id, int64_t key, const char * value, uint16_t value_size)<br>Find appropriate leaf page and insert a record into it.  |
 | pagenum_t | **[adjust_root](/Modules/based B+ tree#function-adjust_root)**(tableid_t table_id)<br>Adjust root page.  |
 | pagenum_t | **[coalesce_internal_nodes](/Modules/based B+ tree#function-coalesce_internal_nodes)**(tableid_t table_id, pagenum_t left_page_idx, int64_t seperate_key, int seperate_key_idx, pagenum_t right_page_idx)<br>Coalesces two internal pages.  |
 | pagenum_t | **[coalesce_leaf_nodes](/Modules/based B+ tree#function-coalesce_leaf_nodes)**(tableid_t table_id, pagenum_t left_page_idx, pagenum_t right_page_idx)<br>Coalesces two leaf pages.  |
@@ -200,7 +200,7 @@ pagenum_t insert_into_parent(
 )
 ```
 
-Choose right method between <code>insert&#95;into&#95;node</code> and <code>insert&#95;into&#95;node&#95;after&#95;splitting</code> and call it. 
+Choose right method between just inserting and <code>insert&#95;into&#95;node&#95;after&#95;splitting</code> and call it. 
 
 **Parameters**: 
 
@@ -229,7 +229,7 @@ Insert <code>(key, value)</code>into leaf node and split it into two pages.
 **Parameters**: 
 
   * **table_id** Table id. 
-  * **left_page_idx** Left page index. 
+  * **leaf_page_idx** Leaf page index. 
   * **key** Record key. 
   * **value** Record value. 
   * **value_size** Record value size. 
@@ -248,14 +248,14 @@ pagenum_t insert_node(
 )
 ```
 
-Choose right method between <code>insert&#95;into&#95;node</code> and <code>insert&#95;into&#95;node&#95;after&#95;splitting</code> and call it. 
+Find appropriate leaf page and insert a record into it. 
 
 **Parameters**: 
 
   * **table_id** Table id. 
-  * **left_page_idx** Left page index. 
-  * **key** Key which means right page. 
-  * **right_page_idx** Right page index. 
+  * **key** Record key. 
+  * **value** Record value. 
+  * **value_size** Record value size. 
 
 
 **Return**: Root page number. 
@@ -462,4 +462,4 @@ pagenum_t delete_node(tableid_t table_id, int64_t key);
 
 -------------------------------
 
-Updated on 2021-10-15 at 13:42:30 +0900
+Updated on 2021-10-15 at 15:44:16 +0900

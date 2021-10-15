@@ -20,7 +20,7 @@ Inherits from [Page](/Classes/Page)
 | pagenum_t | **[free_page_idx](/Classes/HeaderPage#variable-free_page_idx)** <br>The first free page index.  |
 | uint64_t | **[page_num](/Classes/HeaderPage#variable-page_num)** <br>Total count of the page reserved.  |
 | pagenum_t | **[root_page_idx](/Classes/HeaderPage#variable-root_page_idx)** <br>The root page index.  |
-| uint8_t | **[reserved](/Classes/HeaderPage#variable-reserved)**  |
+| uint8_t | **[reserved](/Classes/HeaderPage#variable-reserved)** <br>Reserved area for next project.  |
 
 ## Public Attributes Documentation
 
@@ -54,7 +54,8 @@ The root page index.
 uint8_t reserved;
 ```
 
+Reserved area for next project. 
 
 -------------------------------
 
-Updated on 2021-10-15 at 13:42:29 +0900
+Updated on 2021-10-15 at 15:44:16 +0900
