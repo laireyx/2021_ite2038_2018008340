@@ -1,5 +1,5 @@
 /**
- * @addtogroup Disk based B+ tree
+ * @addtogroup DiskBasedBpt
  * @{
  */
 #pragma once
