@@ -1,5 +1,4 @@
 
-rm -rf ../../wiki
 mkdir ../../wiki
 
 doxygen
