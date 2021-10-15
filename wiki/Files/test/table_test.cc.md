@@ -14,7 +14,7 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicTableTest">BasicTableTest</a> , RandomDeletionTest )<br>Tests database insertion API.  |
+| | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicTableTest">BasicTableTest</a> , RandomDeletionTest )<br>Tests database deletion API.  |
 | | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicTableTest">BasicTableTest</a> , RandomInsertTest )<br>Tests database insertion API.  |
 
 ## Attributes
@@ -35,12 +35,13 @@ TEST_F(
 )
 ```
 
-Tests database insertion API. 
+Tests database deletion API. 
 
 
 
-1. Open a database and write 1024 random values in random order.
-    * Find the value using the key and compare it to the value. 
+1. Open a database and write random values in random order.
+    * Removes those values in random order.
+    * Find those values and check existency. 
 
 
 ### function TEST_F
@@ -56,7 +57,7 @@ Tests database insertion API.
 
 
 
-1. Open a database and write 1024 random values in random order.
+1. Open a database and write random values in random order.
     * Find the value using the key and compare it to the value. 
 
 
@@ -66,7 +67,7 @@ Tests database insertion API.
 ### variable test_count
 
 ```cpp
-constexpr int test_count = 300000;
+constexpr int test_count = 10000;
 ```
 
 
@@ -86,7 +87,7 @@ constexpr int test_count = 300000;
 #include <cstring>
 #include <ctime>
 
-constexpr int test_count = 300000;
+constexpr int test_count = 10000;
 
 class BasicTableTest : public ::testing::Test {
    protected:
@@ -121,7 +122,7 @@ TEST_F(BasicTableTest, RandomDeletionTest) {
 
     for (int i = 0; i < test_count; i++) {
         uint8_t temp_value[1024] = {};
-        uint8_t temp_size = 512 + rand() % 512;
+        uint8_t temp_size = 50 + rand() % 63;
         for (int j = 0; j < temp_size; j++) {
             temp_value[j] = rand() % 256;
         }
@@ -135,19 +136,6 @@ TEST_F(BasicTableTest, RandomDeletionTest) {
     for (int i = 0; i < test_count; i++) {
         uint16_t value_size;
         uint8_t return_value[128] = {};
-
-        if(db_find(table_id, test_order[95255],
-                            reinterpret_cast<char*>(return_value),
-                            &value_size) < 0) {
-            std::cerr << i << "\n";
-        }
-
-        if(i >= 64614) {
-            db_find(table_id, test_order[95255],
-                            reinterpret_cast<char*>(return_value),
-                            &value_size);
-            std::cerr << i << "\n";
-        }
 
         ASSERT_EQ(db_delete(table_id, test_order[i]), 0);
         ASSERT_TRUE(db_find(table_id, test_order[i],
@@ -191,4 +179,4 @@ TEST_F(BasicTableTest, RandomInsertTest) {
 
 -------------------------------
 
-Updated on 2021-10-15 at 15:45:30 +0900
+Updated on 2021-10-16 at 00:31:48 +0900

@@ -21,7 +21,7 @@
 | | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , UniqueIdTest )<br>Tests unique table fd.  |
 | | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , SequentialAllocateTest )<br>Tests sequential allocation.  |
 | | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , RandomAllocateTest )<br>Tests random allocation.  |
-| | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicTableTest">BasicTableTest</a> , RandomDeletionTest )<br>Tests database insertion API.  |
+| | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicTableTest">BasicTableTest</a> , RandomDeletionTest )<br>Tests database deletion API.  |
 | | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicTableTest">BasicTableTest</a> , RandomInsertTest )<br>Tests database insertion API.  |
 
 ## Attributes
@@ -137,12 +137,13 @@ TEST_F(
 )
 ```
 
-Tests database insertion API. 
+Tests database deletion API. 
 
 
 
-1. Open a database and write 1024 random values in random order.
-    * Find the value using the key and compare it to the value. 
+1. Open a database and write random values in random order.
+    * Removes those values in random order.
+    * Find those values and check existency. 
 
 
 ### function TEST_F
@@ -158,7 +159,7 @@ Tests database insertion API.
 
 
 
-1. Open a database and write 1024 random values in random order.
+1. Open a database and write random values in random order.
     * Find the value using the key and compare it to the value. 
 
 
@@ -205,4 +206,4 @@ constexpr int test_count = 128;
 
 -------------------------------
 
-Updated on 2021-10-15 at 15:45:30 +0900
+Updated on 2021-10-16 at 00:31:48 +0900

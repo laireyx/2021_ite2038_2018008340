@@ -19,7 +19,6 @@
         * **file [db/src/table.cc](/Files/db/src/table.cc#file-table.cc)** 
         * **file [db/src/tree.cc](/Files/db/src/tree.cc#file-tree.cc)** 
 * **dir [test](/Files/test#dir-test)** 
-    * **file [test/basic_test.cc](/Files/test/basic_test.cc#file-basic-test.cc)** 
     * **file [test/file_test.cc](/Files/test/file_test.cc#file-file-test.cc)** 
     * **file [test/table_test.cc](/Files/test/table_test.cc#file-table-test.cc)** 
 
@@ -27,4 +26,4 @@
 
 -------------------------------
 
-Updated on 2021-10-15 at 15:45:30 +0900
+Updated on 2021-10-16 at 00:31:48 +0900

@@ -1,7 +1,5 @@
 # DB Project wiki
 
-### [Analysis for original B+ Tree](/Original-In-Memory-B--Tree)
-
 ### [Modules](/Modules/Modules)
   * [TestCode](/Modules/TestCode)
   * [DiskBasedBpt](/Modules/DiskBasedBpt)
@@ -16,8 +14,6 @@
   * [PageBranch](/Classes/PageBranch)
   * [Page](/Classes/Page)
   * [LeafPage](/Classes/LeafPage)
-  * [IntVectorTest](/Classes/IntVectorTest)
-  * [IntVector](/Classes/IntVector)
   * [InternalPage](/Classes/InternalPage)
   * [HeaderPage](/Classes/HeaderPage)
   * [FreePage](/Classes/FreePage)
@@ -34,7 +30,6 @@
   * [error](/Namespaces/error)
 ### [Files](/Files/Files)
   * [test](/Files/test)
-  * [basic_test.cc](/Files/test/basic_test.cc)
   * [file_test.cc](/Files/test/file_test.cc)
   * [table_test.cc](/Files/test/table_test.cc)
   * [db](/Files/db)

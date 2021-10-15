@@ -44,6 +44,11 @@ tableid_t open_table(
 
 Open existing data file using ‘pathname’ or create one if not existed. 
 
+**Parameters**: 
+
+  * **pathname** Table file path. 
+
+
 **Return**: unique table id which represents the own table in this database. return negative value otherwise. 
 
 ### function db_insert
@@ -58,6 +63,14 @@ int db_insert(
 ```
 
 Insert input (key, value) record with its size to data file at the right place. 
+
+**Parameters**: 
+
+  * **table_id** Table id obtained with <code><a href="/Modules/TableManager#function-open-table">open&#95;table()</a></code>. 
+  * **key** Record key. 
+  * **value** Record value. 
+  * **value_size** Record value size. 
+
 
 **Return**: 0 if success. negative value otherwise. 
 
@@ -74,6 +87,14 @@ int db_find(
 
 Find the record corresponding the input key. 
 
+**Parameters**: 
+
+  * **table_id** Table id obtained with <code><a href="/Modules/TableManager#function-open-table">open&#95;table()</a></code>. 
+  * **key** Record key. 
+  * **value** Record value. 
+  * **value_size** Record value size. 
+
+
 **Return**: 0 if success. negative value otherwise. 
 
 If found, ret_val and value_size will be set to matching value and its size.
@@ -89,6 +110,12 @@ int db_delete(
 ```
 
 Find the matching record and delete it if found. 
+
+**Parameters**: 
+
+  * **table_id** Table id obtained with <code><a href="/Modules/TableManager#function-open-table">open&#95;table()</a></code>. 
+  * **key** Record key. 
+
 
 **Return**: 0 if success. negative value otherwise. 
 
@@ -108,4 +135,4 @@ Shutdown database management system.
 
 -------------------------------
 
-Updated on 2021-10-15 at 15:45:30 +0900
+Updated on 2021-10-16 at 00:31:48 +0900

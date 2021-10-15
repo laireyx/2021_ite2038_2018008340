@@ -11,8 +11,6 @@
 * **class [BasicTableTest](/Classes/BasicTableTest)** 
 * **class [FreePage](/Classes/FreePage)** <br>struct for the free page. 
 * **class [HeaderPage](/Classes/HeaderPage)** <br>struct for the header page. 
-* **class [IntVector](/Classes/IntVector)** 
-* **class [IntVectorTest](/Classes/IntVectorTest)** 
 * **class [InternalPage](/Classes/InternalPage)** <br>struct for allocated internal page. 
 * **class [LeafPage](/Classes/LeafPage)** <br>struct for allocated leaf page. 
 * **class [Page](/Classes/Page)** <br>struct for abstract page. 
@@ -32,4 +30,4 @@
 
 -------------------------------
 
-Updated on 2021-10-15 at 15:45:30 +0900
+Updated on 2021-10-16 at 00:31:48 +0900
