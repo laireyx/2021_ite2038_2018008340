@@ -1,4 +1,10 @@
 
+pushd .
+cd ..
+cd ..
+git subtre pull origin-wiki --prefix wiki
+popd
+
 doxygen
 doxybook2 \
     --input doxygen/xml \
