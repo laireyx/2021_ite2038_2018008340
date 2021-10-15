@@ -42,9 +42,10 @@ class BasicTableTest : public ::testing::Test {
 };
 
 /**
- * @brief   Tests database insertion API.
- * @details 1. Open a database and write 1024 random values in random order.
- *          2. Find the value using the key and compare it to the value.
+ * @brief   Tests database deletion API.
+ * @details 1. Open a database and write random values in random order.
+ *          2. Removes those values in random order.
+ *          3. Find those values and check existency.
  */
 TEST_F(BasicTableTest, RandomDeletionTest) {
     tableid_t table_id = open_table("test_delete.db");
@@ -78,7 +79,7 @@ TEST_F(BasicTableTest, RandomDeletionTest) {
 
 /**
  * @brief   Tests database insertion API.
- * @details 1. Open a database and write 1024 random values in random order.
+ * @details 1. Open a database and write random values in random order.
  *          2. Find the value using the key and compare it to the value.
  */
 TEST_F(BasicTableTest, RandomInsertTest) {
