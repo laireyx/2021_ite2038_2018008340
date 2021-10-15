@@ -88,25 +88,13 @@ bool remove_leaf_value(LeafPage* page, int64_t key) {
                 leaf_slot[j - 1].value_offset = leaf_slot[j].value_offset + offset_shift;
                 leaf_slot[j - 1].value_size = leaf_slot[j].value_size;
             }
-            break;
+            page->page_header.key_num--;
+            *get_free_space(page) += offset_shift + sizeof(PageSlot);
+            return true;
         }
     }
-    page->page_header.key_num--;
-    *get_free_space(page) += offset_shift + sizeof(PageSlot);
 
-    return true;
-}
-
-bool set_internal_key(InternalPage* page, int position, int64_t key,
-                      pagenum_t page_idx) {
-    if (position >= 248 || position < 0) {
-        return false;
-    }
-
-    page->page_branches[position].key = key;
-    page->page_branches[position].page_idx = page_idx;
-
-    return true;
+    return false;
 }
 
 bool add_internal_key(InternalPage* page, int64_t key, pagenum_t page_idx) {

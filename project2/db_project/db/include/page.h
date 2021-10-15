@@ -139,26 +139,118 @@ struct LeafPage : public AllocatedPage {
     uint8_t reserved[PAGE_SIZE - PAGE_HEADER_SIZE];
 } __attribute__((packed));
 
+/**
+ * @brief   Page helper
+ * @details This namespace includes some helper functions which are used by
+ * APIs such as tree manager which uses direct page access. These functions do not call any other APIs,
+ * but modifying only given data.
+ */
 namespace page_helper {
 
+/**
+ * @brief Get page slots.
+ * @details It just return the reserved area as <code>PageSlot*</code>, which means it does not give any hints
+ * for the number of slots. Anyway, you can still get the number of the slots by using <code>page->page_header.key_num</code>
+ * 
+ * @param page  Leaf page.
+ * @returns <code>PageSlot*</code>
+ */
 PageSlot* get_page_slot(LeafPage* page);
+/**
+ * @brief Get leaf value.
+ * @details Get a leaf value corresponds to index <code>value_idx</code>, using the page slot information.
+ * Then copies the value and its size into given pointer, which is given by caller.
+ * 
+ * @param page          Leaf page.
+ * @param value_idx     Index number of value.
+ * @param value         The value will be set into this pointer if not null.
+ * @param value_size    The value size will be set into this pointer if not null.
+ */
 void get_leaf_value(LeafPage* page, int value_idx, char* value,
                     uint16_t* value_size = nullptr);
+/**
+ * @brief Get leaf value.
+ * @details Get a leaf value using exact offset and size. Usually it does not called from the outside,
+ * and just help the other function.
+ * Then copies the value and its size into given pointer, which is given by caller.
+ * 
+ * @param page          Leaf page.
+ * @param value_offset  Value offset.
+ * @param value_size    Value size.
+ * @param value         The value will be set into this pointer if not null.
+ * @param value_size    The value size will be set into this pointer if not null.
+ */
 void get_leaf_value(LeafPage* page, uint16_t value_offset, uint16_t value_size,
                     char* value);
-
+/**
+ * @brief Check if given page has enough space for given value size.
+ * @details Required size for the given <code>value_size</code> is <code>value_size + sizeof(PageSlot)</code>.
+ * 
+ * @param page          Leaf page.
+ * @param value_size    Value size.
+ * @returns <code>true</code> if space is enough, <code>false</code> otherwise.
+ */
 bool has_enough_space(LeafPage* page, uint16_t value_size);
+/**
+ * @brief Get free space amount.
+ * @details In leaf page, <code>page->page_header.reserved_footer.footer_1</code> represents current free space amount.
+ * 
+ * @param page          Leaf page.
+ * @returns The pointer to the free space amount, which will be more useful than raw value in purpose like modifying.
+ */
 uint64_t* get_free_space(LeafPage* page);
+/**
+ * @brief Get next sibling index.
+ * @details In leaf page, <code>page->page_header.reserved_footer.footer_2</code> represents the very next(it means right) sibling index.
+ * 
+ * @returns Right sibling index if page is not rightmost child. <code>0</code> if it is.
+ */
 pagenum_t* get_sibling_idx(LeafPage* page);
 
+/**
+ * @brief Add a leaf value into the last position of the leaf page.
+ * 
+ * @param page          The leaf page.
+ * @param key           Record key.
+ * @param value         Record value.
+ * @param value_size    Record value size.
+ * @returns <code>true</code> if the page has enough space and appending is successful, <code>false</code> otherwise.
+ */
 bool add_leaf_value(LeafPage* page, int64_t key, const char* value,
                     uint16_t value_size);
+/**
+ * @brief Remove a record and compact reserved area in the leaf page.
+ * 
+ * @param page          The leaf page.
+ * @param key           Record key.
+ * @returns <code>true</code> if the key was inside the leaf record and deleted successfully, <code>false</code> otherwise.
+ */
 bool remove_leaf_value(LeafPage* page, int64_t key);
 
-bool set_internal_key(InternalPage* page, int position, int64_t key,
-                      pagenum_t page_idx);
+/**
+ * @brief Add a page branch into the last position of the internal page.
+ * 
+ * @param page          The internal page.
+ * @param key           Branch key.
+ * @param page_idx      Branch page index.
+ * @returns <code>true</code> if the page has enough space and appending is successful, <code>false</code> otherwise.
+ */
 bool add_internal_key(InternalPage* page, int64_t key, pagenum_t page_idx);
+/**
+ * @brief Remove a page branch and realign branches.
+ * 
+ * @param page          The internal page.
+ * @param key           Branch key.
+ * @returns <code>true</code> if the key was inside the internal branch and deleted successfully, <code>false</code> otherwise.
+ */
 bool remove_internal_key(InternalPage* page, int64_t key);
+/**
+ * @brief Get leftmost child page index.
+ * @details @details In internal page, <code>page->page_header.reserved_footer.footer_2</code> represents current free space amount.
+ * 
+ * @param page          The internal page.
+ * @returns Leftmost child page index.
+ */
 pagenum_t* get_leftmost_child_idx(InternalPage* page);
 }
 

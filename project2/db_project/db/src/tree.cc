@@ -163,20 +163,6 @@ pagenum_t insert_into_node(tableid_t table_id, pagenum_t parent_page_idx,
             return a.key < b.key;
         });
 
-    /*insert_position = parent_page.page_header.key_num++;
-
-    while (insert_position > 0) {
-        if (parent_page.page_branches[insert_position - 1].page_idx ==
-            left_page_idx)
-            break;
-        parent_page.page_branches[insert_position] =
-            parent_page.page_branches[insert_position - 1];
-        insert_position--;
-    }
-
-    page_helper::set_internal_key(&parent_page, insert_position, key,
-                                  right_page_idx);*/
-
     file_write_page(table_id, parent_page_idx, &parent_page);
 
     return parent_page_idx;
