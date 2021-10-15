@@ -20,26 +20,26 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| typedef struct <a href="/Classes/TableInstance">TableInstance</a> | **[TableInstance](/Modules/based B+ treeSpaceManager#typedef-tableinstance)**  |
+| typedef struct <a href="/Classes/TableInstance">TableInstance</a> | **[TableInstance](/Modules/DiskSpaceManager#typedef-tableinstance)**  |
 
 ## Functions
 
 |                | Name           |
 | -------------- | -------------- |
-| tableid_t | **[file_open_table_file](/Modules/based B+ treeSpaceManager#function-file_open_table_file)**(const char * path)<br>Open existing table file or create one if not existed.  |
-| pagenum_t | **[file_alloc_page](/Modules/based B+ treeSpaceManager#function-file_alloc_page)**(int64_t table_id)<br>Allocate an on-disk page from the free page list.  |
-| void | **[file_free_page](/Modules/based B+ treeSpaceManager#function-file_free_page)**(int64_t table_id, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
-| void | **[file_read_page](/Modules/based B+ treeSpaceManager#function-file_read_page)**(int64_t table_id, pagenum_t pagenum, <a href="/Modules/based B+ treeSpaceManager#typedef-page-t">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
-| void | **[file_write_page](/Modules/based B+ treeSpaceManager#function-file_write_page)**(int64_t table_id, pagenum_t pagenum, const <a href="/Modules/based B+ treeSpaceManager#typedef-page-t">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
-| void | **[file_close_table_files](/Modules/based B+ treeSpaceManager#function-file_close_table_files)**()<br>Stop referencing the table files.  |
+| tableid_t | **[file_open_table_file](/Modules/DiskSpaceManager#function-file_open_table_file)**(const char * path)<br>Open existing table file or create one if not existed.  |
+| pagenum_t | **[file_alloc_page](/Modules/DiskSpaceManager#function-file_alloc_page)**(int64_t table_id)<br>Allocate an on-disk page from the free page list.  |
+| void | **[file_free_page](/Modules/DiskSpaceManager#function-file_free_page)**(int64_t table_id, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
+| void | **[file_read_page](/Modules/DiskSpaceManager#function-file_read_page)**(int64_t table_id, pagenum_t pagenum, <a href="/Modules/DiskSpaceManager#typedef-page-t">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
+| void | **[file_write_page](/Modules/DiskSpaceManager#function-file_write_page)**(int64_t table_id, pagenum_t pagenum, const <a href="/Modules/DiskSpaceManager#typedef-page-t">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
+| void | **[file_close_table_files](/Modules/DiskSpaceManager#function-file_close_table_files)**()<br>Stop referencing the table files.  |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| constexpr int | **[INITIAL_TABLE_FILE_SIZE](/Modules/based B+ treeSpaceManager#variable-initial_table_file_size)** <br>Initial size(in bytes) of newly created table file.  |
-| constexpr int | **[MAX_TABLE_INSTANCE](/Modules/based B+ treeSpaceManager#variable-max_table_instance)** <br>Maximum number of table instances count.  |
-| constexpr int | **[INITIAL_TABLE_CAPS](/Modules/based B+ treeSpaceManager#variable-initial_table_caps)** <br>Initial number of page count in newly created table file.  |
+| constexpr int | **[INITIAL_TABLE_FILE_SIZE](/Modules/DiskSpaceManager#variable-initial_table_file_size)** <br>Initial size(in bytes) of newly created table file.  |
+| constexpr int | **[MAX_TABLE_INSTANCE](/Modules/DiskSpaceManager#variable-max_table_instance)** <br>Maximum number of table instances count.  |
+| constexpr int | **[INITIAL_TABLE_CAPS](/Modules/DiskSpaceManager#variable-initial_table_caps)** <br>Initial number of page count in newly created table file.  |
 
 ## Types Documentation
 
@@ -82,7 +82,7 @@ Allocate an on-disk page from the free page list.
 
 **Parameters**: 
 
-  * **table_id** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
+  * **table_id** table id obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
 
 
 **Return**: >0 <a href="/Classes/Page">Page</a> index number if allocation success. 0 Zero if allocation failed. 
@@ -100,7 +100,7 @@ Free an on-disk page to the free page list.
 
 **Parameters**: 
 
-  * **table_id** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
+  * **table_id** table id obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
 
 
@@ -118,7 +118,7 @@ Read an on-disk page into the in-memory page structure(dest)
 
 **Parameters**: 
 
-  * **table_id** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
+  * **table_id** table id obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
   * **dest** the pointer of the page data. 
 
@@ -137,7 +137,7 @@ Write an in-memory page(src) to the on-disk page.
 
 **Parameters**: 
 
-  * **table_id** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
+  * **table_id** table id obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
   * **src** the pointer of the page data. 
 
@@ -230,4 +230,4 @@ void file_close_table_files();
 
 -------------------------------
 
-Updated on 2021-10-15 at 15:44:16 +0900
+Updated on 2021-10-15 at 15:45:30 +0900

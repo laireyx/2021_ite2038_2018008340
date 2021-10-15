@@ -5,8 +5,8 @@
 
 
 
-* **group [based B+ tree](/Modules/based B+ tree)** 
-* **group [DiskSpaceManager](/Modules/based B+ treeSpaceManager)** 
+* **group [DiskBasedBpt](/Modules/DiskBasedBpt)** 
+* **group [DiskSpaceManager](/Modules/DiskSpaceManager)** 
 * **group [TableManager](/Modules/TableManager)** 
 * **group [TestCode](/Modules/TestCode)** 
 
@@ -14,4 +14,4 @@
 
 -------------------------------
 
-Updated on 2021-10-15 at 15:44:16 +0900
+Updated on 2021-10-15 at 15:45:30 +0900

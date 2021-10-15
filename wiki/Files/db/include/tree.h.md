@@ -8,29 +8,29 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| pagenum_t | **[make_leaf](/Modules/based B+ tree#function-make_leaf)**(tableid_t table_id, pagenum_t parent_page_idx =0)<br>Allocate and make a leaf page.  |
-| pagenum_t | **[make_node](/Modules/based B+ tree#function-make_node)**(tableid_t table_id, pagenum_t parent_page_idx =0)<br>Allocate and make an internal page.  |
-| pagenum_t | **[create_tree](/Modules/based B+ tree#function-create_tree)**(tableid_t table_id, int64_t key, const char * value, uint16_t value_size)<br>Create a new tree.  |
-| pagenum_t | **[find_leaf](/Modules/based B+ tree#function-find_leaf)**(tableid_t table_id, int64_t key)<br>Find a leaf node which continas.  |
-| bool | **[find_by_key](/Modules/based B+ tree#function-find_by_key)**(tableid_t table_id, int64_t key, char * value =nullptr, uint16_t * value_size =nullptr)<br>Find a record with key.  |
-| pagenum_t | **[insert_into_node](/Modules/based B+ tree#function-insert_into_node)**(tableid_t table_id, pagenum_t parent_page_idx, pagenum_t left_page_idx, int64_t key, pagenum_t right_page_idx)<br>Insert a <code>(key, right&#95;page&#95;idx)</code> tuple in parent page.  |
-| pagenum_t | **[insert_into_node_after_splitting](/Modules/based B+ tree#function-insert_into_node_after_splitting)**(tableid_t table_id, pagenum_t parent_page_idx, int64_t key, pagenum_t right_page_idx)<br>Insert a <code>(key, right&#95;page&#95;idx)</code> tuple in parent page, and split it into two pages.  |
-| pagenum_t | **[insert_into_parent](/Modules/based B+ tree#function-insert_into_parent)**(tableid_t table_id, pagenum_t left_page_idx, int64_t key, pagenum_t right_page_idx)<br>Choose right method between just inserting and <code>insert&#95;into&#95;node&#95;after&#95;splitting</code> and call it.  |
-| pagenum_t | **[insert_into_leaf_after_splitting](/Modules/based B+ tree#function-insert_into_leaf_after_splitting)**(tableid_t table_id, pagenum_t leaf_page_idx, int64_t key, const char * value, uint16_t value_size)<br>Insert <code>(key, value)</code>into leaf node and split it into two pages.  |
-| pagenum_t | **[insert_node](/Modules/based B+ tree#function-insert_node)**(tableid_t table_id, int64_t key, const char * value, uint16_t value_size)<br>Find appropriate leaf page and insert a record into it.  |
-| pagenum_t | **[adjust_root](/Modules/based B+ tree#function-adjust_root)**(tableid_t table_id)<br>Adjust root page.  |
-| pagenum_t | **[coalesce_internal_nodes](/Modules/based B+ tree#function-coalesce_internal_nodes)**(tableid_t table_id, pagenum_t left_page_idx, int64_t seperate_key, int seperate_key_idx, pagenum_t right_page_idx)<br>Coalesces two internal pages.  |
-| pagenum_t | **[coalesce_leaf_nodes](/Modules/based B+ tree#function-coalesce_leaf_nodes)**(tableid_t table_id, pagenum_t left_page_idx, pagenum_t right_page_idx)<br>Coalesces two leaf pages.  |
-| pagenum_t | **[delete_internal_key](/Modules/based B+ tree#function-delete_internal_key)**(tableid_t table_id, pagenum_t internal_page_idx, int64_t key)<br>Delete a page branch from internal page.  |
-| pagenum_t | **[delete_leaf_key](/Modules/based B+ tree#function-delete_leaf_key)**(tableid_t table_id, pagenum_t leaf_page_idx, int64_t key)<br>Delete a record from leaf page.  |
-| pagenum_t | **[delete_node](/Modules/based B+ tree#function-delete_node)**(tableid_t table_id, int64_t key)<br>Entrance for remove a record from table.  |
+| pagenum_t | **[make_leaf](/Modules/DiskBasedBpt#function-make_leaf)**(tableid_t table_id, pagenum_t parent_page_idx =0)<br>Allocate and make a leaf page.  |
+| pagenum_t | **[make_node](/Modules/DiskBasedBpt#function-make_node)**(tableid_t table_id, pagenum_t parent_page_idx =0)<br>Allocate and make an internal page.  |
+| pagenum_t | **[create_tree](/Modules/DiskBasedBpt#function-create_tree)**(tableid_t table_id, int64_t key, const char * value, uint16_t value_size)<br>Create a new tree.  |
+| pagenum_t | **[find_leaf](/Modules/DiskBasedBpt#function-find_leaf)**(tableid_t table_id, int64_t key)<br>Find a leaf node which continas.  |
+| bool | **[find_by_key](/Modules/DiskBasedBpt#function-find_by_key)**(tableid_t table_id, int64_t key, char * value =nullptr, uint16_t * value_size =nullptr)<br>Find a record with key.  |
+| pagenum_t | **[insert_into_node](/Modules/DiskBasedBpt#function-insert_into_node)**(tableid_t table_id, pagenum_t parent_page_idx, pagenum_t left_page_idx, int64_t key, pagenum_t right_page_idx)<br>Insert a <code>(key, right&#95;page&#95;idx)</code> tuple in parent page.  |
+| pagenum_t | **[insert_into_node_after_splitting](/Modules/DiskBasedBpt#function-insert_into_node_after_splitting)**(tableid_t table_id, pagenum_t parent_page_idx, int64_t key, pagenum_t right_page_idx)<br>Insert a <code>(key, right&#95;page&#95;idx)</code> tuple in parent page, and split it into two pages.  |
+| pagenum_t | **[insert_into_parent](/Modules/DiskBasedBpt#function-insert_into_parent)**(tableid_t table_id, pagenum_t left_page_idx, int64_t key, pagenum_t right_page_idx)<br>Choose right method between just inserting and <code>insert&#95;into&#95;node&#95;after&#95;splitting</code> and call it.  |
+| pagenum_t | **[insert_into_leaf_after_splitting](/Modules/DiskBasedBpt#function-insert_into_leaf_after_splitting)**(tableid_t table_id, pagenum_t leaf_page_idx, int64_t key, const char * value, uint16_t value_size)<br>Insert <code>(key, value)</code>into leaf node and split it into two pages.  |
+| pagenum_t | **[insert_node](/Modules/DiskBasedBpt#function-insert_node)**(tableid_t table_id, int64_t key, const char * value, uint16_t value_size)<br>Find appropriate leaf page and insert a record into it.  |
+| pagenum_t | **[adjust_root](/Modules/DiskBasedBpt#function-adjust_root)**(tableid_t table_id)<br>Adjust root page.  |
+| pagenum_t | **[coalesce_internal_nodes](/Modules/DiskBasedBpt#function-coalesce_internal_nodes)**(tableid_t table_id, pagenum_t left_page_idx, int64_t seperate_key, int seperate_key_idx, pagenum_t right_page_idx)<br>Coalesces two internal pages.  |
+| pagenum_t | **[coalesce_leaf_nodes](/Modules/DiskBasedBpt#function-coalesce_leaf_nodes)**(tableid_t table_id, pagenum_t left_page_idx, pagenum_t right_page_idx)<br>Coalesces two leaf pages.  |
+| pagenum_t | **[delete_internal_key](/Modules/DiskBasedBpt#function-delete_internal_key)**(tableid_t table_id, pagenum_t internal_page_idx, int64_t key)<br>Delete a page branch from internal page.  |
+| pagenum_t | **[delete_leaf_key](/Modules/DiskBasedBpt#function-delete_leaf_key)**(tableid_t table_id, pagenum_t leaf_page_idx, int64_t key)<br>Delete a record from leaf page.  |
+| pagenum_t | **[delete_node](/Modules/DiskBasedBpt#function-delete_node)**(tableid_t table_id, int64_t key)<br>Entrance for remove a record from table.  |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| constexpr int | **[REDISTRIBUTE_THRESHOLD](/Modules/based B+ tree#variable-redistribute_threshold)**  |
-| constexpr int | **[MAX_VALUE_SIZE](/Modules/based B+ tree#variable-max_value_size)**  |
+| constexpr int | **[REDISTRIBUTE_THRESHOLD](/Modules/DiskBasedBpt#variable-redistribute_threshold)**  |
+| constexpr int | **[MAX_VALUE_SIZE](/Modules/DiskBasedBpt#variable-max_value_size)**  |
 
 
 ## Functions Documentation
@@ -462,4 +462,4 @@ pagenum_t delete_node(tableid_t table_id, int64_t key);
 
 -------------------------------
 
-Updated on 2021-10-15 at 15:44:16 +0900
+Updated on 2021-10-15 at 15:45:30 +0900

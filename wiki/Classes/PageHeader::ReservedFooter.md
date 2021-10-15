@@ -36,4 +36,4 @@ Can be leftmost children idx(in internal page) or next sibling idx(in leaf page)
 
 -------------------------------
 
-Updated on 2021-10-15 at 15:44:16 +0900
+Updated on 2021-10-15 at 15:45:30 +0900

@@ -30,31 +30,31 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| typedef <a href="/Classes/Page">Page</a> | **[page_t](/Modules/based B+ treeSpaceManager#typedef-page_t)**  |
-| typedef <a href="/Classes/PageHeader">PageHeader</a> | **[pageheader_t](/Modules/based B+ treeSpaceManager#typedef-pageheader_t)**  |
-| typedef <a href="/Classes/HeaderPage">HeaderPage</a> | **[headerpage_t](/Modules/based B+ treeSpaceManager#typedef-headerpage_t)**  |
-| typedef <a href="/Classes/FreePage">FreePage</a> | **[freepage_t](/Modules/based B+ treeSpaceManager#typedef-freepage_t)**  |
-| typedef <a href="/Classes/AllocatedFullPage">AllocatedFullPage</a> | **[allocatedpage_t](/Modules/based B+ treeSpaceManager#typedef-allocatedpage_t)**  |
-| typedef <a href="/Classes/InternalPage">InternalPage</a> | **[internalpage_t](/Modules/based B+ treeSpaceManager#typedef-internalpage_t)**  |
-| typedef <a href="/Classes/LeafPage">LeafPage</a> | **[leafpage_t](/Modules/based B+ treeSpaceManager#typedef-leafpage_t)**  |
+| typedef <a href="/Classes/Page">Page</a> | **[page_t](/Modules/DiskSpaceManager#typedef-page_t)**  |
+| typedef <a href="/Classes/PageHeader">PageHeader</a> | **[pageheader_t](/Modules/DiskSpaceManager#typedef-pageheader_t)**  |
+| typedef <a href="/Classes/HeaderPage">HeaderPage</a> | **[headerpage_t](/Modules/DiskSpaceManager#typedef-headerpage_t)**  |
+| typedef <a href="/Classes/FreePage">FreePage</a> | **[freepage_t](/Modules/DiskSpaceManager#typedef-freepage_t)**  |
+| typedef <a href="/Classes/AllocatedFullPage">AllocatedFullPage</a> | **[allocatedpage_t](/Modules/DiskSpaceManager#typedef-allocatedpage_t)**  |
+| typedef <a href="/Classes/InternalPage">InternalPage</a> | **[internalpage_t](/Modules/DiskSpaceManager#typedef-internalpage_t)**  |
+| typedef <a href="/Classes/LeafPage">LeafPage</a> | **[leafpage_t](/Modules/DiskSpaceManager#typedef-leafpage_t)**  |
 
 ## Functions
 
 |                | Name           |
 | -------------- | -------------- |
-| struct <a href="/Classes/PageSlot">PageSlot</a> | **[__attribute__](/Modules/based B+ treeSpaceManager#function-__attribute__)**((packed) ) |
+| struct <a href="/Classes/PageSlot">PageSlot</a> | **[__attribute__](/Modules/DiskSpaceManager#function-__attribute__)**((packed) ) |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| constexpr int | **[PAGE_SIZE](/Modules/based B+ treeSpaceManager#variable-page_size)** <br>Size of each page(in bytes).  |
-| constexpr int | **[PAGE_HEADER_SIZE](/Modules/based B+ treeSpaceManager#variable-page_header_size)** <br>Size of page header(in bytes).  |
-| constexpr int | **[MAX_PAGE_BRANCHES](/Modules/based B+ treeSpaceManager#variable-max_page_branches)** <br>Maximum number of page branches.  |
+| constexpr int | **[PAGE_SIZE](/Modules/DiskSpaceManager#variable-page_size)** <br>Size of each page(in bytes).  |
+| constexpr int | **[PAGE_HEADER_SIZE](/Modules/DiskSpaceManager#variable-page_header_size)** <br>Size of page header(in bytes).  |
+| constexpr int | **[MAX_PAGE_BRANCHES](/Modules/DiskSpaceManager#variable-max_page_branches)** <br>Maximum number of page branches.  |
 | int64_t | **[key](/Files/db/include/page.h#variable-key)** <br>The page key.  |
 | uint16_t | **[value_size](/Files/db/include/page.h#variable-value_size)** <br>The value size(in bytes).  |
 | uint16_t | **[value_offset](/Files/db/include/page.h#variable-value_offset)** <br>The value offset(in bytes).  |
-| struct <a href="/Classes/PageBranch">PageBranch</a> | **[__attribute__](/Modules/based B+ treeSpaceManager#variable-__attribute__)**  |
+| struct <a href="/Classes/PageBranch">PageBranch</a> | **[__attribute__](/Modules/DiskSpaceManager#variable-__attribute__)**  |
 | uint8_t | **[reserved](/Files/db/include/page.h#variable-reserved)** <br>Reserved area for normal allocated page.  |
 
 ## Types Documentation
@@ -292,4 +292,4 @@ typedef LeafPage leafpage_t;
 
 -------------------------------
 
-Updated on 2021-10-15 at 15:44:16 +0900
+Updated on 2021-10-15 at 15:45:30 +0900

@@ -2,7 +2,7 @@
 
 ### [Modules](/Modules/Modules)
   * [TestCode](/Modules/TestCode)
-  * [Disk](/Modules/based B+ tree)
+  * [DiskBasedBpt](/Modules/DiskBasedBpt)
   * [TableManager](/Modules/TableManager)
   * [DiskSpaceManager](/Modules/DiskSpaceManager)
 ***

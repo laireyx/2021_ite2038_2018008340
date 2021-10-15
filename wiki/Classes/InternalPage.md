@@ -2,7 +2,7 @@
 
 # InternalPage
 
-**Module:** **[DiskSpaceManager](/Modules/based B+ treeSpaceManager)**
+**Module:** **[DiskSpaceManager](/Modules/DiskSpaceManager)**
 
 
 
@@ -40,4 +40,4 @@ PageBranch page_branches;
 
 -------------------------------
 
-Updated on 2021-10-15 at 15:44:16 +0900
+Updated on 2021-10-15 at 15:45:30 +0900

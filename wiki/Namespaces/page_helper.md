@@ -2,7 +2,7 @@
 
 # page_helper
 
-**Module:** **[DiskSpaceManager](/Modules/based B+ treeSpaceManager)**
+**Module:** **[DiskSpaceManager](/Modules/DiskSpaceManager)**
 
 <a href="/Classes/Page">Page</a> helper.  [More...](#detailed-description)
 
@@ -264,4 +264,4 @@ In internal page, <code>page-&gt;page&#95;header.reserved&#95;footer.footer&#95;
 
 -------------------------------
 
-Updated on 2021-10-15 at 15:44:16 +0900
+Updated on 2021-10-15 at 15:45:30 +0900

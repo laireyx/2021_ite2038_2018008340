@@ -2,7 +2,7 @@
 
 # TableInstance
 
-**Module:** **[DiskSpaceManager](/Modules/based B+ treeSpaceManager)**
+**Module:** **[DiskSpaceManager](/Modules/DiskSpaceManager)**
 
 
 
@@ -17,7 +17,7 @@ Table file instance.
 | -------------- | -------------- |
 | char * | **[file_path](/Classes/TableInstance#variable-file_path)** <br>Real table file path(obtained by realpath(3)).  |
 | int | **[file_descriptor](/Classes/TableInstance#variable-file_descriptor)** <br>Table file descriptor.  |
-| <a href="/Modules/based B+ treeSpaceManager#typedef-headerpage-t">headerpage_t</a> | **[header_page](/Classes/TableInstance#variable-header_page)** <br>Table header page.  |
+| <a href="/Modules/DiskSpaceManager#typedef-headerpage-t">headerpage_t</a> | **[header_page](/Classes/TableInstance#variable-header_page)** <br>Table header page.  |
 
 ## Public Attributes Documentation
 
@@ -47,4 +47,4 @@ Table header page.
 
 -------------------------------
 
-Updated on 2021-10-15 at 15:44:16 +0900
+Updated on 2021-10-15 at 15:45:30 +0900
