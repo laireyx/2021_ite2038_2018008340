@@ -12,8 +12,8 @@ namespace table_helper {
  * @details If current table_fd is already means given table id, then do
  * nothing. If not, change table_fd to given fd and re-read header_page from it.
  *
- * @param fd table id obtained with
- * <code>file_open_table_file()</code>.
+ * @param table_id  table id obtained with
+ *                  <code>file_open_table_file()</code>.
  */
 bool switch_to_id(int64_t table_id);
 }  // namespace table_helper

@@ -90,7 +90,7 @@ pagenum_t insert_into_node_after_splitting(tableid_t table_id,
                                            pagenum_t parent_page_idx, int64_t key,
                                            pagenum_t right_page_idx);
 /**
- * @brief Choose right method between <code>insert_into_node</code> and
+ * @brief Choose right method between just inserting and
  * <code>insert_into_node_after_splitting</code> and call it.
  *
  * @param table_id          Table id.
@@ -106,7 +106,7 @@ pagenum_t insert_into_parent(tableid_t table_id, pagenum_t left_page_idx, int64_
  * pages.
  *
  * @param table_id          Table id.
- * @param left_page_idx     Left page index.
+ * @param leaf_page_idx     Leaf page index.
  * @param key               Record key.
  * @param value             Record value.
  * @param value_size        Record value size.
@@ -118,13 +118,12 @@ pagenum_t insert_into_leaf_after_splitting(tableid_t table_id,
                                            uint16_t value_size);
 
 /**
- * @brief Choose right method between <code>insert_into_node</code> and
- * <code>insert_into_node_after_splitting</code> and call it.
+ * @brief Find appropriate leaf page and insert a record into it.
  *
  * @param table_id          Table id.
- * @param left_page_idx     Left page index.
- * @param key               Key which means right page.
- * @param right_page_idx    Right page index.
+ * @param key               Record key.
+ * @param value             Record value.
+ * @param value_size        Record value size.
  * @returns                 Root page number.
  */
 pagenum_t insert_node(tableid_t table_id, int64_t key, const char* value,

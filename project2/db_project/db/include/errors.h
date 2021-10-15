@@ -68,8 +68,11 @@ inline int print(bool exit_flag = PRINT_ERROR) {
 /**
  * @brief    If <code>assertion = false</code>, then throw error.
  *
- * @param    assertion   if <code>assertion = true</code>, then return silently.
- *                       if <code>assertion = false</code>, then throw Exception.
+ * @param    assertion  if <code>assertion = true</code>, then return silently.
+ *                      if <code>assertion = false</code>, then process with <code>exit_flag</code>.
+ * @param    exit_flag  if set to true, then print error message and terminate
+ *                      program with error code 1.
+ * @returns <code>true</code> if assertion success, <code>false</code> otherwise.
  */
 inline bool ok(bool assertion, bool exit_flag = THROW_EXCEPTION) {
     if (!assertion) {

@@ -36,7 +36,7 @@ struct HeaderPage : public Page {
     /// @brief The root page index.
     pagenum_t root_page_idx;
 
-    /// @property Reserved area for next project.
+    /// @brief Reserved area for next project.
     uint8_t reserved[PAGE_SIZE - 24];
 };
 
@@ -178,7 +178,6 @@ void get_leaf_value(LeafPage* page, int value_idx, char* value,
  * @param value_offset  Value offset.
  * @param value_size    Value size.
  * @param value         The value will be set into this pointer if not null.
- * @param value_size    The value size will be set into this pointer if not null.
  */
 void get_leaf_value(LeafPage* page, uint16_t value_offset, uint16_t value_size,
                     char* value);
