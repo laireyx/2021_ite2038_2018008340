@@ -2,7 +2,7 @@
 
 # HeaderPage
 
-**Module:** **[DiskSpaceManager](/Modules/DiskSpaceManager)**
+**Module:** **[DiskSpaceManager](/Modules/based B+ treeSpaceManager)**
 
 
 
@@ -17,8 +17,9 @@ Inherits from [Page](/Classes/Page)
 
 |                | Name           |
 | -------------- | -------------- |
-| uint64_t | **[free_page_idx](/Classes/HeaderPage#variable-free_page_idx)** <br>The first free page index.  |
+| pagenum_t | **[free_page_idx](/Classes/HeaderPage#variable-free_page_idx)** <br>The first free page index.  |
 | uint64_t | **[page_num](/Classes/HeaderPage#variable-page_num)** <br>Total count of the page reserved.  |
+| pagenum_t | **[root_page_idx](/Classes/HeaderPage#variable-root_page_idx)** <br>The root page index.  |
 | uint8_t | **[reserved](/Classes/HeaderPage#variable-reserved)**  |
 
 ## Public Attributes Documentation
@@ -26,7 +27,7 @@ Inherits from [Page](/Classes/Page)
 ### variable free_page_idx
 
 ```cpp
-uint64_t free_page_idx;
+pagenum_t free_page_idx;
 ```
 
 The first free page index. 
@@ -39,6 +40,14 @@ uint64_t page_num;
 
 Total count of the page reserved. 
 
+### variable root_page_idx
+
+```cpp
+pagenum_t root_page_idx;
+```
+
+The root page index. 
+
 ### variable reserved
 
 ```cpp
@@ -48,4 +57,4 @@ uint8_t reserved;
 
 -------------------------------
 
-Updated on 2021-10-01 at 23:30:07 +0900
+Updated on 2021-10-15 at 13:42:29 +0900

@@ -2,7 +2,7 @@
 
 # file_helper
 
-**Module:** **[DiskSpaceManager](/Modules/DiskSpaceManager)**
+**Module:** **[DiskSpaceManager](/Modules/based B+ treeSpaceManager)**
 
 Filemanager helper.  [More...](#detailed-description)
 
@@ -10,9 +10,9 @@ Filemanager helper.  [More...](#detailed-description)
 
 |                | Name           |
 | -------------- | -------------- |
-| bool | **[switch_to_fd](/Namespaces/file_helper#function-switch_to_fd)**(int fd)<br>Switch current database into given database.  |
-| void | **[extend_capacity](/Namespaces/file_helper#function-extend_capacity)**(pagenum_t newsize)<br>Automatically check and size-up a page file.  |
-| void | **[flush_header](/Namespaces/file_helper#function-flush_header)**()<br>Flush a header page as "pagenum 0".  |
+| <a href="/Classes/TableInstance">TableInstance</a> & | **[get_table](/Namespaces/file_helper#function-get_table)**(tableid_t table_id)<br>Get table instance.  |
+| void | **[extend_capacity](/Namespaces/file_helper#function-extend_capacity)**(tableid_t table_id, pagenum_t newsize)<br>Automatically check and size-up a page file.  |
+| void | **[flush_header](/Namespaces/file_helper#function-flush_header)**(tableid_t table_id)<br>Flush a header page as "pagenum 0".  |
 
 ## Detailed Description
 
@@ -23,28 +23,29 @@ This namespace includes some helper functions which are used by filemanager API.
 
 ## Functions Documentation
 
-### function switch_to_fd
+### function get_table
 
 ```cpp
-bool switch_to_fd(
-    int fd
+TableInstance & get_table(
+    tableid_t table_id
 )
 ```
 
-Switch current database into given database. 
+Get table instance. 
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
+  * **table_id** Target table id 
 
 
-If current <code>database&#95;fd == fd</code>, then do nothing. If not, change database_fd to given fd and re-read header_page from it.
+Get the reference of the table instance ojbect corresponds with the given table id.
 
 
 ### function extend_capacity
 
 ```cpp
 void extend_capacity(
+    tableid_t table_id,
     pagenum_t newsize
 )
 ```
@@ -53,6 +54,7 @@ Automatically check and size-up a page file.
 
 **Parameters**: 
 
+  * **table_id** Target table id. 
   * **newsize** extended size. default is 0, which means doubling the reserved page count if there are no free page. 
 
 
@@ -67,12 +69,14 @@ next free page index is next page index, unless it is the last page.
 ### function flush_header
 
 ```cpp
-void flush_header()
+void flush_header(
+    tableid_t table_id
+)
 ```
 
 Flush a header page as "pagenum 0". 
 
-Write header page into offset 0 of the current database file descriptor. 
+Write header page into offset 0 of the current table file 
 
 
 
@@ -81,4 +85,4 @@ Write header page into offset 0 of the current database file descriptor.
 
 -------------------------------
 
-Updated on 2021-10-01 at 23:30:07 +0900
+Updated on 2021-10-15 at 13:42:29 +0900

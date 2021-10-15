@@ -9,65 +9,146 @@
 | Name           |
 | -------------- |
 | **[file_helper](/Namespaces/file_helper)** <br>Filemanager helper.  |
+| **[page_helper](/Namespaces/page_helper)** <br><a href="/Classes/Page">Page</a> helper.  |
 
 ## Classes
 
 |                | Name           |
 | -------------- | -------------- |
+| class | **[TableInstance](/Classes/TableInstance)** <br>Table file instance.  |
 | class | **[Page](/Classes/Page)** <br>struct for abstract page.  |
-| class | **[AllocatedPage](/Classes/AllocatedPage)** <br>struct for allocated page.  |
 | class | **[HeaderPage](/Classes/HeaderPage)** <br>struct for the header page.  |
 | class | **[FreePage](/Classes/FreePage)** <br>struct for the free page.  |
+| class | **[PageHeader](/Classes/PageHeader)** <br>page header for allocated(internal and leaf) node.  |
+| class | **[PageSlot](/Classes/PageSlot)** <br>page slot for allocated(internal and leaf) node.  |
+| class | **[PageBranch](/Classes/PageBranch)** <br>page slot for internal node.  |
+| class | **[AllocatedPage](/Classes/AllocatedPage)** <br>struct for allocated page.  |
+| class | **[AllocatedFullPage](/Classes/AllocatedFullPage)** <br>struct for any allocated page.  |
+| class | **[InternalPage](/Classes/InternalPage)** <br>struct for allocated internal page.  |
+| class | **[LeafPage](/Classes/LeafPage)** <br>struct for allocated leaf page.  |
+
+## Types
+
+|                | Name           |
+| -------------- | -------------- |
+| typedef struct <a href="/Classes/TableInstance">TableInstance</a> | **[TableInstance](/Modules/based B+ treeSpaceManager#typedef-tableinstance)**  |
+| typedef <a href="/Classes/Page">Page</a> | **[page_t](/Modules/based B+ treeSpaceManager#typedef-page_t)**  |
+| typedef <a href="/Classes/PageHeader">PageHeader</a> | **[pageheader_t](/Modules/based B+ treeSpaceManager#typedef-pageheader_t)**  |
+| typedef <a href="/Classes/HeaderPage">HeaderPage</a> | **[headerpage_t](/Modules/based B+ treeSpaceManager#typedef-headerpage_t)**  |
+| typedef <a href="/Classes/FreePage">FreePage</a> | **[freepage_t](/Modules/based B+ treeSpaceManager#typedef-freepage_t)**  |
+| typedef <a href="/Classes/AllocatedFullPage">AllocatedFullPage</a> | **[allocatedpage_t](/Modules/based B+ treeSpaceManager#typedef-allocatedpage_t)**  |
+| typedef <a href="/Classes/InternalPage">InternalPage</a> | **[internalpage_t](/Modules/based B+ treeSpaceManager#typedef-internalpage_t)**  |
+| typedef <a href="/Classes/LeafPage">LeafPage</a> | **[leafpage_t](/Modules/based B+ treeSpaceManager#typedef-leafpage_t)**  |
 
 ## Functions
 
 |                | Name           |
 | -------------- | -------------- |
-| int | **[file_open_database_file](/Modules/DiskSpaceManager#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
-| pagenum_t | **[file_alloc_page](/Modules/DiskSpaceManager#function-file_alloc_page)**(int fd)<br>Allocate an on-disk page from the free page list.  |
-| void | **[file_free_page](/Modules/DiskSpaceManager#function-file_free_page)**(int fd, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
-| void | **[file_read_page](/Modules/DiskSpaceManager#function-file_read_page)**(int fd, pagenum_t pagenum, <a href="/Classes/Page">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
-| void | **[file_write_page](/Modules/DiskSpaceManager#function-file_write_page)**(int fd, pagenum_t pagenum, const <a href="/Classes/Page">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
-| void | **[file_close_database_file](/Modules/DiskSpaceManager#function-file_close_database_file)**()<br>Stop referencing the database file.  |
+| tableid_t | **[file_open_table_file](/Modules/based B+ treeSpaceManager#function-file_open_table_file)**(const char * path)<br>Open existing table file or create one if not existed.  |
+| pagenum_t | **[file_alloc_page](/Modules/based B+ treeSpaceManager#function-file_alloc_page)**(int64_t table_id)<br>Allocate an on-disk page from the free page list.  |
+| void | **[file_free_page](/Modules/based B+ treeSpaceManager#function-file_free_page)**(int64_t table_id, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
+| void | **[file_read_page](/Modules/based B+ treeSpaceManager#function-file_read_page)**(int64_t table_id, pagenum_t pagenum, <a href="/Modules/based B+ treeSpaceManager#typedef-page-t">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
+| void | **[file_write_page](/Modules/based B+ treeSpaceManager#function-file_write_page)**(int64_t table_id, pagenum_t pagenum, const <a href="/Modules/based B+ treeSpaceManager#typedef-page-t">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
+| void | **[file_close_table_files](/Modules/based B+ treeSpaceManager#function-file_close_table_files)**()<br>Stop referencing the table files.  |
+| struct <a href="/Classes/PageSlot">PageSlot</a> | **[__attribute__](/Modules/based B+ treeSpaceManager#function-__attribute__)**((packed) ) |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| constexpr int | **[INITIAL_DB_FILE_SIZE](/Modules/DiskSpaceManager#variable-initial_db_file_size)** <br>Initial size(in bytes) of newly created database file.  |
-| constexpr int | **[MAX_DATABASE_INSTANCE](/Modules/DiskSpaceManager#variable-max_database_instance)** <br>Maximum number of database instances count.  |
-| constexpr int | **[INITIAL_DATABASE_CAPS](/Modules/DiskSpaceManager#variable-initial_database_caps)** <br>Initial number of page count in newly created database file.  |
-| constexpr int | **[PAGE_SIZE](/Modules/DiskSpaceManager#variable-page_size)** <br>Size of each page(in bytes).  |
-| int | **[database_instance_count](/Modules/DiskSpaceManager#variable-database_instance_count)** <br>current database instance number  |
-| <a href="/Classes/DatabaseInstance">DatabaseInstance</a> | **[database_instances](/Modules/DiskSpaceManager#variable-database_instances)** <br>all database instances  |
-| int | **[database_fd](/Modules/DiskSpaceManager#variable-database_fd)** <br>currently opened database file descriptor  |
-| <a href="/Classes/HeaderPage">headerpage_t</a> | **[header_page](/Modules/DiskSpaceManager#variable-header_page)** <br>currently opened database header page  |
+| constexpr int | **[INITIAL_TABLE_FILE_SIZE](/Modules/based B+ treeSpaceManager#variable-initial_table_file_size)** <br>Initial size(in bytes) of newly created table file.  |
+| constexpr int | **[MAX_TABLE_INSTANCE](/Modules/based B+ treeSpaceManager#variable-max_table_instance)** <br>Maximum number of table instances count.  |
+| constexpr int | **[INITIAL_TABLE_CAPS](/Modules/based B+ treeSpaceManager#variable-initial_table_caps)** <br>Initial number of page count in newly created table file.  |
+| constexpr int | **[PAGE_SIZE](/Modules/based B+ treeSpaceManager#variable-page_size)** <br>Size of each page(in bytes).  |
+| constexpr int | **[PAGE_HEADER_SIZE](/Modules/based B+ treeSpaceManager#variable-page_header_size)** <br>Size of page header(in bytes).  |
+| constexpr int | **[MAX_PAGE_BRANCHES](/Modules/based B+ treeSpaceManager#variable-max_page_branches)** <br>Maximum number of page branches.  |
+| struct <a href="/Classes/PageBranch">PageBranch</a> | **[__attribute__](/Modules/based B+ treeSpaceManager#variable-__attribute__)**  |
+| int | **[table_instance_count](/Modules/based B+ treeSpaceManager#variable-table_instance_count)** <br>current table instance number  |
+| <a href="/Classes/TableInstance">TableInstance</a> | **[table_instances](/Modules/based B+ treeSpaceManager#variable-table_instances)** <br>all table instances  |
+
+## Types Documentation
+
+### typedef TableInstance
+
+```
+typedef struct TableInstance TableInstance;
+```
+
+
+### typedef page_t
+
+```
+typedef Page page_t;
+```
+
+
+### typedef pageheader_t
+
+```
+typedef PageHeader pageheader_t;
+```
+
+
+### typedef headerpage_t
+
+```
+typedef HeaderPage headerpage_t;
+```
+
+
+### typedef freepage_t
+
+```
+typedef FreePage freepage_t;
+```
+
+
+### typedef allocatedpage_t
+
+```
+typedef AllocatedFullPage allocatedpage_t;
+```
+
+
+### typedef internalpage_t
+
+```
+typedef InternalPage internalpage_t;
+```
+
+
+### typedef leafpage_t
+
+```
+typedef LeafPage leafpage_t;
+```
+
 
 
 ## Functions Documentation
 
-### function file_open_database_file
+### function file_open_table_file
 
 ```
-int file_open_database_file(
+tableid_t file_open_table_file(
     const char * path
 )
 ```
 
-Open existing database file or create one if not existed. 
+Open existing table file or create one if not existed. 
 
 **Parameters**: 
 
-  * **path** Database file path. 
+  * **path** Table file path. 
 
 
-**Return**: ID of the opened database file. 
+**Return**: ID of the opened table file. 
 
 ### function file_alloc_page
 
 ```
 pagenum_t file_alloc_page(
-    int fd
+    int64_t table_id
 )
 ```
 
@@ -75,7 +156,7 @@ Allocate an on-disk page from the free page list.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
+  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
 
 
 **Return**: >0 <a href="/Classes/Page">Page</a> index number if allocation success. 0 Zero if allocation failed. 
@@ -84,7 +165,7 @@ Allocate an on-disk page from the free page list.
 
 ```
 void file_free_page(
-    int fd,
+    int64_t table_id,
     pagenum_t pagenum
 )
 ```
@@ -93,7 +174,7 @@ Free an on-disk page to the free page list.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
+  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
 
 
@@ -101,7 +182,7 @@ Free an on-disk page to the free page list.
 
 ```
 void file_read_page(
-    int fd,
+    int64_t table_id,
     pagenum_t pagenum,
     page_t * dest
 )
@@ -111,7 +192,7 @@ Read an on-disk page into the in-memory page structure(dest)
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
+  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
   * **dest** the pointer of the page data. 
 
@@ -120,7 +201,7 @@ Read an on-disk page into the in-memory page structure(dest)
 
 ```
 void file_write_page(
-    int fd,
+    int64_t table_id,
     pagenum_t pagenum,
     const page_t * src
 )
@@ -130,49 +211,58 @@ Write an in-memory page(src) to the on-disk page.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
+  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
   * **src** the pointer of the page data. 
 
 
-### function file_close_database_file
+### function file_close_table_files
 
 ```
-void file_close_database_file()
+void file_close_table_files()
 ```
 
-Stop referencing the database file. 
+Stop referencing the table files. 
+
+### function __attribute__
+
+```
+struct PageSlot __attribute__(
+    (packed) 
+)
+```
+
 
 
 ## Attributes Documentation
 
-### variable INITIAL_DB_FILE_SIZE
+### variable INITIAL_TABLE_FILE_SIZE
 
 ```
-constexpr int INITIAL_DB_FILE_SIZE = 10 * 1024 * 1024;
+constexpr int INITIAL_TABLE_FILE_SIZE = 10 * 1024 * 1024;
 ```
 
-Initial size(in bytes) of newly created database file. 
+Initial size(in bytes) of newly created table file. 
 
 It means 10MiB. 
 
 
-### variable MAX_DATABASE_INSTANCE
+### variable MAX_TABLE_INSTANCE
 
 ```
-constexpr int MAX_DATABASE_INSTANCE = 1024;
+constexpr int MAX_TABLE_INSTANCE = 32;
 ```
 
-Maximum number of database instances count. 
+Maximum number of table instances count. 
 
-### variable INITIAL_DATABASE_CAPS
+### variable INITIAL_TABLE_CAPS
 
 ```
-constexpr int INITIAL_DATABASE_CAPS =
-    INITIAL_DB_FILE_SIZE / MAX_DATABASE_INSTANCE;
+constexpr int INITIAL_TABLE_CAPS =
+    INITIAL_TABLE_FILE_SIZE / MAX_TABLE_INSTANCE;
 ```
 
-Initial number of page count in newly created database file. 
+Initial number of page count in newly created table file. 
 
 Its value is 2560. 
 
@@ -185,41 +275,48 @@ constexpr int PAGE_SIZE = 4096;
 
 Size of each page(in bytes). 
 
-### variable database_instance_count
+### variable PAGE_HEADER_SIZE
 
 ```
-int database_instance_count = 0;
+constexpr int PAGE_HEADER_SIZE = 128;
 ```
 
-current database instance number 
+Size of page header(in bytes). 
 
-### variable database_instances
-
-```
-DatabaseInstance database_instances;
-```
-
-all database instances 
-
-### variable database_fd
+### variable MAX_PAGE_BRANCHES
 
 ```
-int database_fd = 0;
+constexpr int MAX_PAGE_BRANCHES = 248;
 ```
 
-currently opened database file descriptor 
+Maximum number of page branches. 
 
-### variable header_page
+### variable __attribute__
 
 ```
-headerpage_t header_page;
+struct PageBranch __attribute__;
 ```
 
-currently opened database header page 
+
+### variable table_instance_count
+
+```
+int table_instance_count = 0;
+```
+
+current table instance number 
+
+### variable table_instances
+
+```
+TableInstance table_instances;
+```
+
+all table instances 
 
 
 
 
 -------------------------------
 
-Updated on 2021-10-01 at 23:30:07 +0900
+Updated on 2021-10-15 at 13:42:29 +0900

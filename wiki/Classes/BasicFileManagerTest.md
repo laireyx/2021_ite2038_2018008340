@@ -22,7 +22,7 @@ Inherits from testing::Test
 |                | Name           |
 | -------------- | -------------- |
 | int | **[test_order](/Classes/BasicFileManagerTest#variable-test_order)** <br>Random indexes for test count.  |
-| int | **[database_fd](/Classes/BasicFileManagerTest#variable-database_fd)** <br>Test database fd.  |
+| tableid_t | **[table_id](/Classes/BasicFileManagerTest#variable-table_id)** <br>Test table id.  |
 
 ## Protected Functions Documentation
 
@@ -50,14 +50,14 @@ int test_order;
 
 Random indexes for test count. 
 
-### variable database_fd
+### variable table_id
 
 ```cpp
-int database_fd = 0;
+tableid_t table_id = 0;
 ```
 
-Test database fd. 
+Test table id. 
 
 -------------------------------
 
-Updated on 2021-10-01 at 23:30:07 +0900
+Updated on 2021-10-15 at 13:42:29 +0900

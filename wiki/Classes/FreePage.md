@@ -2,7 +2,7 @@
 
 # FreePage
 
-**Module:** **[DiskSpaceManager](/Modules/DiskSpaceManager)**
+**Module:** **[DiskSpaceManager](/Modules/based B+ treeSpaceManager)**
 
 
 
@@ -17,7 +17,7 @@ Inherits from [Page](/Classes/Page)
 
 |                | Name           |
 | -------------- | -------------- |
-| uint64_t | **[next_free_idx](/Classes/FreePage#variable-next_free_idx)** <br>Index of the very next free page.  |
+| pagenum_t | **[next_free_idx](/Classes/FreePage#variable-next_free_idx)** <br>Index of the very next free page.  |
 | uint8_t | **[reserved](/Classes/FreePage#variable-reserved)** <br>Reserved area for next project.  |
 
 ## Public Attributes Documentation
@@ -25,7 +25,7 @@ Inherits from [Page](/Classes/Page)
 ### variable next_free_idx
 
 ```cpp
-uint64_t next_free_idx;
+pagenum_t next_free_idx;
 ```
 
 Index of the very next free page. 
@@ -40,4 +40,4 @@ Reserved area for next project.
 
 -------------------------------
 
-Updated on 2021-10-01 at 23:30:07 +0900
+Updated on 2021-10-15 at 13:42:29 +0900

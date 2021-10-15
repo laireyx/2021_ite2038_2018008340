@@ -2,7 +2,7 @@
 
 # AllocatedPage
 
-**Module:** **[DiskSpaceManager](/Modules/DiskSpaceManager)**
+**Module:** **[DiskSpaceManager](/Modules/based B+ treeSpaceManager)**
 
 
 
@@ -13,22 +13,24 @@ struct for allocated page.
 
 Inherits from [Page](/Classes/Page)
 
+Inherited by [AllocatedFullPage](/Classes/AllocatedFullPage), [InternalPage](/Classes/InternalPage), [LeafPage](/Classes/LeafPage)
+
 ## Public Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| uint8_t | **[reserved](/Classes/AllocatedPage#variable-reserved)** <br>Reserved area for normal allocated page.  |
+| <a href="/Classes/PageHeader">PageHeader</a> | **[page_header](/Classes/AllocatedPage#variable-page_header)** <br><a href="/Classes/Page">Page</a> header.  |
 
 ## Public Attributes Documentation
 
-### variable reserved
+### variable page_header
 
 ```cpp
-uint8_t reserved;
+PageHeader page_header;
 ```
 
-Reserved area for normal allocated page. 
+<a href="/Classes/Page">Page</a> header. 
 
 -------------------------------
 
-Updated on 2021-10-01 at 23:30:07 +0900
+Updated on 2021-10-15 at 13:42:29 +0900

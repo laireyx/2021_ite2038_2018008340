@@ -14,47 +14,45 @@
 
 |                | Name           |
 | -------------- | -------------- |
-| int | **[file_open_database_file](/Modules/DiskSpaceManager#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
-| pagenum_t | **[file_alloc_page](/Modules/DiskSpaceManager#function-file_alloc_page)**(int fd)<br>Allocate an on-disk page from the free page list.  |
-| void | **[file_free_page](/Modules/DiskSpaceManager#function-file_free_page)**(int fd, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
-| void | **[file_read_page](/Modules/DiskSpaceManager#function-file_read_page)**(int fd, pagenum_t pagenum, <a href="/Classes/Page">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
-| void | **[file_write_page](/Modules/DiskSpaceManager#function-file_write_page)**(int fd, pagenum_t pagenum, const <a href="/Classes/Page">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
-| void | **[file_close_database_file](/Modules/DiskSpaceManager#function-file_close_database_file)**()<br>Stop referencing the database file.  |
+| tableid_t | **[file_open_table_file](/Modules/based B+ treeSpaceManager#function-file_open_table_file)**(const char * path)<br>Open existing table file or create one if not existed.  |
+| pagenum_t | **[file_alloc_page](/Modules/based B+ treeSpaceManager#function-file_alloc_page)**(int64_t table_id)<br>Allocate an on-disk page from the free page list.  |
+| void | **[file_free_page](/Modules/based B+ treeSpaceManager#function-file_free_page)**(int64_t table_id, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
+| void | **[file_read_page](/Modules/based B+ treeSpaceManager#function-file_read_page)**(int64_t table_id, pagenum_t pagenum, <a href="/Modules/based B+ treeSpaceManager#typedef-page-t">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
+| void | **[file_write_page](/Modules/based B+ treeSpaceManager#function-file_write_page)**(int64_t table_id, pagenum_t pagenum, const <a href="/Modules/based B+ treeSpaceManager#typedef-page-t">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
+| void | **[file_close_table_files](/Modules/based B+ treeSpaceManager#function-file_close_table_files)**()<br>Stop referencing the table files.  |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| int | **[database_instance_count](/Modules/DiskSpaceManager#variable-database_instance_count)** <br>current database instance number  |
-| <a href="/Classes/DatabaseInstance">DatabaseInstance</a> | **[database_instances](/Modules/DiskSpaceManager#variable-database_instances)** <br>all database instances  |
-| int | **[database_fd](/Modules/DiskSpaceManager#variable-database_fd)** <br>currently opened database file descriptor  |
-| <a href="/Classes/HeaderPage">headerpage_t</a> | **[header_page](/Modules/DiskSpaceManager#variable-header_page)** <br>currently opened database header page  |
+| int | **[table_instance_count](/Modules/based B+ treeSpaceManager#variable-table_instance_count)** <br>current table instance number  |
+| <a href="/Classes/TableInstance">TableInstance</a> | **[table_instances](/Modules/based B+ treeSpaceManager#variable-table_instances)** <br>all table instances  |
 
 
 ## Functions Documentation
 
-### function file_open_database_file
+### function file_open_table_file
 
 ```cpp
-int file_open_database_file(
+tableid_t file_open_table_file(
     const char * path
 )
 ```
 
-Open existing database file or create one if not existed. 
+Open existing table file or create one if not existed. 
 
 **Parameters**: 
 
-  * **path** Database file path. 
+  * **path** Table file path. 
 
 
-**Return**: ID of the opened database file. 
+**Return**: ID of the opened table file. 
 
 ### function file_alloc_page
 
 ```cpp
 pagenum_t file_alloc_page(
-    int fd
+    int64_t table_id
 )
 ```
 
@@ -62,7 +60,7 @@ Allocate an on-disk page from the free page list.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
+  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
 
 
 **Return**: >0 <a href="/Classes/Page">Page</a> index number if allocation success. 0 Zero if allocation failed. 
@@ -71,7 +69,7 @@ Allocate an on-disk page from the free page list.
 
 ```cpp
 void file_free_page(
-    int fd,
+    int64_t table_id,
     pagenum_t pagenum
 )
 ```
@@ -80,7 +78,7 @@ Free an on-disk page to the free page list.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
+  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
 
 
@@ -88,7 +86,7 @@ Free an on-disk page to the free page list.
 
 ```cpp
 void file_read_page(
-    int fd,
+    int64_t table_id,
     pagenum_t pagenum,
     page_t * dest
 )
@@ -98,7 +96,7 @@ Read an on-disk page into the in-memory page structure(dest)
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
+  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
   * **dest** the pointer of the page data. 
 
@@ -107,7 +105,7 @@ Read an on-disk page into the in-memory page structure(dest)
 
 ```cpp
 void file_write_page(
-    int fd,
+    int64_t table_id,
     pagenum_t pagenum,
     const page_t * src
 )
@@ -117,53 +115,37 @@ Write an in-memory page(src) to the on-disk page.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
+  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
   * **src** the pointer of the page data. 
 
 
-### function file_close_database_file
+### function file_close_table_files
 
 ```cpp
-void file_close_database_file()
+void file_close_table_files()
 ```
 
-Stop referencing the database file. 
+Stop referencing the table files. 
 
 
 ## Attributes Documentation
 
-### variable database_instance_count
+### variable table_instance_count
 
 ```cpp
-int database_instance_count = 0;
+int table_instance_count = 0;
 ```
 
-current database instance number 
+current table instance number 
 
-### variable database_instances
+### variable table_instances
 
 ```cpp
-DatabaseInstance database_instances;
+TableInstance table_instances;
 ```
 
-all database instances 
-
-### variable database_fd
-
-```cpp
-int database_fd = 0;
-```
-
-currently opened database file descriptor 
-
-### variable header_page
-
-```cpp
-headerpage_t header_page;
-```
-
-currently opened database header page 
+all table instances 
 
 
 ## Source code
@@ -181,27 +163,21 @@ currently opened database header page
 #include "file.h"
 #include "errors.h"
 
-int database_instance_count = 0;
-DatabaseInstance database_instances[MAX_DATABASE_INSTANCE];
-
-int database_fd = 0;
-
-headerpage_t header_page;
+int table_instance_count = 0;
+TableInstance table_instances[MAX_TABLE_INSTANCE];
 
 namespace file_helper {
-bool switch_to_fd(int fd) {
-    // file descriptor should be positive integer.
-    assert(fd > 0);
-    // If the given fd is equal to current fd, just return true.
-    if (database_fd == fd) return true;
-
-    // Switch database fd.
-    database_fd = fd;
-    // Switch header page content with new database fd.
-    return error::ok(pread64(database_fd, &header_page, PAGE_SIZE, 0) == PAGE_SIZE);
+TableInstance& get_table(tableid_t table_id) {
+    error::ok(table_id < table_instance_count);
+    return table_instances[table_id];
 }
 
-void extend_capacity(pagenum_t newsize = 0) {
+void extend_capacity(tableid_t table_id, pagenum_t newsize = 0) {
+    auto& instance = get_table(table_id);
+
+    int table_fd = instance.file_descriptor;
+    headerpage_t& header_page = instance.header_page;
+
     if (newsize > header_page.page_num || header_page.free_page_idx == 0) {
         if (newsize == 0) {
             newsize = header_page.page_num * 2;
@@ -217,165 +193,171 @@ void extend_capacity(pagenum_t newsize = 0) {
             else
                 free_page.next_free_idx = 0;
 
-            error::ok(pwrite64(database_fd, &free_page, PAGE_SIZE,
+            error::ok(pwrite64(table_fd, &free_page, PAGE_SIZE,
                                   free_page_idx * PAGE_SIZE) == PAGE_SIZE);
-            error::ok(fsync(database_fd) == 0);
+            error::ok(fsync(table_fd) == 0);
         }
 
         header_page.free_page_idx = header_page.page_num;
         header_page.page_num = newsize;
 
-        error::ok(pwrite64(database_fd, &header_page, PAGE_SIZE, 0) == PAGE_SIZE);
-        error::ok(fsync(database_fd) == 0);
+        error::ok(pwrite64(table_fd, &header_page, PAGE_SIZE, 0) == PAGE_SIZE);
+                error::ok(fsync(table_fd) == 0);
     }
 }
 
-void flush_header() {
-    assert(database_fd > 0);
-    error::ok(pwrite64(database_fd, &header_page, PAGE_SIZE, 0) == PAGE_SIZE);
-    error::ok(fsync(database_fd) == 0);
+void flush_header(tableid_t table_id) {
+    auto& instance = get_table(table_id);
+
+    int table_fd = instance.file_descriptor;
+    headerpage_t& header_page = instance.header_page;
+
+    error::ok(pwrite64(table_fd, &header_page, PAGE_SIZE, 0) == PAGE_SIZE);
+    error::ok(fsync(table_fd) == 0);
 }
 };
 
-int file_open_database_file(const char* path) {
-    
+tableid_t file_open_table_file(const char* pathname) {
     char* real_path = NULL;
 
-    // If database instance is already full, then return error.
-    if (database_instance_count >= MAX_DATABASE_INSTANCE) {
+    // If table instance is already full, then return error.
+    if (table_instance_count >= MAX_TABLE_INSTANCE) {
         return -1;
     }
 
-    // Check if database file is already in database instance array.
-    if((real_path = realpath(path, NULL)) > 0) {
-        for (
-            int instance_idx = 0;
-            instance_idx < database_instance_count;
-            instance_idx++
-        ) {
-            if (
-                strcmp(
-                    database_instances[instance_idx].file_path,
-                    real_path
-                ) == 0
-            ) {
+    // Check if table file is already in table instance array.
+    if ((real_path = realpath(pathname, NULL)) > 0) {
+        for (int instance_idx = 0; instance_idx < table_instance_count;
+             instance_idx++) {
+            if (strcmp(table_instances[instance_idx].file_path, real_path) ==
+                0) {
                 // If exists, then return it.
                 free(real_path);
-                return database_instances[instance_idx].file_descriptor;
+                return instance_idx;
             }
         }
 
         free(real_path);
     }
 
-    // Reserve a new area in database instance array.
-    DatabaseInstance& new_instance = database_instances[database_instance_count++];
+    // Reserve a new area in table instance array.
+    auto& new_instance = file_helper::get_table(table_instance_count);
+
+    int& table_fd = new_instance.file_descriptor;
+    headerpage_t& header_page = new_instance.header_page;
 
     // Check if file exists.
-    if ((database_fd = open(path, O_RDWR)) < 1) {
-        if(errno == ENOENT) {
+    if ((table_fd = open(pathname, O_RDWR)) < 1) {
+        if (errno == ENOENT) {
             // Create if not exists.
-            error::ok((database_fd = open(path, O_RDWR | O_CREAT | O_EXCL, 0644)) > 0);
+            error::ok((table_fd = open(pathname, O_RDWR | O_CREAT | O_EXCL,
+                                       0644)) > 0);
 
             // Initialize header page.
+            header_page.root_page_idx = 0;
             header_page.free_page_idx = 0;
             header_page.page_num = 1;
 
             // Initialize free pages.
-            file_helper::extend_capacity(2560);
+            file_helper::extend_capacity(table_instance_count, 2560);
         } else {
             return error::print();
         }
-    }
-    else {
+    } else {
         // Read header page.
-        error::ok(read(database_fd, &header_page, PAGE_SIZE) == PAGE_SIZE);
+        error::ok(read(table_fd, &header_page, PAGE_SIZE) == PAGE_SIZE);
     }
 
-    new_instance.file_path = realpath(path, NULL);
+    new_instance.file_path = realpath(pathname, NULL);
 
-    return (new_instance.file_descriptor = database_fd);
+    return table_instance_count++;
 }
 
-pagenum_t file_alloc_page(int fd) {
-    if (!file_helper::switch_to_fd(fd)) {
-        return 0;
-    }
-    file_helper::extend_capacity();
+pagenum_t file_alloc_page(int64_t table_id) {
+    auto& instance = file_helper::get_table(table_id);
+
+    int table_fd = instance.file_descriptor;
+    headerpage_t& header_page = instance.header_page;
+
+    file_helper::extend_capacity(table_id);
 
     // Pop the first page from free page stack.
     pagenum_t free_page_idx = header_page.free_page_idx;
     freepage_t free_page;
 
-    error::ok(pread64(database_fd, &free_page, PAGE_SIZE, free_page_idx * PAGE_SIZE) == PAGE_SIZE);
+    error::ok(pread64(table_fd, &free_page, PAGE_SIZE,
+                      free_page_idx * PAGE_SIZE) == PAGE_SIZE);
     // Move the first free page index to the next page.
     header_page.free_page_idx = free_page.next_free_idx;
 
-    file_helper::flush_header();
+    file_helper::flush_header(table_fd);
 
     return free_page_idx;
 }
 
-void file_free_page(int fd, pagenum_t pagenum) {
-    if (!file_helper::switch_to_fd(fd)) {
-        return;
-    }
+void file_free_page(int64_t table_id, pagenum_t pagenum) {
+    auto& instance = file_helper::get_table(table_id);
+
+    int table_fd = instance.file_descriptor;
+    headerpage_t& header_page = instance.header_page;
 
     // Current first free page index
     pagenum_t old_free_page_idx = header_page.free_page_idx;
     // Newly freed page
     freepage_t new_free_page;
 
-    // Next free page index of newly freed page is current first free page index.
-    // Its just pushing the pagenum into free page stack.
+    // Next free page index of newly freed page is current first free page
+    // index. Its just pushing the pagenum into free page stack.
     new_free_page.next_free_idx = old_free_page_idx;
-    error::ok(pwrite64(database_fd, &new_free_page, PAGE_SIZE, pagenum * PAGE_SIZE) == PAGE_SIZE);
-    error::ok(fsync(database_fd) == 0);
+    error::ok(pwrite64(table_fd, &new_free_page, PAGE_SIZE,
+                       pagenum * PAGE_SIZE) == PAGE_SIZE);
+    error::ok(fsync(table_fd) == 0);
 
     // Set the first free page to freed page number.
     header_page.free_page_idx = pagenum;
-    file_helper::flush_header();
+    file_helper::flush_header(table_id);
 
     return;
 }
 
-void file_read_page(int fd, pagenum_t pagenum, page_t* dest) {
-    if (!file_helper::switch_to_fd(fd)) {
-        return;
-    }
-    error::ok(pread64(database_fd, dest, PAGE_SIZE, pagenum * PAGE_SIZE) == PAGE_SIZE);
+void file_read_page(int64_t table_id, pagenum_t pagenum, page_t* dest) {
+    auto& instance = file_helper::get_table(table_id);
+
+    int table_fd = instance.file_descriptor;
+    error::ok(pread64(table_fd, dest, PAGE_SIZE, pagenum * PAGE_SIZE) ==
+              PAGE_SIZE);
 }
 
-void file_write_page(int fd, pagenum_t pagenum, const page_t* src) {
-    if (!file_helper::switch_to_fd(fd)) {
-        return;
-    }
-    error::ok(pwrite64(database_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE) == PAGE_SIZE);
-    error::ok(fsync(database_fd) == 0);
+void file_write_page(int64_t table_id, pagenum_t pagenum, const page_t* src) {
+    auto& instance = file_helper::get_table(table_id);
+
+    int table_fd = instance.file_descriptor;
+    error::ok(pwrite64(table_fd, src, PAGE_SIZE, pagenum * PAGE_SIZE) ==
+              PAGE_SIZE);
+    error::ok(fsync(table_fd) == 0);
 }
 
-void file_close_database_file() {
+void file_close_table_files() {
     for (
         int instance_idx = 0;
-        instance_idx < database_instance_count;
+        instance_idx < table_instance_count;
         instance_idx++
     ) {
         // Close file descriptor and free file path
-        close(database_instances[instance_idx].file_descriptor);
-        free(database_instances[instance_idx].file_path);
+        close(table_instances[instance_idx].file_descriptor);
+        free(table_instances[instance_idx].file_path);
 
-        // Reset for accidently re-opening database file.
-        database_instances[instance_idx].file_descriptor = 0;
-        database_instances[instance_idx].file_path = NULL;
+        // Reset for accidently re-opening table file.
+        table_instances[instance_idx].file_descriptor = 0;
+        table_instances[instance_idx].file_path = NULL;
     }
 
-    // Clear database instance count and current database fd.
-    database_instance_count = 0;
-    database_fd = 0;
+    // Clear table instance count.
+    table_instance_count = 0;
 }
 ```
 
 
 -------------------------------
 
-Updated on 2021-10-01 at 23:30:08 +0900
+Updated on 2021-10-15 at 13:42:30 +0900

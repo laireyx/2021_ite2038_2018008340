@@ -7,10 +7,12 @@
 
 * **namespace [error](/Namespaces/error)** <br>Error. 
 * **namespace [file_helper](/Namespaces/file_helper)** <br>Filemanager helper. 
+* **namespace [page_helper](/Namespaces/page_helper)** <br><a href="/Classes/Page">Page</a> helper. 
+* **namespace [table_helper](/Namespaces/table_helper)** 
 * **namespace [testing](/Namespaces/testing)** 
 
 
 
 -------------------------------
 
-Updated on 2021-10-01 at 23:30:08 +0900
+Updated on 2021-10-15 at 13:42:30 +0900

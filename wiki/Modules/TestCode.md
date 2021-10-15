@@ -9,6 +9,7 @@
 |                | Name           |
 | -------------- | -------------- |
 | class | **[BasicFileManagerTest](/Classes/BasicFileManagerTest)**  |
+| class | **[BasicTableTest](/Classes/BasicTableTest)**  |
 
 ## Functions
 
@@ -17,18 +18,21 @@
 | | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , HandlesInitialization )<br>Tests file open/close APIs.  |
 | | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , HandlesPageAllocation )<br>Tests page allocation and free.  |
 | | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , CheckReadWriteOperation )<br>Tests page read/write operations.  |
-| | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , UniqueIdTest )<br>Tests unique database fd.  |
+| | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , UniqueIdTest )<br>Tests unique table fd.  |
 | | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , SequentialAllocateTest )<br>Tests sequential allocation.  |
 | | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicFileManagerTest">BasicFileManagerTest</a> , RandomAllocateTest )<br>Tests random allocation.  |
+| | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicTableTest">BasicTableTest</a> , RandomDeletionTest )<br>Tests database insertion API.  |
+| | **[TEST_F](/Modules/TestCode#function-test_f)**(<a href="/Classes/BasicTableTest">BasicTableTest</a> , RandomInsertTest )<br>Tests database insertion API.  |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
 | constexpr int | **[test_count](/Modules/TestCode#variable-test_count)**  |
-| const char * | **[DATABASE_PATH](/Modules/TestCode#variable-database_path)**  |
-| const char * | **[DATABASE_PATH_ALIAS](/Modules/TestCode#variable-database_path_alias)**  |
-| const char * | **[ANOTHER_DATABASE_PATH](/Modules/TestCode#variable-another_database_path)**  |
+| const char * | **[TABLE_PATH](/Modules/TestCode#variable-table_path)**  |
+| const char * | **[TABLE_PATH_ALIAS](/Modules/TestCode#variable-table_path_alias)**  |
+| const char * | **[ANOTHER_TABLE_PATH](/Modules/TestCode#variable-another_table_path)**  |
+| constexpr int | **[test_count](/Modules/TestCode#variable-test_count)**  |
 
 
 ## Functions Documentation
@@ -91,9 +95,9 @@ TEST_F(
 )
 ```
 
-Tests unique database fd. 
+Tests unique table fd. 
 
-Create database files with different path, but same realpath to check if database uses unique id for that file. Also checks real different file and assure that two different database fd should not be same. 
+Create table files with different path, but same realpath to check if table uses unique id for that file. Also checks real different file and assure that two different table id should not be same. 
 
 
 ### function TEST_F
@@ -124,6 +128,40 @@ Tests random allocation.
 This disk space manager uses LIFO for free page management. Allocate and free page randomly first then allocate again and check if second allocation result is equal to first free result in reverse order. 
 
 
+### function TEST_F
+
+```
+TEST_F(
+    BasicTableTest ,
+    RandomDeletionTest 
+)
+```
+
+Tests database insertion API. 
+
+
+
+1. Open a database and write 1024 random values in random order.
+    * Find the value using the key and compare it to the value. 
+
+
+### function TEST_F
+
+```
+TEST_F(
+    BasicTableTest ,
+    RandomInsertTest 
+)
+```
+
+Tests database insertion API. 
+
+
+
+1. Open a database and write 1024 random values in random order.
+    * Find the value using the key and compare it to the value. 
+
+
 
 ## Attributes Documentation
 
@@ -134,24 +172,31 @@ constexpr int test_count = 128;
 ```
 
 
-### variable DATABASE_PATH
+### variable TABLE_PATH
 
 ```
-const char * DATABASE_PATH = "test.db";
-```
-
-
-### variable DATABASE_PATH_ALIAS
-
-```
-const char * DATABASE_PATH_ALIAS = "./test.db";
+const char * TABLE_PATH = "test.db";
 ```
 
 
-### variable ANOTHER_DATABASE_PATH
+### variable TABLE_PATH_ALIAS
 
 ```
-const char * ANOTHER_DATABASE_PATH = "test_another.db";
+const char * TABLE_PATH_ALIAS = "./test.db";
+```
+
+
+### variable ANOTHER_TABLE_PATH
+
+```
+const char * ANOTHER_TABLE_PATH = "test_another.db";
+```
+
+
+### variable test_count
+
+```
+constexpr int test_count = 128;
 ```
 
 
@@ -160,4 +205,4 @@ const char * ANOTHER_DATABASE_PATH = "test_another.db";
 
 -------------------------------
 
-Updated on 2021-10-01 at 23:30:07 +0900
+Updated on 2021-10-15 at 13:42:29 +0900

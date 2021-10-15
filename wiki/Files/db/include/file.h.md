@@ -10,50 +10,71 @@
 | -------------- |
 | **[file_helper](/Namespaces/file_helper)** <br>Filemanager helper.  |
 
+## Classes
+
+|                | Name           |
+| -------------- | -------------- |
+| class | **[TableInstance](/Classes/TableInstance)** <br>Table file instance.  |
+
+## Types
+
+|                | Name           |
+| -------------- | -------------- |
+| typedef struct <a href="/Classes/TableInstance">TableInstance</a> | **[TableInstance](/Modules/based B+ treeSpaceManager#typedef-tableinstance)**  |
+
 ## Functions
 
 |                | Name           |
 | -------------- | -------------- |
-| int | **[file_open_database_file](/Modules/DiskSpaceManager#function-file_open_database_file)**(const char * path)<br>Open existing database file or create one if not existed.  |
-| pagenum_t | **[file_alloc_page](/Modules/DiskSpaceManager#function-file_alloc_page)**(int fd)<br>Allocate an on-disk page from the free page list.  |
-| void | **[file_free_page](/Modules/DiskSpaceManager#function-file_free_page)**(int fd, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
-| void | **[file_read_page](/Modules/DiskSpaceManager#function-file_read_page)**(int fd, pagenum_t pagenum, <a href="/Classes/Page">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
-| void | **[file_write_page](/Modules/DiskSpaceManager#function-file_write_page)**(int fd, pagenum_t pagenum, const <a href="/Classes/Page">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
-| void | **[file_close_database_file](/Modules/DiskSpaceManager#function-file_close_database_file)**()<br>Stop referencing the database file.  |
+| tableid_t | **[file_open_table_file](/Modules/based B+ treeSpaceManager#function-file_open_table_file)**(const char * path)<br>Open existing table file or create one if not existed.  |
+| pagenum_t | **[file_alloc_page](/Modules/based B+ treeSpaceManager#function-file_alloc_page)**(int64_t table_id)<br>Allocate an on-disk page from the free page list.  |
+| void | **[file_free_page](/Modules/based B+ treeSpaceManager#function-file_free_page)**(int64_t table_id, pagenum_t pagenum)<br>Free an on-disk page to the free page list.  |
+| void | **[file_read_page](/Modules/based B+ treeSpaceManager#function-file_read_page)**(int64_t table_id, pagenum_t pagenum, <a href="/Modules/based B+ treeSpaceManager#typedef-page-t">page_t</a> * dest)<br>Read an on-disk page into the in-memory page structure(dest)  |
+| void | **[file_write_page](/Modules/based B+ treeSpaceManager#function-file_write_page)**(int64_t table_id, pagenum_t pagenum, const <a href="/Modules/based B+ treeSpaceManager#typedef-page-t">page_t</a> * src)<br>Write an in-memory page(src) to the on-disk page.  |
+| void | **[file_close_table_files](/Modules/based B+ treeSpaceManager#function-file_close_table_files)**()<br>Stop referencing the table files.  |
 
 ## Attributes
 
 |                | Name           |
 | -------------- | -------------- |
-| constexpr int | **[INITIAL_DB_FILE_SIZE](/Modules/DiskSpaceManager#variable-initial_db_file_size)** <br>Initial size(in bytes) of newly created database file.  |
-| constexpr int | **[MAX_DATABASE_INSTANCE](/Modules/DiskSpaceManager#variable-max_database_instance)** <br>Maximum number of database instances count.  |
-| constexpr int | **[INITIAL_DATABASE_CAPS](/Modules/DiskSpaceManager#variable-initial_database_caps)** <br>Initial number of page count in newly created database file.  |
+| constexpr int | **[INITIAL_TABLE_FILE_SIZE](/Modules/based B+ treeSpaceManager#variable-initial_table_file_size)** <br>Initial size(in bytes) of newly created table file.  |
+| constexpr int | **[MAX_TABLE_INSTANCE](/Modules/based B+ treeSpaceManager#variable-max_table_instance)** <br>Maximum number of table instances count.  |
+| constexpr int | **[INITIAL_TABLE_CAPS](/Modules/based B+ treeSpaceManager#variable-initial_table_caps)** <br>Initial number of page count in newly created table file.  |
+
+## Types Documentation
+
+### typedef TableInstance
+
+```cpp
+typedef struct TableInstance TableInstance;
+```
+
 
 
 ## Functions Documentation
 
-### function file_open_database_file
+### function file_open_table_file
 
 ```cpp
-int file_open_database_file(
+tableid_t file_open_table_file(
     const char * path
 )
 ```
 
-Open existing database file or create one if not existed. 
+Open existing table file or create one if not existed. 
 
 **Parameters**: 
 
-  * **path** Database file path. 
+  * **path** Table file path. 
 
 
-**Return**: ID of the opened database file. 
+**Return**: ID of the opened table file. 
 
 ### function file_alloc_page
 
 ```cpp
 pagenum_t file_alloc_page(
-    int fd
+    int64_t table_id
 )
 ```
 
@@ -61,7 +82,7 @@ Allocate an on-disk page from the free page list.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
+  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
 
 
 **Return**: >0 <a href="/Classes/Page">Page</a> index number if allocation success. 0 Zero if allocation failed. 
@@ -70,7 +91,7 @@ Allocate an on-disk page from the free page list.
 
 ```cpp
 void file_free_page(
-    int fd,
+    int64_t table_id,
     pagenum_t pagenum
 )
 ```
@@ -79,7 +100,7 @@ Free an on-disk page to the free page list.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
+  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
 
 
@@ -87,7 +108,7 @@ Free an on-disk page to the free page list.
 
 ```cpp
 void file_read_page(
-    int fd,
+    int64_t table_id,
     pagenum_t pagenum,
     page_t * dest
 )
@@ -97,7 +118,7 @@ Read an on-disk page into the in-memory page structure(dest)
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
+  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
   * **dest** the pointer of the page data. 
 
@@ -106,7 +127,7 @@ Read an on-disk page into the in-memory page structure(dest)
 
 ```cpp
 void file_write_page(
-    int fd,
+    int64_t table_id,
     pagenum_t pagenum,
     const page_t * src
 )
@@ -116,49 +137,49 @@ Write an in-memory page(src) to the on-disk page.
 
 **Parameters**: 
 
-  * **fd** Database file descriptor obtained with <code><a href="/Modules/DiskSpaceManager#function-file-open-database-file">file&#95;open&#95;database&#95;file()</a></code>. 
+  * **fd** table id obtained with <code><a href="/Modules/based B+ treeSpaceManager#function-file-open-table-file">file&#95;open&#95;table&#95;file()</a></code>. 
   * **pagenum** page index. 
   * **src** the pointer of the page data. 
 
 
-### function file_close_database_file
+### function file_close_table_files
 
 ```cpp
-void file_close_database_file()
+void file_close_table_files()
 ```
 
-Stop referencing the database file. 
+Stop referencing the table files. 
 
 
 ## Attributes Documentation
 
-### variable INITIAL_DB_FILE_SIZE
+### variable INITIAL_TABLE_FILE_SIZE
 
 ```cpp
-constexpr int INITIAL_DB_FILE_SIZE = 10 * 1024 * 1024;
+constexpr int INITIAL_TABLE_FILE_SIZE = 10 * 1024 * 1024;
 ```
 
-Initial size(in bytes) of newly created database file. 
+Initial size(in bytes) of newly created table file. 
 
 It means 10MiB. 
 
 
-### variable MAX_DATABASE_INSTANCE
+### variable MAX_TABLE_INSTANCE
 
 ```cpp
-constexpr int MAX_DATABASE_INSTANCE = 1024;
+constexpr int MAX_TABLE_INSTANCE = 32;
 ```
 
-Maximum number of database instances count. 
+Maximum number of table instances count. 
 
-### variable INITIAL_DATABASE_CAPS
+### variable INITIAL_TABLE_CAPS
 
 ```cpp
-constexpr int INITIAL_DATABASE_CAPS =
-    INITIAL_DB_FILE_SIZE / MAX_DATABASE_INSTANCE;
+constexpr int INITIAL_TABLE_CAPS =
+    INITIAL_TABLE_FILE_SIZE / MAX_TABLE_INSTANCE;
 ```
 
-Initial number of page count in newly created database file. 
+Initial number of page count in newly created table file. 
 
 Its value is 2560. 
 
@@ -170,37 +191,43 @@ Its value is 2560.
 
 #pragma once
 
+#include "page.h"
 #include "types.h"
 
-constexpr int INITIAL_DB_FILE_SIZE = 10 * 1024 * 1024;
+constexpr int INITIAL_TABLE_FILE_SIZE = 10 * 1024 * 1024;
 
-constexpr int MAX_DATABASE_INSTANCE = 1024;
+constexpr int MAX_TABLE_INSTANCE = 32;
 
-constexpr int INITIAL_DATABASE_CAPS =
-    INITIAL_DB_FILE_SIZE / MAX_DATABASE_INSTANCE;
+constexpr int INITIAL_TABLE_CAPS =
+    INITIAL_TABLE_FILE_SIZE / MAX_TABLE_INSTANCE;
+
+typedef struct TableInstance {
+    char* file_path;
+    int file_descriptor;
+    headerpage_t header_page;
+} TableInstance;
 
 namespace file_helper {
-bool switch_to_fd(int fd);
+TableInstance& get_table(tableid_t table_id);
+void extend_capacity(tableid_t table_id, pagenum_t newsize);
 
-void extend_capacity(pagenum_t newsize);
-
-void flush_header();
+void flush_header(tableid_t table_id);
 };  // namespace file_helper
 
-int file_open_database_file(const char* path);
+tableid_t file_open_table_file(const char* path);
 
-pagenum_t file_alloc_page(int fd);
+pagenum_t file_alloc_page(int64_t table_id);
 
-void file_free_page(int fd, pagenum_t pagenum);
+void file_free_page(int64_t table_id, pagenum_t pagenum);
 
-void file_read_page(int fd, pagenum_t pagenum, page_t* dest);
+void file_read_page(int64_t table_id, pagenum_t pagenum, page_t* dest);
 
-void file_write_page(int fd, pagenum_t pagenum, const page_t* src);
+void file_write_page(int64_t table_id, pagenum_t pagenum, const page_t* src);
 
-void file_close_database_file();
+void file_close_table_files();
 ```
 
 
 -------------------------------
 
-Updated on 2021-10-01 at 23:30:08 +0900
+Updated on 2021-10-15 at 13:42:30 +0900
