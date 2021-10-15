@@ -29,6 +29,7 @@ int init_db();
  * @brief   Open existing data file using ‘pathname’ or create one if not
  * existed.
  *
+ * @param pathname Table file path.
  * @returns unique table id which represents the own table in this database.
  *          return negative value otherwise.
  */
@@ -38,6 +39,10 @@ tableid_t open_table(char* pathname);
  * @brief   Insert input (key, value) record with its size to data file at the
  * right place.
  *
+ * @param table_id      Table id obtained with <code>open_table()</code>.
+ * @param key           Record key.
+ * @param value         Record value.
+ * @param value_size    Record value size.
  * @returns 0 if success.
  *          negative value otherwise.
  */
@@ -49,6 +54,10 @@ int db_insert(tableid_t table_id, int64_t key, char* value,
  * @details If found, ret_val and value_size will be set to matching value and
  * its size.
  *
+ * @param       table_id      Table id obtained with <code>open_table()</code>.
+ * @param       key           Record key.
+ * @param[out]  value         Record value.
+ * @param[out]  value_size    Record value size.
  * @returns 0 if success.
  *          negative value otherwise.
  */
@@ -58,6 +67,8 @@ int db_find(tableid_t table_id, int64_t key, char* ret_val,
 /**
  * @brief   Find the matching record and delete it if found.
  *
+ * @param table_id      Table id obtained with <code>open_table()</code>.
+ * @param key           Record key.
  * @returns 0 if success.
  *          negative value otherwise.
  */

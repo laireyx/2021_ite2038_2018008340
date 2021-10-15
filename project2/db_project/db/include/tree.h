@@ -40,7 +40,7 @@ pagenum_t create_tree(tableid_t table_id, int64_t key, const char* value,
                       uint16_t value_size);
 
 /**
- * @brief Find a leaf node which continas
+ * @brief Find a leaf node which contains given key.
  *
  * @param table_id          Table id.
  * @param key               Key to query with.
@@ -53,12 +53,13 @@ pagenum_t find_leaf(tableid_t table_id, int64_t key);
  *
  * @param table_id          Table id.
  * @param key               Key to query with.
- * @param value             If the record is found successful, then this value is
- *                          set to record value. Caller should allocate enough(MAX_VALUE_SIZE)
- *                          memory for it.
- * @param value_size        If the record is found successful, then this value is
- *                          set to record size.
- * @return                  <code>true</code> if found successful. <code>false</code> otherwise.
+ * @param[out] value        If the record is found successful, then this value
+ * is set to record value. Caller should allocate enough(MAX_VALUE_SIZE) memory
+ * for it.
+ * @param[out] value_size   If the record is found successful, then this value
+ * is set to record size.
+ * @return                  <code>true</code> if found successful.
+ * <code>false</code> otherwise.
  */
 bool find_by_key(tableid_t table_id, int64_t key, char* value = nullptr,
                  uint16_t* value_size = nullptr);
