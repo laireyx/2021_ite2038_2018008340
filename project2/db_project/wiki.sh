@@ -17,6 +17,6 @@ node wiki-gen.js
 
 cd ../..
 
-#git add wiki
-#git commit -m "Wiki update"
-#git subtree push --prefix wiki origin-wiki master
+git add wiki
+git commit -m "Wiki update"
+git subtree push --prefix wiki origin-wiki master
