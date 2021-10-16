@@ -8,16 +8,19 @@ const linkMapping = {};
 
 function recursive(dirPath, cb = null, relativePath = '/') {
   const files = fs.readdirSync(dirPath, { withFileTypes: true });
-  if(path.basename(dirPath) === '.git') return;
   files.forEach(file => {
-    if(file.isDirectory())
+    if(file.isDirectory()) {
+      if(path.basename(dirPath) === '.git') return;
       recursive(
         path.join(dirPath, file.name),
         cb,
         path.join(relativePath, file.name)
       );
-    else if(cb)
+    }
+    else if(cb) {
+      if(path.extname(file.name) !== 'js') return;
       cb(dirPath, file, relativePath);
+    }
   })
 }
 
