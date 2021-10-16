@@ -1,13 +1,12 @@
 # DB Project wiki
 
-### [Analysis for Original B+ Tree](Analysis-for-Original-B--Tree)
-
 ### [Modules](/Modules/Modules)
   * [TestCode](/Modules/TestCode)
   * [DiskBasedBpt](/Modules/DiskBasedBpt)
   * [TableManager](/Modules/TableManager)
   * [DiskSpaceManager](/Modules/DiskSpaceManager)
 ***
+### [In-Memory B+ Tree Analysis](In_Memory_Bpt_Analysis)
 ### [Classes](/Classes/Classes)
   * [TableInstance](/Classes/TableInstance)
   * [PageSlot](/Classes/PageSlot)
