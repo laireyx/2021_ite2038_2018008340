@@ -1,0 +1,13 @@
+{
+    "baseUrl": "/",
+    "indexInFolders": true,
+    "linkSuffix": "",
+    "linkLowercase": false,
+    "linkAndInlineCodeAsHTML": true,
+    "foldersToGenerate": [
+      "modules",
+      "namespaces",
+      "classes",
+      "files"
+    ]
+  }

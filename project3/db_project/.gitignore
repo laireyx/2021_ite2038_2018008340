@@ -1,0 +1,10 @@
+
+## VSCode ##
+.vscode/
+
+## CMake ##
+build/
+
+## Documents & Wiki ##
+doxygen/
+wiki/
