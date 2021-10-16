@@ -1,9 +1,7 @@
+#!/bin/sh
 
-pushd .
-cd ..
-cd ..
-git subtre pull origin-wiki --prefix wiki
-popd
+rm -rf ../../wiki
+mkdir ../../wiki
 
 doxygen
 doxybook2 \
@@ -13,10 +11,12 @@ doxybook2 \
     --summary-input .doxybook/home.md.tmpl \
     --summary-output ../../wiki/home.md
 
+cp -r manual-wiki/* ../../wiki/
+
 node wiki-gen.js
 
 cd ../..
 
-git add wiki
-git commit -m "Wiki update"
-git subtree push --prefix wiki origin-wiki master
+#git add wiki
+#git commit -m "Wiki update"
+#git subtree push --prefix wiki origin-wiki master
