@@ -28,8 +28,6 @@ typedef struct TableInstance {
     char* file_path;
     /// @brief Table file descriptor.
     int file_descriptor;
-    /// @brief Table header page.
-    headerpage_t header_page;
 } TableInstance;
 
 /**
@@ -63,7 +61,7 @@ void extend_capacity(tableid_t table_id, pagenum_t newsize);
  * @brief   Flush a header page as "pagenum 0".
  * @details Write header page into offset 0 of the current table file
  */
-void flush_header(tableid_t table_id);
+void flush_header(tableid_t table_id, headerpage_t* header_page);
 };  // namespace file_helper
 
 /**
