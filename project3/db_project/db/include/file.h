@@ -4,8 +4,8 @@
  */
 #pragma once
 
-#include "page.h"
-#include "types.h"
+#include <page.h>
+#include <types.h>
 
 /// @brief      Initial size(in bytes) of newly created table file.
 /// @details    It means 10MiB.
@@ -28,8 +28,6 @@ typedef struct TableInstance {
     char* file_path;
     /// @brief Table file descriptor.
     int file_descriptor;
-    /// @brief Table header page.
-    headerpage_t header_page;
 } TableInstance;
 
 /**
@@ -46,7 +44,7 @@ namespace file_helper {
  *
  * @param   table_id    Target table id
  */
-TableInstance& get_table(tableid_t table_id);
+TableInstance& get_table_instance(tableid_t table_id);
 /**
  * @brief   Automatically check and size-up a page file.
  * @details If <code>newsize > page_num</code>, reserve pages so that total page
@@ -62,8 +60,10 @@ void extend_capacity(tableid_t table_id, pagenum_t newsize);
 /**
  * @brief   Flush a header page as "pagenum 0".
  * @details Write header page into offset 0 of the current table file
+ * 
+ * @param   header_page Header page.
  */
-void flush_header(tableid_t table_id);
+void flush_header(tableid_t table_id, headerpage_t* header_page);
 };  // namespace file_helper
 
 /**

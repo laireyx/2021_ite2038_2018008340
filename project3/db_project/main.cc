@@ -1,4 +1,4 @@
-#include "table.h"
+#include <db.h>
 
 #include <iostream>
 #include <string>
@@ -143,7 +143,7 @@ func_exit:
 }
 
 #if 0 
-#include "bpt.h"
+#include <bpt.h>
 
 // MAIN
 

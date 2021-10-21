@@ -2,7 +2,8 @@
  * @addtogroup TableManager
  * @{
  */
-#include "table.h"
+#include <db.h>
+#include <file.h>
 
 #include "file.h"
 #include "tree.h"

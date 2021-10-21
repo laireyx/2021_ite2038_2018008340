@@ -2,7 +2,7 @@
  * @addtogroup TestCode
  * @{
  */
-#include "file.h"
+#include <file.h>
 
 #include <gtest/gtest.h>
 #include <sys/stat.h>

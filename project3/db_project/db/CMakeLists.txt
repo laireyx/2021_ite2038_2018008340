@@ -5,8 +5,9 @@ set(DB_SOURCES
   # Add your sources here
   # ${DB_SOURCE_DIR}/foo/bar/your_source.cc
   ${DB_SOURCE_DIR}/page.cc
-  ${DB_SOURCE_DIR}/table.cc
   ${DB_SOURCE_DIR}/tree.cc
+  ${DB_SOURCE_DIR}/buffer.cc
+  ${DB_SOURCE_DIR}/db.cc
   )
 
 # Headers
@@ -15,11 +16,12 @@ set(DB_HEADERS
   ${DB_HEADER_DIR}/file.h
   # Add your headers here
   # ${DB_HEADER_DIR}/foo/bar/your_header.h
-  ${DB_HEADER_DIR}/table.h
   ${DB_HEADER_DIR}/errors.h
   ${DB_HEADER_DIR}/page.h
   ${DB_HEADER_DIR}/types.h
   ${DB_HEADER_DIR}/tree.h
+  ${DB_HEADER_DIR}/buffer.h
+  ${DB_HEADER_DIR}/db.h
   )
 
 add_library(db STATIC ${DB_HEADERS} ${DB_SOURCES})

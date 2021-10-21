@@ -1,10 +1,10 @@
-#include "page.h"
+#include <page.h>
 
 #include <cstring>
 #include <iostream>
 #include <vector>
 
-#include "types.h"
+#include <types.h>
 
 namespace page_helper {
 PageSlot* get_page_slot(LeafPage* page) {
