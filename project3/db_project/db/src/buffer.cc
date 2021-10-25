@@ -33,49 +33,27 @@ BufferBlock* load_buffer(const PageLocation& page_location, page_t* page,
     if (existing_buffer != buffer_index.end()) {
         int buffer_page_idx = existing_buffer->second;
         BufferBlock* buffer_page = buffer_slot + buffer_page_idx;
-        BufferBlock* buffer_head = buffer_slot + buffer_head_idx;
 
-        if (buffer_page->prev_block_idx != -1) {
-            BufferBlock* buffer_prev =
-                buffer_slot + (buffer_page->prev_block_idx);
-            buffer_prev->next_block_idx = buffer_page->next_block_idx;
-        }
+        detach_from_tree(buffer_page_idx);
+        prepend_to_head(buffer_page_idx);
 
-        if (buffer_page->next_block_idx != -1) {
-            BufferBlock* buffer_next =
-                buffer_slot + (buffer_page->next_block_idx);
-            buffer_next->prev_block_idx = buffer_page->prev_block_idx;
-        }
-
-        buffer_page->prev_block_idx = -1;
-        buffer_page->next_block_idx = buffer_head_idx;
-        buffer_head->prev_block_idx = buffer_page_idx;
-
-        buffer_page->is_pinned = buffer_page->is_pinned + (pin ? 1 : 0);
+        buffer_page->is_pinned = (pin ? 1 : 0);
 
         memcpy(page, &(buffer_page->page), PAGE_SIZE);
-        return buffer_slot + (buffer_head_idx = buffer_page_idx);
+        return buffer_slot + buffer_page_idx;
     }
 
-    int evicted_index = evict();
-    if (evicted_index > 0) {
+    int evicted_idx = evict();
+    if (evicted_idx > 0) {
         // add
-        BufferBlock* buffer_page = buffer_slot + evicted_index;
+        BufferBlock* buffer_page = buffer_slot + evicted_idx;
         BufferBlock* buffer_head = buffer_slot + buffer_head_idx;
 
-        if (buffer_page->prev_block_idx != -1) {
-            BufferBlock* buffer_prev =
-                buffer_slot + (buffer_page->prev_block_idx);
-            buffer_prev->next_block_idx = buffer_page->next_block_idx;
-        }
+        detach_from_tree(evicted_idx);
+        buffer_tail_idx = buffer_page->prev_block_idx;
+        prepend_to_head(evicted_idx);
 
-        buffer_page->prev_block_idx = -1;
-        buffer_page->next_block_idx = buffer_head_idx;
-        buffer_head->prev_block_idx = evicted_index;
-
-        buffer_head_idx = evicted_index;
-
-        buffer_index[page_location] = evicted_index;
+        buffer_index[page_location] = evicted_idx;
 
         buffer_page->is_dirty = false;
         buffer_page->is_pinned = pin ? 1 : 0;
@@ -101,9 +79,12 @@ bool apply_buffer(const PageLocation& page_location, const page_t* page) {
         int buffer_page_idx = existing_buffer->second;
         BufferBlock* buffer_page = buffer_slot + buffer_page_idx;
 
+        detach_from_tree(buffer_page_idx);
+        prepend_to_head(buffer_page_idx);
+
         memcpy(&(buffer_page->page), page, PAGE_SIZE);
         buffer_page->is_dirty = true;
-        buffer_page->is_pinned--;
+        buffer_page->is_pinned = 0;
         return true;
     }
 
@@ -117,28 +98,52 @@ int evict() {
     pagenum_t page_num;
 
     int evicted_idx = buffer_tail_idx;
-    BufferBlock* buffer_tail = buffer_slot + buffer_tail_idx;
+    BufferBlock* buffer_evict = buffer_slot + evicted_idx;
 
-    int prev_tail_idx = buffer_tail->prev_block_idx;
-    BufferBlock* buffer_prev_tail = buffer_slot + prev_tail_idx;
+    while (evicted_idx != -1 && buffer_evict->is_pinned) {
+        evicted_idx = buffer_evict->prev_block_idx;
+        buffer_evict = buffer_slot + evicted_idx;
+    }
 
     // All the buffers are using
-    if (buffer_tail->is_pinned) {
+    if (evicted_idx == -1) {
         return -1;
     }
 
-    std::tie(table_id, page_num) = buffer_tail->page_location;
-    if (buffer_tail->is_dirty) {
-        file_write_page(table_id, page_num, &buffer_tail->page);
-    }
+    buffer_index.erase(buffer_evict->page_location);
 
-    buffer_index.erase(buffer_tail->page_location);
-    if (prev_tail_idx != -1) {
-        buffer_prev_tail->next_block_idx = -1;
-        buffer_tail_idx = prev_tail_idx;
+    // Flush to file if dirty
+    std::tie(table_id, page_num) = buffer_evict->page_location;
+    if (buffer_evict->is_dirty) {
+        file_write_page(table_id, page_num, &buffer_evict->page);
     }
 
     return evicted_idx;
+}
+
+void detach_from_tree(int buffer_idx) {
+    BufferBlock* buffer_page = buffer_slot + buffer_idx;
+
+    if (buffer_page->prev_block_idx != -1) {
+        BufferBlock* buffer_prev = buffer_slot + (buffer_page->prev_block_idx);
+        buffer_prev->next_block_idx = buffer_page->next_block_idx;
+    }
+
+    if (buffer_page->next_block_idx != -1) {
+        BufferBlock* buffer_next = buffer_slot + (buffer_page->next_block_idx);
+        buffer_next->prev_block_idx = buffer_page->prev_block_idx;
+    }
+}
+
+void prepend_to_head(int buffer_idx) {
+    BufferBlock* buffer_page = buffer_slot + buffer_idx;
+    BufferBlock* buffer_head = buffer_slot + buffer_head_idx;
+
+    buffer_page->prev_block_idx = -1;
+    buffer_page->next_block_idx = buffer_head_idx;
+    buffer_head->prev_block_idx = buffer_idx;
+
+    buffer_head_idx = buffer_idx;
 }
 }  // namespace buffer_helper
 

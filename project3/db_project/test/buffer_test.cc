@@ -12,7 +12,7 @@
 #include <cstdlib>
 #include <ctime>
 
-constexpr int test_count = 10000;
+constexpr int test_count = 100;
 
 const char* TABLE_PATH = "test.db";
 const char* TABLE_PATH_ALIAS = "./test.db";

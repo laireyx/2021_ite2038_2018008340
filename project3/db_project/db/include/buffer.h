@@ -87,6 +87,19 @@ bool is_full();
  * @return evicted buffer slot index if success, <code><0</code> otherwise.
  */
 int evict();
+/**
+ * @brief detach a buffer from Recently-Used list.
+ * @details It links previous and next index of given buffer.
+ *
+ * @param buffer_idx    index of buffer which will be detached.
+ */
+void detach_from_tree(int buffer_idx);
+/**
+ * @brief prepend a buffer to the head of Recently-Used list.
+ *
+ * @param buffer_idx    index of buffer which will be prepended.
+ */
+void prepend_to_head(int buffer_idx);
 }  // namespace buffer_helper
 
 /**
