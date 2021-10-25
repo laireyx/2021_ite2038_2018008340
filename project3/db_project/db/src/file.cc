@@ -24,7 +24,7 @@ TableInstance& get_table_instance(tableid_t table_id) {
     return table_instances[table_id];
 }
 
-void extend_capacity(tableid_t table_id, pagenum_t newsize = 0) {
+void extend_capacity(tableid_t table_id, pagenum_t newsize) {
     auto& instance = get_table_instance(table_id);
 
     int table_fd = instance.file_descriptor;
@@ -124,7 +124,7 @@ tableid_t file_open_table_file(const char* pathname) {
     return table_instance_count - 1;
 }
 
-pagenum_t file_alloc_page(int64_t table_id) {
+pagenum_t file_alloc_page(tableid_t table_id) {
     auto& instance = file_helper::get_table_instance(table_id);
 
     int table_fd = instance.file_descriptor;
@@ -147,7 +147,7 @@ pagenum_t file_alloc_page(int64_t table_id) {
     return free_page_idx;
 }
 
-void file_free_page(int64_t table_id, pagenum_t pagenum) {
+void file_free_page(tableid_t table_id, pagenum_t pagenum) {
     auto& instance = file_helper::get_table_instance(table_id);
 
     int table_fd = instance.file_descriptor;
@@ -173,7 +173,7 @@ void file_free_page(int64_t table_id, pagenum_t pagenum) {
     return;
 }
 
-void file_read_page(int64_t table_id, pagenum_t pagenum, page_t* dest) {
+void file_read_page(tableid_t table_id, pagenum_t pagenum, page_t* dest) {
     auto& instance = file_helper::get_table_instance(table_id);
 
     int table_fd = instance.file_descriptor;
@@ -181,7 +181,7 @@ void file_read_page(int64_t table_id, pagenum_t pagenum, page_t* dest) {
               PAGE_SIZE);
 }
 
-void file_write_page(int64_t table_id, pagenum_t pagenum, const page_t* src) {
+void file_write_page(tableid_t table_id, pagenum_t pagenum, const page_t* src) {
     auto& instance = file_helper::get_table_instance(table_id);
 
     int table_fd = instance.file_descriptor;

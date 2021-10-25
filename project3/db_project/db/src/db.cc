@@ -1,19 +1,17 @@
 /**
- * @addtogroup TableManager
+ * @addtogroup DatabaseAPI
  * @{
  */
+#include <buffer.h>
 #include <db.h>
-#include <file.h>
-
-#include "file.h"
-#include "tree.h"
+#include <tree.h>
 
 #include <cstring>
 
-int init_db() { return 0; }
+int init_db(int num_buf) { return init_buffer(num_buf); }
 
 tableid_t open_table(char* pathname) {
-    return file_open_table_file(pathname);
+    return buffered_open_table_file(pathname);
 }
 
 int db_insert(tableid_t table_id, int64_t key, char* value,
@@ -37,7 +35,7 @@ int db_delete(tableid_t table_id, int64_t key) {
 }
 
 int shutdown_db() {
-    file_close_table_files();
+    shutdown_buffer();
     return 0;
 }
 /** @}*/

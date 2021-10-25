@@ -24,9 +24,9 @@ constexpr int INITIAL_TABLE_CAPS =
  * @brief   Table file instance.
  */
 typedef struct TableInstance {
-    /// @brief Real table file path(obtained by realpath(3)).
+    /// @brief real table file path(obtained by realpath(3)).
     char* file_path;
-    /// @brief Table file descriptor.
+    /// @brief table file descriptor.
     int file_descriptor;
 } TableInstance;
 
@@ -55,7 +55,7 @@ TableInstance& get_table_instance(tableid_t table_id);
  * @param   newsize     extended size. default is 0, which means doubling the
  *                      reserved page count if there are no free page.
  */
-void extend_capacity(tableid_t table_id, pagenum_t newsize);
+void extend_capacity(tableid_t table_id, pagenum_t newsize = 0);
 
 /**
  * @brief   Flush a header page as "pagenum 0".
@@ -82,7 +82,7 @@ tableid_t file_open_table_file(const char* path);
  * @return  >0  Page index number if allocation success.
  *          0   Zero if allocation failed.
  */
-pagenum_t file_alloc_page(int64_t table_id);
+pagenum_t file_alloc_page(tableid_t table_id);
 
 /**
  * @brief   Free an on-disk page to the free page list
@@ -91,7 +91,7 @@ pagenum_t file_alloc_page(int64_t table_id);
  *                          <code>file_open_table_file()</code>.
  * @param   pagenum         page index.
  */
-void file_free_page(int64_t table_id, pagenum_t pagenum);
+void file_free_page(tableid_t table_id, pagenum_t pagenum);
 
 /**
  * @brief   Read an on-disk page into the in-memory page structure(dest)
@@ -101,7 +101,7 @@ void file_free_page(int64_t table_id, pagenum_t pagenum);
  * @param   pagenum         page index.
  * @param   dest            the pointer of the page data.
  */
-void file_read_page(int64_t table_id, pagenum_t pagenum, page_t* dest);
+void file_read_page(tableid_t table_id, pagenum_t pagenum, page_t* dest);
 
 /**
  * @brief   Write an in-memory page(src) to the on-disk page
@@ -111,7 +111,7 @@ void file_read_page(int64_t table_id, pagenum_t pagenum, page_t* dest);
  * @param   pagenum         page index.
  * @param   src             the pointer of the page data.
  */
-void file_write_page(int64_t table_id, pagenum_t pagenum, const page_t* src);
+void file_write_page(tableid_t table_id, pagenum_t pagenum, const page_t* src);
 
 /**
  * @brief   Stop referencing the table files
