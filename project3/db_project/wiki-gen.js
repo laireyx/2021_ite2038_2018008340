@@ -18,7 +18,7 @@ function recursive(dirPath, cb = null, relativePath = '/') {
       );
     }
     else if(cb) {
-      if(path.extname(file.name) !== 'js') return;
+      if(path.extname(file.name) !== '.md') return;
       cb(dirPath, file, relativePath);
     }
   })
