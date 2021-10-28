@@ -60,7 +60,7 @@ namespace buffer_helper {
  * @param       pin             pin.
  * @return loaded buffer.
  */
-BufferBlock* load_buffer(const PageLocation& page_location, page_t* page,
+BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
                          bool pin = true);
 /**
  * @brief   Apply a page into buffer.
@@ -72,7 +72,7 @@ BufferBlock* load_buffer(const PageLocation& page_location, page_t* page,
  * @returns <code>true</code> if buffer write success, <code>false</code> if
  * fallback method is used.
  */
-bool apply_buffer(const PageLocation& page_location, const page_t* page);
+bool apply_buffer(tableid_t table_id, pagenum_t pagenum, const page_t* page);
 /**
  * @brief Check if there buffer slot is full.
  *

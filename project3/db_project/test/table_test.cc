@@ -12,7 +12,7 @@
 #include <cstring>
 #include <ctime>
 
-constexpr int test_count = 10000;
+constexpr int test_count = 20000;
 
 class BasicTableTest : public ::testing::Test {
    protected:
