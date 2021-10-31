@@ -3,6 +3,7 @@
  * @{
  */
 #include <db.h>
+#include <buffer.h>
 
 #include <gtest/gtest.h>
 #include <sys/stat.h>

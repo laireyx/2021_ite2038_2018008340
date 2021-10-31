@@ -10,6 +10,7 @@
 #include <new>
 #include <unordered_map>
 #include <utility>
+#include <iostream>
 
 /// @brief buffer slot.
 BufferBlock* buffer_slot = nullptr;
@@ -93,6 +94,16 @@ bool apply_buffer(tableid_t table_id, pagenum_t pagenum, const page_t* page) {
     return false;
 }
 
+void release_buffer(tableid_t table_id, pagenum_t pagenum) {
+    auto page_location = std::make_pair(table_id, pagenum);
+    const auto& existing_buffer = buffer_index.find(page_location);
+    if (existing_buffer != buffer_index.end()) {
+        int buffer_page_idx = existing_buffer->second;
+        BufferBlock* buffer_page = buffer_slot + buffer_page_idx;
+        buffer_page->is_pinned = 0;
+    }
+}
+
 int evict() {
     int evicted_idx = buffer_tail_idx;
     BufferBlock* buffer_evict = buffer_slot + evicted_idx;
@@ -158,6 +169,7 @@ int init_buffer(int _buffer_size) {
         buffer_size = _buffer_size;
         buffer_slot = new BufferBlock[buffer_size];
         for (int i = 0; i < buffer_size; i++) {
+            buffer_slot[i].page_location = std::make_pair(MAX_TABLE_INSTANCE + 1, 0);
             buffer_slot[i].is_dirty = false;
             buffer_slot[i].is_pinned = 0;
 
@@ -224,12 +236,16 @@ void buffered_free_page(tableid_t table_id, pagenum_t pagenum) {
 
 void buffered_read_page(tableid_t table_id, pagenum_t pagenum, page_t* dest,
                         bool pin) {
-    buffer_helper::load_buffer(table_id, pagenum, dest);
+    buffer_helper::load_buffer(table_id, pagenum, dest, pin);
 }
 
 void buffered_write_page(tableid_t table_id, pagenum_t pagenum,
                          const page_t* src) {
     buffer_helper::apply_buffer(table_id, pagenum, src);
+}
+
+void buffered_release_page(tableid_t table_id, pagenum_t pagenum) {
+    buffer_helper::release_buffer(table_id, pagenum);
 }
 
 int shutdown_buffer() {
@@ -252,5 +268,17 @@ int shutdown_buffer() {
     }
     file_close_table_files();
     return 0;
+}
+
+bool validate_pin() {
+    if (buffer_slot != nullptr) {
+        for (int i = 0; i < buffer_size; i++) {
+            BufferBlock* buffer = buffer_slot + i;
+            if(buffer->is_pinned) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 /** @}*/

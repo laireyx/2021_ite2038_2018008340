@@ -55,7 +55,8 @@ namespace buffer_helper {
  * buffer with the lowest priority and load a buffer in that position. If there
  * are no room for more buffer, fallback direct I/O method will be used.
  *
- * @param       page_location   page location.
+ * @param       table_id        table id.
+ * @param       pagenum         page number.
  * @param[out]  page            page.
  * @param       pin             pin.
  * @return loaded buffer.
@@ -67,12 +68,21 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
  * @details Apply page content into buffer block if exists. If not, return
  * <code>false</code> to notify fallback direct I/O method should be used.
  *
- * @param page_location page location.
+ * @param table_id      table id.
+ * @param pagenum       page number.
  * @param page          page content.
  * @returns <code>true</code> if buffer write success, <code>false</code> if
  * fallback method is used.
  */
 bool apply_buffer(tableid_t table_id, pagenum_t pagenum, const page_t* page);
+/**
+ * @brief   Release a buffer page.
+ * @details Remove the pin from the buffer.
+ *
+ * @param page_location page location.
+ * @param page          page content.
+ */
+void release_buffer(tableid_t table_id, pagenum_t pagenum);
 /**
  * @brief Check if there buffer slot is full.
  *
@@ -162,10 +172,27 @@ void buffered_write_page(tableid_t table_id, pagenum_t pagenum,
                          const page_t* src);
 
 /**
+ * @brief   Releases an in-memory buffer.
+ * @details In case of conditional writing, instead of using
+ *          R(read without pin) - R(read with pin) - W(write to clean pin) method,
+ *          Just clearing pin without write any data is needed.
+ *
+ * @param   table_id        table id obtained with
+ *                          <code>buffered_open_table_file()</code>.
+ * @param   pagenum         page index.
+ */
+void buffered_release_page(tableid_t table_id, pagenum_t pagenum);
+
+/**
  * @brief   Shutdown buffer manager.
  *
  * @return  <code>0</code> if success, non-zero value otherwise.
  */
 int shutdown_buffer();
+
+/**
+ * 
+ */
+bool validate_pin();
 
 /** @}*/

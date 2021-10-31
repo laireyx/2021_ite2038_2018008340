@@ -420,8 +420,8 @@ pagenum_t adjust_root(tableid_t table_id) {
     headerpage_t header_page;
     allocatedpage_t root_page, new_root_page;
 
-    buffered_read_page(table_id, 0, &header_page);
-    buffered_read_page(table_id, header_page.root_page_idx, &root_page);
+    buffered_read_page(table_id, 0, &header_page, false);
+    buffered_read_page(table_id, header_page.root_page_idx, &root_page, false);
 
     /* Case: nonempty root.
      * Key and pointer have already been deleted,
@@ -437,10 +437,10 @@ pagenum_t adjust_root(tableid_t table_id) {
     // the first (only) child
     // as the new root.
 
-    if (!root_page.page_header.is_leaf_page) {
-        buffered_free_page(table_id, header_page.root_page_idx);
-        buffered_read_page(table_id, 0, &header_page);
+    buffered_free_page(table_id, header_page.root_page_idx);
+    buffered_read_page(table_id, 0, &header_page);
 
+    if (!root_page.page_header.is_leaf_page) {
         header_page.root_page_idx = *page_helper::get_leftmost_child_idx(
             reinterpret_cast<internalpage_t*>(&root_page));
         buffered_read_page(table_id, header_page.root_page_idx, &new_root_page);
@@ -448,8 +448,6 @@ pagenum_t adjust_root(tableid_t table_id) {
         buffered_write_page(table_id, header_page.root_page_idx,
                             &new_root_page);
     } else {
-        buffered_free_page(table_id, header_page.root_page_idx);
-        buffered_read_page(table_id, 0, &header_page);
         header_page.root_page_idx = 0;
         buffered_write_page(table_id, 0, &header_page);
         return 1;
@@ -474,7 +472,7 @@ pagenum_t coalesce_internal_nodes(tableid_t table_id, pagenum_t left_page_idx,
 
     buffered_read_page(table_id, 0, &header_page, false);
     buffered_read_page(table_id, left_page_idx, &left_page);
-    buffered_read_page(table_id, right_page_idx, &right_page);
+    buffered_read_page(table_id, right_page_idx, &right_page, false);
     buffered_read_page(table_id, left_page.page_header.parent_page_idx,
                        &parent_page);
 
@@ -527,9 +525,9 @@ pagenum_t coalesce_leaf_nodes(tableid_t table_id, pagenum_t left_page_idx, pagen
 
     buffered_read_page(table_id, 0, &header_page, false);
     buffered_read_page(table_id, left_page_idx, &left_page);
-    buffered_read_page(table_id, right_page_idx, &right_page);
+    buffered_read_page(table_id, right_page_idx, &right_page, false);
     buffered_read_page(table_id, left_page.page_header.parent_page_idx,
-                       &parent_page);
+                       &parent_page, false);
 
     /* In a leaf, append the keys and pointers of
      * n to the neighbor.
@@ -721,8 +719,10 @@ pagenum_t delete_leaf_key(tableid_t table_id, pagenum_t leaf_page_idx, int64_t k
 
     buffered_read_page(table_id, parent_page_idx, &parent_page);
 
-    if (*page_helper::get_free_space(&leaf_page) < REDISTRIBUTE_THRESHOLD)
+    if (*page_helper::get_free_space(&leaf_page) < REDISTRIBUTE_THRESHOLD) {
+        buffered_release_page(table_id, parent_page_idx);
         return leaf_page_idx;
+    }
 
     sibling_page_idx = *page_helper::get_sibling_idx(&leaf_page);
     for (int i = 0; i < parent_page.page_header.key_num; i++) {
