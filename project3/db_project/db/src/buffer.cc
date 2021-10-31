@@ -5,7 +5,6 @@
 #include <buffer.h>
 #include <errors.h>
 #include <file.h>
-#include <sys/uio.h>
 
 #include <cstring>
 #include <new>
