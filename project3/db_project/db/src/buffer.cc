@@ -269,16 +269,4 @@ int shutdown_buffer() {
     file_close_table_files();
     return 0;
 }
-
-bool validate_pin() {
-    if (buffer_slot != nullptr) {
-        for (int i = 0; i < buffer_size; i++) {
-            BufferBlock* buffer = buffer_slot + i;
-            if(buffer->is_pinned) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
 /** @}*/

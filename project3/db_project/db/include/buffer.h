@@ -190,9 +190,4 @@ void buffered_release_page(tableid_t table_id, pagenum_t pagenum);
  */
 int shutdown_buffer();
 
-/**
- * 
- */
-bool validate_pin();
-
 /** @}*/
