@@ -2,6 +2,7 @@ test_lock_table
 *.swp
 *.o
 *.o.d
+build/
 bin/
 lib/
 CMakeFiles/
