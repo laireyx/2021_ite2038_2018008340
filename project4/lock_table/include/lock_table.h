@@ -4,29 +4,30 @@
  */
 #pragma once
 
-#include <cstdint>
+#include <pthread.h>
 
+#include <cstdint>
 #include <functional>
 
 typedef std::pair<int, int64_t> LockLocation;
 
 struct lock_t {
   /* GOOD LOCK :) */
-  int table_id;
-  int64_t key;
+  LockLocation lock_location;
 
-  bool operator==(const lock_t& rhs) const {
-    return (table_id == rhs.table_id) && (key == rhs.key);
-  }
+  pthread_cond_t* cond;
+
+  lock_t* prev;
+  lock_t* next;
 };
 
 namespace std {
 template <>
-struct hash<lock_t> {
-    size_t operator()(const lock_t& lock) const {
+struct hash<LockLocation> {
+    size_t operator()(const LockLocation& location) const {
         size_t hash_value = 17;
-        hash_value = hash_value * 31 + std::hash<int>()(lock.table_id);
-        hash_value = hash_value * 31 + std::hash<int64_t>()(lock.key);
+        hash_value = hash_value * 31 + std::hash<int>()(location.first);
+        hash_value = hash_value * 31 + std::hash<int64_t>()(location.second);
         return hash_value;
     }
 };

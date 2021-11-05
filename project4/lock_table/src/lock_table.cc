@@ -4,76 +4,84 @@
  */
 #include "lock_table.h"
 
-#include <pthread.h>
-#include <iostream>
-#include <unordered_set>
+#include <map>
 
-pthread_cond_t *table_condition;
-pthread_mutex_t *table_mutex;
+pthread_mutex_t* lock_manager_mutex;
 
 /** @todo change it to MAX_TABLE_INSTANCE */
-std::unordered_set<lock_t> lock_instances[32];
-
-int log_cnt = 10000;
+std::map<LockLocation, lock_t*> lock_instances;
 
 int init_lock_table() {
-
-  /** @todo change it to MAX_TABLE_INSTANCE */
-  table_condition = new pthread_cond_t[32];
-  table_mutex = new pthread_mutex_t[32];
-
-  for(int i = 0; i < 32; i++) {
-    pthread_cond_init(&table_condition[i], nullptr);
-    pthread_mutex_init(&table_mutex[i], nullptr);
-  }
+  lock_manager_mutex = new pthread_mutex_t;
+  pthread_mutex_init(lock_manager_mutex, nullptr);
   return 0;
 }
 
 lock_t* lock_acquire(int table_id, int64_t key) {
+  pthread_mutex_lock(lock_manager_mutex);
   lock_t* lock_instance = new lock_t;
-  bool can_acquire_immediately = false;
+  auto lock_location = std::make_pair(table_id, key);
 
-  lock_instance->table_id = table_id;
-  lock_instance->key = key;
+  lock_instance->lock_location = lock_location;
 
-  //std::cout << log_cnt++ << " " << "ACQ start lock" << std::endl;
-  pthread_mutex_lock(&table_mutex[table_id]);
-  while(true) {
-    if(!lock_instances[table_id].count(*lock_instance)) {
-      lock_instances[table_id].insert(*lock_instance);
+  lock_instance->cond = nullptr;
 
-      //std::cout << log_cnt++ << " " << "ACQ success unlock" << std::endl;
-      pthread_mutex_unlock(&table_mutex[table_id]);
-      return lock_instance;
-    }
-    //std::cout << log_cnt++ << " " << "ACQ failed wait" << std::endl;
-    pthread_cond_wait(&table_condition[table_id], &table_mutex[table_id]);
+  lock_instance->prev = nullptr;
+  lock_instance->next = nullptr;
+
+  if(lock_instances.find(lock_location) == lock_instances.end()) {
+    lock_instance->cond = new pthread_cond_t;
+    pthread_cond_init(lock_instance->cond, nullptr);
+
+    lock_instances[lock_location] = lock_instance;
+    pthread_mutex_unlock(lock_manager_mutex);
+    return lock_instance;
   }
+  
+  lock_t* lock_tail = lock_instances[lock_location];
+  while(lock_tail->next != nullptr) {
+    lock_tail = lock_tail->next;
+  }
+
+  lock_instance->cond = lock_tail->cond;
+  
+  lock_instance->prev = lock_tail;
+  lock_tail->next = lock_instance;
+  
+  while(true) {
+    pthread_cond_wait(lock_instance->cond, lock_manager_mutex);
+
+    if(lock_instance->prev == nullptr) {
+      break;
+    }
+  }
+
+  pthread_mutex_unlock(lock_manager_mutex);
+  return lock_instance;
 };
 
 int lock_release(lock_t* lock_obj) {
-  int table_id;
-  int64_t key;
+  pthread_mutex_lock(lock_manager_mutex);
 
-  table_id = lock_obj->table_id;
-  key = lock_obj->key;
+  if(lock_obj->next == nullptr) {
+    lock_instances.erase(lock_obj->lock_location);
 
-  //std::cout << log_cnt++ << " " << "REL start lock" << std::endl;
-  pthread_mutex_lock(&table_mutex[table_id]);
-  const auto& existing_lock = lock_instances[table_id].find(*lock_obj);
-  if(existing_lock != lock_instances[table_id].end()) {
-    lock_instances[table_id].erase(existing_lock);
+    pthread_cond_destroy(lock_obj->cond);
+    delete lock_obj->cond;
     delete lock_obj;
-  
-    //std::cout << log_cnt++ << " " << "REL success unlock" << std::endl;
-    pthread_cond_broadcast(&table_condition[table_id]);
-    pthread_mutex_unlock(&table_mutex[table_id]);
+
+    pthread_mutex_unlock(lock_manager_mutex);
     return 0;
-  } else {
-    //std::cout << log_cnt++ << " " << "REL fail unlock" << std::endl;
-    pthread_cond_broadcast(&table_condition[table_id]);
-    pthread_mutex_unlock(&table_mutex[table_id]);
-    return -1;
   }
+
+  lock_t* next_lock = lock_obj->next;
+  next_lock->prev = nullptr;
+
+  lock_instances[lock_obj->lock_location] = next_lock;
+  delete lock_obj;
+
+  pthread_cond_broadcast(next_lock->cond);
+  pthread_mutex_unlock(lock_manager_mutex);
+  return 0;
 }
 /** @}*/
