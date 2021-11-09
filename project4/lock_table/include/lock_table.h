@@ -23,9 +23,9 @@ struct Lock {
   pthread_cond_t* cond;
 
   /// @brief Previous waiting lock.
-  lock_t* prev;
+  Lock* prev;
   /// @brief Next waiting lock.
-  lock_t* next;
+  Lock* next;
 };
 
 namespace std {
