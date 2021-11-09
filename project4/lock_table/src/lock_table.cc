@@ -4,6 +4,7 @@
  */
 #include "lock_table.h"
 
+#include <new>
 #include <map>
 
 pthread_mutex_t* lock_manager_mutex;
@@ -12,9 +13,12 @@ pthread_mutex_t* lock_manager_mutex;
 std::map<LockLocation, lock_t*> lock_instances;
 
 int init_lock_table() {
-  lock_manager_mutex = new pthread_mutex_t;
-  pthread_mutex_init(lock_manager_mutex, nullptr);
-  return 0;
+  try {
+    lock_manager_mutex = new pthread_mutex_t;
+    return pthread_mutex_init(lock_manager_mutex, nullptr);
+  } catch(std::bad_alloc exception) {
+    return -1;
+  }
 }
 
 lock_t* lock_acquire(int table_id, int64_t key) {
