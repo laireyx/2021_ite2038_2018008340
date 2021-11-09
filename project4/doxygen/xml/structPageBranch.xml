@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="structPageBranch" kind="class" language="C++" prot="public">
+    <compoundname>PageBranch</compoundname>
+    <includes local="no">page.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structPageBranch_1a4fd447bb2fc5dcc00344ffb950be7050" prot="public" static="no" mutable="no">
+        <type>int64_t</type>
+        <definition>int64_t PageBranch::key</definition>
+        <argsstring></argsstring>
+        <name>key</name>
+        <briefdescription>
+<para>The page key. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="107" column="13" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structPageBranch_1a4a96cb8f228eccff326785565f60cf4b" prot="public" static="no" mutable="no">
+        <type>uint16_t</type>
+        <definition>uint16_t PageBranch::page_idx</definition>
+        <argsstring></argsstring>
+        <name>page_idx</name>
+        <briefdescription>
+<para>The page index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="109" column="14" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>page slot for internal node. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="105" column="1" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="105" bodyend="110"/>
+    <listofallmembers>
+      <member refid="structPageBranch_1a4fd447bb2fc5dcc00344ffb950be7050" prot="public" virt="non-virtual"><scope>PageBranch</scope><name>key</name></member>
+      <member refid="structPageBranch_1a4a96cb8f228eccff326785565f60cf4b" prot="public" virt="non-virtual"><scope>PageBranch</scope><name>page_idx</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

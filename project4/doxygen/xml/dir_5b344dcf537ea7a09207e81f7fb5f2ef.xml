@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_5b344dcf537ea7a09207e81f7fb5f2ef" kind="dir">
+    <compoundname>/home/eliot/DBMS/2021_ite2038_2018008340/project3</compoundname>
+    <innerdir refid="dir_1517e429160cb464db226da2b91b4237">/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/"/>
+  </compounddef>
+</doxygen>

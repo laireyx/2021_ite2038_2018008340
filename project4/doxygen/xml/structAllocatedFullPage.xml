@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="structAllocatedFullPage" kind="class" language="C++" prot="public">
+    <compoundname>AllocatedFullPage</compoundname>
+    <basecompoundref refid="structAllocatedPage" prot="public" virt="non-virtual">AllocatedPage</basecompoundref>
+    <includes local="no">page.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structAllocatedFullPage_1a99b3acc01d8655826fc1ae5b492e1e91" prot="public" static="no" mutable="no">
+        <type>uint8_t</type>
+        <definition>uint8_t AllocatedFullPage::reserved[PAGE_SIZE - PAGE_HEADER_SIZE]</definition>
+        <argsstring>[PAGE_SIZE - PAGE_HEADER_SIZE]</argsstring>
+        <name>reserved</name>
+        <briefdescription>
+<para>Reserved area for normal allocated page. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="128" column="13" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>struct for any allocated page. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>You should use this struct for read &amp; write allocated page. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>AllocatedFullPage</label>
+        <link refid="structAllocatedFullPage"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>AllocatedPage</label>
+        <link refid="structAllocatedPage"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Page</label>
+        <link refid="structPage"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>AllocatedFullPage</label>
+        <link refid="structAllocatedFullPage"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>AllocatedPage</label>
+        <link refid="structAllocatedPage"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>page_header</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Page</label>
+        <link refid="structPage"/>
+      </node>
+      <node id="4">
+        <label>PageHeader</label>
+        <link refid="structPageHeader"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>reserved_footer</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>PageHeader::ReservedFooter</label>
+        <link refid="structPageHeader_1_1ReservedFooter"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="126" column="1" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="126" bodyend="129"/>
+    <listofallmembers>
+      <member refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" prot="public" virt="non-virtual"><scope>AllocatedFullPage</scope><name>page_header</name></member>
+      <member refid="structAllocatedFullPage_1a99b3acc01d8655826fc1ae5b492e1e91" prot="public" virt="non-virtual"><scope>AllocatedFullPage</scope><name>reserved</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

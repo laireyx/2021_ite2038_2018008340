@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="structBufferBlock" kind="struct" language="C++" prot="public">
+    <compoundname>BufferBlock</compoundname>
+    <includes local="no">buffer.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structBufferBlock_1ae6e3e950155952976f74178b1951d09d" prot="public" static="no" mutable="no">
+        <type><ref refid="group__DiskSpaceManager_1ga9a954c1682fd9060fd2d6a5a2bd9f488" kindref="member">fullpage_t</ref></type>
+        <definition>fullpage_t BufferBlock::page</definition>
+        <argsstring></argsstring>
+        <name>page</name>
+        <briefdescription>
+<para>buffered page. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" line="27" column="16" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structBufferBlock_1aa11d7c4ecd1f920eece0b56df5b2b1b9" prot="public" static="no" mutable="no">
+        <type><ref refid="group__BufferManager_1ga3553edd3b6e515245aff3770081f506e" kindref="member">PageLocation</ref></type>
+        <definition>PageLocation BufferBlock::page_location</definition>
+        <argsstring></argsstring>
+        <name>page_location</name>
+        <briefdescription>
+<para>page location. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" line="29" column="18" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structBufferBlock_1ad89fb09273ce3d0e9fc071f795a2afc6" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool BufferBlock::is_dirty</definition>
+        <argsstring></argsstring>
+        <name>is_dirty</name>
+        <briefdescription>
+<para><computeroutput>true</computeroutput> if this buffer has been modified, <computeroutput>false</computeroutput> otherwise. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" line="32" column="10" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structBufferBlock_1a8a71a2ddf902615f30c43f49d499dc77" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int BufferBlock::is_pinned</definition>
+        <argsstring></argsstring>
+        <name>is_pinned</name>
+        <briefdescription>
+<para><computeroutput>true</computeroutput> if this buffer is currently using, <computeroutput>false</computeroutput> otherwise. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" line="35" column="9" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structBufferBlock_1a68a3b5efa5d3b6b940523417c1ca8730" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int BufferBlock::prev_block_idx</definition>
+        <argsstring></argsstring>
+        <name>prev_block_idx</name>
+        <briefdescription>
+<para>revious buffer block index of Recently-Used linked list. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><computeroutput>-1</computeroutput> if this buffer is the first item. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" line="39" column="9" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structBufferBlock_1a69a9ee672b7e833b568f524b6329a978" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int BufferBlock::next_block_idx</definition>
+        <argsstring></argsstring>
+        <name>next_block_idx</name>
+        <briefdescription>
+<para>next buffer block index of Recently-Used linked list. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><computeroutput>-1</computeroutput> if this buffer is the last item. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" line="42" column="9" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>BufferBlock</label>
+        <link refid="structBufferBlock"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>page</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>FullPage</label>
+        <link refid="structFullPage"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Page</label>
+        <link refid="structPage"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" line="25" column="1" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" bodystart="25" bodyend="43"/>
+    <listofallmembers>
+      <member refid="structBufferBlock_1ad89fb09273ce3d0e9fc071f795a2afc6" prot="public" virt="non-virtual"><scope>BufferBlock</scope><name>is_dirty</name></member>
+      <member refid="structBufferBlock_1a8a71a2ddf902615f30c43f49d499dc77" prot="public" virt="non-virtual"><scope>BufferBlock</scope><name>is_pinned</name></member>
+      <member refid="structBufferBlock_1a69a9ee672b7e833b568f524b6329a978" prot="public" virt="non-virtual"><scope>BufferBlock</scope><name>next_block_idx</name></member>
+      <member refid="structBufferBlock_1ae6e3e950155952976f74178b1951d09d" prot="public" virt="non-virtual"><scope>BufferBlock</scope><name>page</name></member>
+      <member refid="structBufferBlock_1aa11d7c4ecd1f920eece0b56df5b2b1b9" prot="public" virt="non-virtual"><scope>BufferBlock</scope><name>page_location</name></member>
+      <member refid="structBufferBlock_1a68a3b5efa5d3b6b940523417c1ca8730" prot="public" virt="non-virtual"><scope>BufferBlock</scope><name>prev_block_idx</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

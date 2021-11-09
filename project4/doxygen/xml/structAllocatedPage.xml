@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="structAllocatedPage" kind="class" language="C++" prot="public">
+    <compoundname>AllocatedPage</compoundname>
+    <basecompoundref refid="structPage" prot="public" virt="non-virtual">Page</basecompoundref>
+    <derivedcompoundref refid="structAllocatedFullPage" prot="public" virt="non-virtual">AllocatedFullPage</derivedcompoundref>
+    <derivedcompoundref refid="structInternalPage" prot="public" virt="non-virtual">InternalPage</derivedcompoundref>
+    <derivedcompoundref refid="structLeafPage" prot="public" virt="non-virtual">LeafPage</derivedcompoundref>
+    <includes local="no">page.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" prot="public" static="no" mutable="no">
+        <type><ref refid="structPageHeader" kindref="compound">PageHeader</ref></type>
+        <definition>PageHeader AllocatedPage::page_header</definition>
+        <argsstring></argsstring>
+        <name>page_header</name>
+        <briefdescription>
+<para><ref refid="structPage" kindref="compound">Page</ref> header. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="118" column="16" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>struct for allocated page. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>AllocatedFullPage</label>
+        <link refid="structAllocatedFullPage"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>AllocatedPage</label>
+        <link refid="structAllocatedPage"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>InternalPage</label>
+        <link refid="structInternalPage"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>LeafPage</label>
+        <link refid="structLeafPage"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Page</label>
+        <link refid="structPage"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>AllocatedPage</label>
+        <link refid="structAllocatedPage"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>page_header</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Page</label>
+        <link refid="structPage"/>
+      </node>
+      <node id="3">
+        <label>PageHeader</label>
+        <link refid="structPageHeader"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>reserved_footer</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>PageHeader::ReservedFooter</label>
+        <link refid="structPageHeader_1_1ReservedFooter"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="116" column="1" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="116" bodyend="119"/>
+    <listofallmembers>
+      <member refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" prot="public" virt="non-virtual"><scope>AllocatedPage</scope><name>page_header</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

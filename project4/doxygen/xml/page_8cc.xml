@@ -1,0 +1,175 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="page_8cc" kind="file" language="C++">
+    <compoundname>page.cc</compoundname>
+    <includes refid="page_8h" local="no">page.h</includes>
+    <includes local="no">cstring</includes>
+    <includes local="no">iostream</includes>
+    <includes local="no">vector</includes>
+    <includes refid="types_8h" local="no">types.h</includes>
+    <incdepgraph>
+      <node id="1">
+        <label>/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc</label>
+        <link refid="page_8cc"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>cstring</label>
+      </node>
+      <node id="3">
+        <label>iostream</label>
+      </node>
+      <node id="4">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacepage__helper">page_helper</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&lt;page.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstring&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;iostream&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;types.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacepage__helper" kindref="compound">page_helper</ref><sp/>{</highlight></codeline>
+<codeline lineno="10" refid="namespacepage__helper_1aa8ddc40b0445e58446bee7702744feb6" refkind="member"><highlight class="normal"><ref refid="structPageSlot" kindref="compound">PageSlot</ref>*<sp/><ref refid="namespacepage__helper_1aa8ddc40b0445e58446bee7702744feb6" kindref="member">get_page_slot</ref>(<ref refid="structLeafPage" kindref="compound">LeafPage</ref>*<sp/>page)<sp/>{</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">reinterpret_cast&lt;</highlight><highlight class="normal"><ref refid="structPageSlot" kindref="compound">PageSlot</ref>*</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(page-&gt;<ref refid="structLeafPage_1aea1e6d73b2a879fa8a8b4e6e590524b9" kindref="member">reserved</ref>);</highlight></codeline>
+<codeline lineno="12"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14" refid="namespacepage__helper_1a156258314c74c8ccba98cc3372161b84" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespacepage__helper_1a156258314c74c8ccba98cc3372161b84" kindref="member">get_leaf_value</ref>(<ref refid="structLeafPage" kindref="compound">LeafPage</ref>*<sp/>page,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>value_idx,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>value,</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint16_t*<sp/>value_size)<sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structPageSlot" kindref="compound">PageSlot</ref>*<sp/>leaf_slot<sp/>=<sp/><ref refid="namespacepage__helper_1aa8ddc40b0445e58446bee7702744feb6" kindref="member">get_page_slot</ref>(page);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(value_size)<sp/>*value_size<sp/>=<sp/>leaf_slot[value_idx].<ref refid="structPageSlot_1ae968301f8baa23e1c7c08876ee7a0b53" kindref="member">value_size</ref>;</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacepage__helper_1a156258314c74c8ccba98cc3372161b84" kindref="member">get_leaf_value</ref>(page,<sp/>leaf_slot[value_idx].value_offset,</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>leaf_slot[value_idx].value_size,<sp/>value);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24" refid="namespacepage__helper_1ae98c75ecddf828c7ecf377dbe86cd0a1" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespacepage__helper_1a156258314c74c8ccba98cc3372161b84" kindref="member">get_leaf_value</ref>(<ref refid="structLeafPage" kindref="compound">LeafPage</ref>*<sp/>page,<sp/>uint16_t<sp/>value_offset,<sp/>uint16_t<sp/>value_size,</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>value)<sp/>{</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(value)</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>memcpy(value,<sp/></highlight><highlight class="keyword">reinterpret_cast&lt;</highlight><highlight class="normal">uint8_t*</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(page)<sp/>+<sp/>value_offset,</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>value_size);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31" refid="namespacepage__helper_1a26459fe64afd7eb1939844ffdd9255ba" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespacepage__helper_1a26459fe64afd7eb1939844ffdd9255ba" kindref="member">has_enough_space</ref>(<ref refid="structLeafPage" kindref="compound">LeafPage</ref>*<sp/>page,<sp/>uint16_t<sp/>value_size)<sp/>{</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/>uint64_t<sp/>free_space_amount<sp/>=<sp/>page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1a23bd66b8517a497496740f0a44d47b8e" kindref="member">reserved_footer</ref>.<ref refid="structPageHeader_1_1ReservedFooter_1a449cef91528e5426aec9c0d5b91805a8" kindref="member">footer_1</ref>;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>free_space_amount<sp/>&gt;=<sp/>value_size<sp/>+<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(<ref refid="structPageSlot" kindref="compound">PageSlot</ref>);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36" refid="namespacepage__helper_1a48eb82f7d2e7347c9abcb7a15f517bc7" refkind="member"><highlight class="normal">uint64_t*<sp/><ref refid="namespacepage__helper_1a48eb82f7d2e7347c9abcb7a15f517bc7" kindref="member">get_free_space</ref>(<ref refid="structLeafPage" kindref="compound">LeafPage</ref>*<sp/>page)<sp/>{</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>&amp;(page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1a23bd66b8517a497496740f0a44d47b8e" kindref="member">reserved_footer</ref>.<ref refid="structPageHeader_1_1ReservedFooter_1a449cef91528e5426aec9c0d5b91805a8" kindref="member">footer_1</ref>);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40" refid="namespacepage__helper_1adaafa18748744e81f5abd5540207af63" refkind="member"><highlight class="normal">uint64_t*<sp/><ref refid="namespacepage__helper_1adaafa18748744e81f5abd5540207af63" kindref="member">get_sibling_idx</ref>(<ref refid="structLeafPage" kindref="compound">LeafPage</ref>*<sp/>page)<sp/>{</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>&amp;(page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1a23bd66b8517a497496740f0a44d47b8e" kindref="member">reserved_footer</ref>.<ref refid="structPageHeader_1_1ReservedFooter_1a501b83aebe4bb2732b7f20ecc1fe95e9" kindref="member">footer_2</ref>);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44" refid="namespacepage__helper_1a3b88342bb43352d25c5bc0cb73bdd873" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespacepage__helper_1a3b88342bb43352d25c5bc0cb73bdd873" kindref="member">add_leaf_value</ref>(<ref refid="structLeafPage" kindref="compound">LeafPage</ref>*<sp/>page,<sp/>int64_t<sp/>key,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>value,</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint16_t<sp/>value_size)<sp/>{</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!<ref refid="namespacepage__helper_1a26459fe64afd7eb1939844ffdd9255ba" kindref="member">has_enough_space</ref>(page,<sp/>value_size))<sp/>{</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>uint64_t*<sp/>free_space_amount<sp/>=<sp/><ref refid="namespacepage__helper_1a48eb82f7d2e7347c9abcb7a15f517bc7" kindref="member">get_free_space</ref>(page);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structPageSlot" kindref="compound">PageSlot</ref>*<sp/>leaf_slot<sp/>=<sp/><ref refid="namespacepage__helper_1aa8ddc40b0445e58446bee7702744feb6" kindref="member">get_page_slot</ref>(page);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>uint16_t<sp/>value_offset<sp/>=<sp/><ref refid="group__DiskSpaceManager_1ga02cae3c3ec7f57eeec642e2cade048f8" kindref="member">PAGE_SIZE</ref><sp/>-<sp/>value_size;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>leaf_slot[page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref>].<ref refid="structPageSlot_1ab133a4d483a0d718872413c37a9d8d79" kindref="member">key</ref><sp/>=<sp/>key;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>leaf_slot[page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref>].<ref refid="structPageSlot_1ae968301f8baa23e1c7c08876ee7a0b53" kindref="member">value_size</ref><sp/>=<sp/>value_size;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref><sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>value_offset<sp/>=<sp/>leaf_slot[page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref><sp/>-<sp/>1].<ref refid="structPageSlot_1a3ac75fd0061544a853d61fd09f90e47b" kindref="member">value_offset</ref><sp/>-<sp/>value_size;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>leaf_slot[page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref>].<ref refid="structPageSlot_1a3ac75fd0061544a853d61fd09f90e47b" kindref="member">value_offset</ref><sp/>=<sp/>value_offset;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>memcpy(</highlight><highlight class="keyword">reinterpret_cast&lt;</highlight><highlight class="normal">uint8_t*</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(page)<sp/>+<sp/>value_offset,<sp/>value,<sp/>value_size);</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref>++;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>*free_space_amount<sp/>-=<sp/>value_size<sp/>+<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(<ref refid="structPageSlot" kindref="compound">PageSlot</ref>);</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70" refid="namespacepage__helper_1a46a6aea7dd6f29cd79ad905d94f748df" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespacepage__helper_1a46a6aea7dd6f29cd79ad905d94f748df" kindref="member">remove_leaf_value</ref>(<ref refid="structLeafPage" kindref="compound">LeafPage</ref>*<sp/>page,<sp/>int64_t<sp/>key)<sp/>{</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structPageSlot" kindref="compound">PageSlot</ref>*<sp/>leaf_slot<sp/>=<sp/><ref refid="namespacepage__helper_1aa8ddc40b0445e58446bee7702744feb6" kindref="member">get_page_slot</ref>(page);</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/>uint16_t<sp/>start_offset;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/>uint16_t<sp/>offset_shift;</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref>;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(leaf_slot[i].key<sp/>==<sp/>key)<sp/>{</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>start_offset<sp/>=<sp/>leaf_slot[i].<ref refid="structPageSlot_1a3ac75fd0061544a853d61fd09f90e47b" kindref="member">value_offset</ref>;</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>offset_shift<sp/>=<sp/>leaf_slot[i].<ref refid="structPageSlot_1ae968301f8baa23e1c7c08876ee7a0b53" kindref="member">value_size</ref>;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>j<sp/>=<sp/>i<sp/>+<sp/>1;<sp/>j<sp/>&lt;<sp/>page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref>;<sp/>j++)<sp/>{</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>memmove(</highlight><highlight class="keyword">reinterpret_cast&lt;</highlight><highlight class="normal">uint8_t*</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(page)<sp/>+</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>leaf_slot[j].value_offset<sp/>+<sp/>offset_shift,</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">reinterpret_cast&lt;</highlight><highlight class="normal">uint8_t*</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(page)<sp/>+</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>leaf_slot[j].value_offset,</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>leaf_slot[j].value_size);</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>leaf_slot[j<sp/>-<sp/>1].<ref refid="structPageSlot_1ab133a4d483a0d718872413c37a9d8d79" kindref="member">key</ref><sp/>=<sp/>leaf_slot[j].<ref refid="structPageSlot_1ab133a4d483a0d718872413c37a9d8d79" kindref="member">key</ref>;</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>leaf_slot[j<sp/>-<sp/>1].<ref refid="structPageSlot_1a3ac75fd0061544a853d61fd09f90e47b" kindref="member">value_offset</ref><sp/>=<sp/>leaf_slot[j].<ref refid="structPageSlot_1a3ac75fd0061544a853d61fd09f90e47b" kindref="member">value_offset</ref><sp/>+<sp/>offset_shift;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>leaf_slot[j<sp/>-<sp/>1].<ref refid="structPageSlot_1ae968301f8baa23e1c7c08876ee7a0b53" kindref="member">value_size</ref><sp/>=<sp/>leaf_slot[j].<ref refid="structPageSlot_1ae968301f8baa23e1c7c08876ee7a0b53" kindref="member">value_size</ref>;</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref>--;</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*<ref refid="namespacepage__helper_1a48eb82f7d2e7347c9abcb7a15f517bc7" kindref="member">get_free_space</ref>(page)<sp/>+=<sp/>offset_shift<sp/>+<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(<ref refid="structPageSlot" kindref="compound">PageSlot</ref>);</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="98"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight></codeline>
+<codeline lineno="100" refid="namespacepage__helper_1a9831b9695515a5c601a52d773b855e20" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespacepage__helper_1a9831b9695515a5c601a52d773b855e20" kindref="member">add_internal_key</ref>(<ref refid="structInternalPage" kindref="compound">InternalPage</ref>*<sp/>page,<sp/>int64_t<sp/>key,<sp/>pagenum_t<sp/>page_idx)<sp/>{</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref><sp/>==<sp/>248)<sp/>{</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/>page-&gt;<ref refid="structInternalPage_1a28bee8353c1552803f43534d4217ca57" kindref="member">page_branches</ref>[page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref>].<ref refid="structPageBranch_1a4fd447bb2fc5dcc00344ffb950be7050" kindref="member">key</ref><sp/>=<sp/>key;</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>page-&gt;<ref refid="structInternalPage_1a28bee8353c1552803f43534d4217ca57" kindref="member">page_branches</ref>[page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref>].<ref refid="structPageBranch_1a4a96cb8f228eccff326785565f60cf4b" kindref="member">page_idx</ref><sp/>=<sp/>page_idx;</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref>++;</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight></codeline>
+<codeline lineno="113" refid="namespacepage__helper_1afb596042de2e0d0b4efdc117e244a587" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespacepage__helper_1afb596042de2e0d0b4efdc117e244a587" kindref="member">remove_internal_key</ref>(<ref refid="structInternalPage" kindref="compound">InternalPage</ref>*<sp/>page,<sp/>int64_t<sp/>key)<sp/>{</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref><sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref>;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(page-&gt;<ref refid="structInternalPage_1a28bee8353c1552803f43534d4217ca57" kindref="member">page_branches</ref>[i].<ref refid="structPageBranch_1a4fd447bb2fc5dcc00344ffb950be7050" kindref="member">key</ref><sp/>==<sp/>key)<sp/>{</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>memmove(page-&gt;<ref refid="structInternalPage_1a28bee8353c1552803f43534d4217ca57" kindref="member">page_branches</ref><sp/>+<sp/>i,<sp/>page-&gt;<ref refid="structInternalPage_1a28bee8353c1552803f43534d4217ca57" kindref="member">page_branches</ref><sp/>+<sp/>i<sp/>+<sp/>1,</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(<ref refid="structPageBranch" kindref="compound">PageBranch</ref>)<sp/>*<sp/>(page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref><sp/>-<sp/>1<sp/>-<sp/>i));</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/>page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" kindref="member">key_num</ref>--;</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="129"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"></highlight></codeline>
+<codeline lineno="131" refid="namespacepage__helper_1ad8adbcd49de0f47797f74155ca978492" refkind="member"><highlight class="normal">uint64_t*<sp/><ref refid="namespacepage__helper_1ad8adbcd49de0f47797f74155ca978492" kindref="member">get_leftmost_child_idx</ref>(<ref refid="structInternalPage" kindref="compound">InternalPage</ref>*<sp/>page)<sp/>{</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>&amp;(page-&gt;<ref refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" kindref="member">page_header</ref>.<ref refid="structPageHeader_1a23bd66b8517a497496740f0a44d47b8e" kindref="member">reserved_footer</ref>.<ref refid="structPageHeader_1_1ReservedFooter_1a501b83aebe4bb2732b7f20ecc1fe95e9" kindref="member">footer_2</ref>);</highlight></codeline>
+<codeline lineno="133"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal">}<sp/><sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>page_helper</highlight></codeline>
+    </programlisting>
+    <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc"/>
+  </compounddef>
+</doxygen>

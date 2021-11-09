@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="structPageHeader" kind="class" language="C++" prot="public">
+    <compoundname>PageHeader</compoundname>
+    <includes local="no">page.h</includes>
+    <innerclass refid="structPageHeader_1_1ReservedFooter" prot="public">PageHeader::ReservedFooter</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structPageHeader_1ae7c89f892f8b4ab143a6e880fa216fa7" prot="public" static="no" mutable="no">
+        <type>pagenum_t</type>
+        <definition>pagenum_t PageHeader::parent_page_idx</definition>
+        <argsstring></argsstring>
+        <name>parent_page_idx</name>
+        <briefdescription>
+<para>The parent page index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="70" column="15" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structPageHeader_1a9ba2743a65e47b648036ad18ed744cc5" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t PageHeader::is_leaf_page</definition>
+        <argsstring></argsstring>
+        <name>is_leaf_page</name>
+        <briefdescription>
+<para>1 if this page is leaf page, and 0 if internal page. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="72" column="14" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t PageHeader::key_num</definition>
+        <argsstring></argsstring>
+        <name>key_num</name>
+        <briefdescription>
+<para>Number of keys this page is holding. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="74" column="14" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structPageHeader_1a6972b3eb729b33b025dfc6aa3ad2127f" prot="public" static="no" mutable="no">
+        <type>uint8_t</type>
+        <definition>uint8_t PageHeader::reserved[PAGE_HEADER_SIZE - 16 - 16]</definition>
+        <argsstring>[PAGE_HEADER_SIZE - 16 - 16]</argsstring>
+        <name>reserved</name>
+        <briefdescription>
+<para>Reserved area for page header. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="77" column="13" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structPageHeader_1a23bd66b8517a497496740f0a44d47b8e" prot="public" static="no" mutable="no">
+        <type>struct <ref refid="structPageHeader_1_1ReservedFooter" kindref="compound">PageHeader::ReservedFooter</ref></type>
+        <definition>struct PageHeader::ReservedFooter PageHeader::reserved_footer</definition>
+        <argsstring></argsstring>
+        <name>reserved_footer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="85" column="21"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>page header for allocated(internal and leaf) node. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>PageHeader</label>
+        <link refid="structPageHeader"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>reserved_footer</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>PageHeader::ReservedFooter</label>
+        <link refid="structPageHeader_1_1ReservedFooter"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="68" column="1" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="68" bodyend="86"/>
+    <listofallmembers>
+      <member refid="structPageHeader_1a9ba2743a65e47b648036ad18ed744cc5" prot="public" virt="non-virtual"><scope>PageHeader</scope><name>is_leaf_page</name></member>
+      <member refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" prot="public" virt="non-virtual"><scope>PageHeader</scope><name>key_num</name></member>
+      <member refid="structPageHeader_1ae7c89f892f8b4ab143a6e880fa216fa7" prot="public" virt="non-virtual"><scope>PageHeader</scope><name>parent_page_idx</name></member>
+      <member refid="structPageHeader_1a6972b3eb729b33b025dfc6aa3ad2127f" prot="public" virt="non-virtual"><scope>PageHeader</scope><name>reserved</name></member>
+      <member refid="structPageHeader_1a23bd66b8517a497496740f0a44d47b8e" prot="public" virt="non-virtual"><scope>PageHeader</scope><name>reserved_footer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

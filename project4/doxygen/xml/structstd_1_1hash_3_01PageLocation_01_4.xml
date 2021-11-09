@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="structstd_1_1hash_3_01PageLocation_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>std::hash&lt; PageLocation &gt;</compoundname>
+    <includes local="no">buffer.h</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structstd_1_1hash_3_01PageLocation_01_4_1a8205d975b194bc683c6dd85f01947f43" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t std::hash&lt; PageLocation &gt;::operator()</definition>
+        <argsstring>(const PageLocation &amp;location) const</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const <ref refid="group__BufferManager_1ga3553edd3b6e515245aff3770081f506e" kindref="member">PageLocation</ref> &amp;</type>
+          <declname>location</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" line="16" column="12" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" bodystart="16" bodyend="21"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" line="15" column="1" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" bodystart="15" bodyend="22"/>
+    <listofallmembers>
+      <member refid="structstd_1_1hash_3_01PageLocation_01_4_1a8205d975b194bc683c6dd85f01947f43" prot="public" virt="non-virtual"><scope>std::hash&lt; PageLocation &gt;</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

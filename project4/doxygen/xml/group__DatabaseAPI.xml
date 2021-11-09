@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="group__DatabaseAPI" kind="group">
+    <compoundname>DatabaseAPI</compoundname>
+    <title>DatabaseAPI</title>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="group__DatabaseAPI_1ga29a426fd2c420e211394d25e0dd6fcf1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int init_db</definition>
+        <argsstring>(int num_buf=1024)</argsstring>
+        <name>init_db</name>
+        <param>
+          <type>int</type>
+          <declname>num_buf</declname>
+          <defval>1024</defval>
+        </param>
+        <briefdescription>
+<para>Initialize database management system. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>If success, return 0. Otherwise return non-zero value. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/db.cc" line="11" column="5" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/db.cc" bodystart="11" bodyend="11" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/db.h" declline="14" declcolumn="5"/>
+        <references refid="group__BufferManager_1gab188c05b5d9ab0523d542f94bc318d98" compoundref="buffer_8cc" startline="161" endline="191">init_buffer</references>
+      </memberdef>
+      <memberdef kind="function" id="group__DatabaseAPI_1ga623c24cfff7aa28b98fd221edcede56c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>tableid_t</type>
+        <definition>tableid_t open_table</definition>
+        <argsstring>(char *pathname)</argsstring>
+        <name>open_table</name>
+        <param>
+          <type>char *</type>
+          <declname>pathname</declname>
+        </param>
+        <briefdescription>
+<para>Open existing data file using ‘pathname’ or create one if not existed. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>pathname</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Table file path. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>unique table id which represents the own table in this database. return negative value otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/db.cc" line="13" column="11" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/db.cc" bodystart="13" bodyend="15" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/db.h" declline="24" declcolumn="11"/>
+        <references refid="group__BufferManager_1gac94c20a2ecdf34a76eecd07b7c2533f1" compoundref="buffer_8cc" startline="193" endline="195">buffered_open_table_file</references>
+      </memberdef>
+      <memberdef kind="function" id="group__DatabaseAPI_1gad1d7294010d3c8fb76aabf5d78174a83" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int db_insert</definition>
+        <argsstring>(tableid_t table_id, int64_t key, char *value, uint16_t value_size)</argsstring>
+        <name>db_insert</name>
+        <param>
+          <type>tableid_t</type>
+          <declname>table_id</declname>
+        </param>
+        <param>
+          <type>int64_t</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>uint16_t</type>
+          <declname>value_size</declname>
+        </param>
+        <briefdescription>
+<para>Insert input (key, value) record with its size to data file at the right place. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>table_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>table id obtained with <computeroutput><ref refid="group__DatabaseAPI_1ga623c24cfff7aa28b98fd221edcede56c" kindref="member">open_table()</ref></computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>record key. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>record value. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>value_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>record value size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0 if success. negative value otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/db.cc" line="17" column="5" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/db.cc" bodystart="17" bodyend="20" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/db.h" declline="37" declcolumn="5"/>
+        <references refid="group__IndexManager_1ga63fa3c205831c7f6803bab444d370c84" compoundref="tree_8cc" startline="343" endline="417">insert_node</references>
+      </memberdef>
+      <memberdef kind="function" id="group__DatabaseAPI_1gae45dde889eed382ceaedfbabab6e18a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int db_find</definition>
+        <argsstring>(tableid_t table_id, int64_t key, char *ret_val, uint16_t *value_size)</argsstring>
+        <name>db_find</name>
+        <param>
+          <type>tableid_t</type>
+          <declname>table_id</declname>
+        </param>
+        <param>
+          <type>int64_t</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>ret_val</declname>
+        </param>
+        <param>
+          <type>uint16_t *</type>
+          <declname>value_size</declname>
+        </param>
+        <briefdescription>
+<para>Find the record corresponding the input key. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>If found, ret_val and value_size will be set to matching value and its size.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>table_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>table id obtained with <computeroutput><ref refid="group__DatabaseAPI_1ga623c24cfff7aa28b98fd221edcede56c" kindref="member">open_table()</ref></computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>record key. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>record value. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">value_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>record value size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0 if success. negative value otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/db.cc" line="22" column="5" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/db.cc" bodystart="22" bodyend="28" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/db.h" declline="52" declcolumn="5"/>
+        <references refid="group__IndexManager_1gad65fca29eee4b34496d97c6d4e48b765" compoundref="tree_8cc" startline="97" endline="118">find_by_key</references>
+      </memberdef>
+      <memberdef kind="function" id="group__DatabaseAPI_1ga76a14164559b3e5f90e76e7a32e1a682" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int db_delete</definition>
+        <argsstring>(tableid_t table_id, int64_t key)</argsstring>
+        <name>db_delete</name>
+        <param>
+          <type>tableid_t</type>
+          <declname>table_id</declname>
+        </param>
+        <param>
+          <type>int64_t</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Find the matching record and delete it if found. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>table_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>table id obtained with <computeroutput><ref refid="group__DatabaseAPI_1ga623c24cfff7aa28b98fd221edcede56c" kindref="member">open_table()</ref></computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>record key. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0 if success. negative value otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/db.cc" line="30" column="5" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/db.cc" bodystart="30" bodyend="35" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/db.h" declline="62" declcolumn="5"/>
+        <references refid="group__IndexManager_1ga157da10a1b39d539647c22ca891e1a92" compoundref="tree_8cc" startline="850" endline="859">delete_node</references>
+      </memberdef>
+      <memberdef kind="function" id="group__DatabaseAPI_1gac467cf84091dd8f2475c44aa06f8ae57" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int shutdown_db</definition>
+        <argsstring>()</argsstring>
+        <name>shutdown_db</name>
+        <briefdescription>
+<para>Shutdown database management system. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>If success, return 0. Otherwise return non-zero value. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/db.cc" line="37" column="5" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/db.cc" bodystart="37" bodyend="40" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/db.h" declline="69" declcolumn="5"/>
+        <references refid="group__BufferManager_1ga0c529ae91595ade20c4c314ab4b194a4" compoundref="buffer_8cc" startline="252" endline="272">shutdown_buffer</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,737 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="buffer_8cc" kind="file" language="C++">
+    <compoundname>buffer.cc</compoundname>
+    <includes refid="buffer_8h" local="no">buffer.h</includes>
+    <includes refid="errors_8h" local="no">errors.h</includes>
+    <includes refid="file_8h" local="no">file.h</includes>
+    <includes local="no">sys/uio.h</includes>
+    <includes local="no">cstring</includes>
+    <includes local="no">new</includes>
+    <includes local="no">unordered_map</includes>
+    <includes local="no">utility</includes>
+    <includes local="no">iostream</includes>
+    <incdepgraph>
+      <node id="1">
+        <label>/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc</label>
+        <link refid="buffer_8cc"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>cstring</label>
+      </node>
+      <node id="7">
+        <label>iostream</label>
+      </node>
+      <node id="4">
+        <label>new</label>
+      </node>
+      <node id="2">
+        <label>sys/uio.h</label>
+      </node>
+      <node id="5">
+        <label>unordered_map</label>
+      </node>
+      <node id="6">
+        <label>utility</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacebuffer__helper">buffer_helper</innernamespace>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" prot="public" static="no" mutable="no">
+        <type><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref> *</type>
+        <definition>BufferBlock* buffer_slot</definition>
+        <argsstring></argsstring>
+        <name>buffer_slot</name>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+<para>buffer slot. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" line="17" column="13" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__BufferManager_1ga6675ef26738b0878ce5d2df48c71d93d" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int buffer_head_idx</definition>
+        <argsstring></argsstring>
+        <name>buffer_head_idx</name>
+        <initializer>= -1</initializer>
+        <briefdescription>
+<para>head index of Recently-Used list. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" line="19" column="5" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__BufferManager_1ga6d994e470b6e3c1d671c42e3f5dc9d02" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int buffer_tail_idx</definition>
+        <argsstring></argsstring>
+        <name>buffer_tail_idx</name>
+        <initializer>= -1</initializer>
+        <briefdescription>
+<para>tail index of Recently-Used list. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" line="21" column="5" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__BufferManager_1gaf22ff4ab7a026e6c3b4b08eafb2df027" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int buffer_size</definition>
+        <argsstring></argsstring>
+        <name>buffer_size</name>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>size of buffer block. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" line="23" column="5" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="group__BufferManager_1gaf0a958b81a6ef6c50ece8231eb6e8495" prot="public" static="no" mutable="no">
+        <type>std::unordered_map&lt; <ref refid="group__BufferManager_1ga3553edd3b6e515245aff3770081f506e" kindref="member">PageLocation</ref>, int &gt;</type>
+        <definition>std::unordered_map&lt;PageLocation, int&gt; buffer_index</definition>
+        <argsstring></argsstring>
+        <name>buffer_index</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" line="25" column="20" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="group__BufferManager_1gab188c05b5d9ab0523d542f94bc318d98" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int init_buffer</definition>
+        <argsstring>(int buffer_size)</argsstring>
+        <name>init_buffer</name>
+        <param>
+          <type>int</type>
+          <declname>buffer_size</declname>
+        </param>
+        <briefdescription>
+<para>Initialize buffer manager. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>buffer_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Buffer size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>0</computeroutput> if success, non-zero value otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" line="161" column="5" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" bodystart="161" bodyend="191" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" declline="121" declcolumn="5"/>
+        <references refid="group__BufferManager_1ga6675ef26738b0878ce5d2df48c71d93d" compoundref="buffer_8cc" startline="19">buffer_head_idx</references>
+        <references refid="group__BufferManager_1gaf22ff4ab7a026e6c3b4b08eafb2df027" compoundref="buffer_8cc" startline="23">buffer_size</references>
+        <references refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" compoundref="buffer_8cc" startline="17">buffer_slot</references>
+        <references refid="group__BufferManager_1ga6d994e470b6e3c1d671c42e3f5dc9d02" compoundref="buffer_8cc" startline="21">buffer_tail_idx</references>
+        <references refid="structBufferBlock_1ad89fb09273ce3d0e9fc071f795a2afc6" compoundref="buffer_8h" startline="32">BufferBlock::is_dirty</references>
+        <references refid="structBufferBlock_1a8a71a2ddf902615f30c43f49d499dc77" compoundref="buffer_8h" startline="35">BufferBlock::is_pinned</references>
+        <references refid="group__DiskSpaceManager_1ga79a658b287e000805bc971b437b0cae0" compoundref="file_8h" startline="15">MAX_TABLE_INSTANCE</references>
+        <references refid="structBufferBlock_1a69a9ee672b7e833b568f524b6329a978" compoundref="buffer_8h" startline="42">BufferBlock::next_block_idx</references>
+        <references refid="structBufferBlock_1aa11d7c4ecd1f920eece0b56df5b2b1b9" compoundref="buffer_8h" startline="29">BufferBlock::page_location</references>
+        <references refid="structBufferBlock_1a68a3b5efa5d3b6b940523417c1ca8730" compoundref="buffer_8h" startline="39">BufferBlock::prev_block_idx</references>
+      </memberdef>
+      <memberdef kind="function" id="group__BufferManager_1gac94c20a2ecdf34a76eecd07b7c2533f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>tableid_t</type>
+        <definition>tableid_t buffered_open_table_file</definition>
+        <argsstring>(const char *path)</argsstring>
+        <name>buffered_open_table_file</name>
+        <param>
+          <type>const char *</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+<para>Open existing table file or create one if not existed. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Table file path. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>ID of the opened table file. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" line="193" column="11" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" bodystart="193" bodyend="195" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" declline="129" declcolumn="11"/>
+        <references refid="group__DiskSpaceManager_1ga400a17cdefa78574df2029ab4223a5da" compoundref="file_8cc" startline="80" endline="132">file_open_table_file</references>
+      </memberdef>
+      <memberdef kind="function" id="group__BufferManager_1ga029e5567b5d7f1ebacd02e0769cbfd1f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pagenum_t</type>
+        <definition>pagenum_t buffered_alloc_page</definition>
+        <argsstring>(tableid_t table_id)</argsstring>
+        <name>buffered_alloc_page</name>
+        <param>
+          <type>tableid_t</type>
+          <declname>table_id</declname>
+        </param>
+        <briefdescription>
+<para>Allocate an on-disk page from the free page list. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>table_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>table id obtained with <computeroutput><ref refid="group__BufferManager_1gac94c20a2ecdf34a76eecd07b7c2533f1" kindref="member">buffered_open_table_file()</ref></computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>&gt;0 <ref refid="structPage" kindref="compound">Page</ref> index number if allocation success. 0 Zero if allocation failed. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" line="197" column="11" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" bodystart="197" bodyend="217" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" declline="139" declcolumn="11"/>
+        <references refid="namespacebuffer__helper_1a04ef1a7b71e2268965ebc4791e7ff817" compoundref="buffer_8cc" startline="77" endline="96">buffer_helper::apply_buffer</references>
+        <references refid="namespacefile__helper_1ab6f797fad7afb1ec4909c88d21970b27" compoundref="file_8cc" startline="27" endline="68">file_helper::extend_capacity</references>
+        <references refid="structHeaderPage_1a4a94aded4d003eb992bb16f98038345a" compoundref="page_8h" startline="42">HeaderPage::free_page_idx</references>
+        <references refid="namespacebuffer__helper_1a74ed2677c259449b4dbd4d92476fb88c" compoundref="buffer_8cc" startline="28" endline="75">buffer_helper::load_buffer</references>
+        <references refid="structFreePage_1a20ca90083caaf104b7e45d0a7a863ff3" compoundref="page_8h" startline="58">FreePage::next_free_idx</references>
+      </memberdef>
+      <memberdef kind="function" id="group__BufferManager_1gadeb4470c5495d5b66689f395a1603fb5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void buffered_free_page</definition>
+        <argsstring>(tableid_t table_id, pagenum_t pagenum)</argsstring>
+        <name>buffered_free_page</name>
+        <param>
+          <type>tableid_t</type>
+          <declname>table_id</declname>
+        </param>
+        <param>
+          <type>pagenum_t</type>
+          <declname>pagenum</declname>
+        </param>
+        <briefdescription>
+<para>Free an on-disk page to the free page list. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>table_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>table id obtained with <computeroutput><ref refid="group__BufferManager_1gac94c20a2ecdf34a76eecd07b7c2533f1" kindref="member">buffered_open_table_file()</ref></computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pagenum</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>page index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" line="219" column="6" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" bodystart="219" bodyend="236" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" declline="148" declcolumn="6"/>
+        <references refid="namespacebuffer__helper_1a04ef1a7b71e2268965ebc4791e7ff817" compoundref="buffer_8cc" startline="77" endline="96">buffer_helper::apply_buffer</references>
+        <references refid="structHeaderPage_1a4a94aded4d003eb992bb16f98038345a" compoundref="page_8h" startline="42">HeaderPage::free_page_idx</references>
+        <references refid="namespacebuffer__helper_1a74ed2677c259449b4dbd4d92476fb88c" compoundref="buffer_8cc" startline="28" endline="75">buffer_helper::load_buffer</references>
+        <references refid="structFreePage_1a20ca90083caaf104b7e45d0a7a863ff3" compoundref="page_8h" startline="58">FreePage::next_free_idx</references>
+      </memberdef>
+      <memberdef kind="function" id="group__BufferManager_1ga14df3d77c93d5ed2718ec3d4ac4b8f67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void buffered_read_page</definition>
+        <argsstring>(tableid_t table_id, pagenum_t pagenum, page_t *dest, bool pin=true)</argsstring>
+        <name>buffered_read_page</name>
+        <param>
+          <type>tableid_t</type>
+          <declname>table_id</declname>
+        </param>
+        <param>
+          <type>pagenum_t</type>
+          <declname>pagenum</declname>
+        </param>
+        <param>
+          <type><ref refid="group__DiskSpaceManager_1ga46b232fa234ff08da68a876589863216" kindref="member">page_t</ref> *</type>
+          <declname>dest</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>pin</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Read an on-disk page into the in-memory page structure(dest) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>table_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>table id obtained with <computeroutput><ref refid="group__BufferManager_1gac94c20a2ecdf34a76eecd07b7c2533f1" kindref="member">buffered_open_table_file()</ref></computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pagenum</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>page index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dest</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the pointer of the page data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> if this buffer will be writed after. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" line="238" column="6" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" bodystart="238" bodyend="241" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" declline="160" declcolumn="6"/>
+        <references refid="namespacebuffer__helper_1a74ed2677c259449b4dbd4d92476fb88c" compoundref="buffer_8cc" startline="28" endline="75">buffer_helper::load_buffer</references>
+      </memberdef>
+      <memberdef kind="function" id="group__BufferManager_1ga3813c4a6ac17833c7b130b82705fefea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void buffered_write_page</definition>
+        <argsstring>(tableid_t table_id, pagenum_t pagenum, const page_t *src)</argsstring>
+        <name>buffered_write_page</name>
+        <param>
+          <type>tableid_t</type>
+          <declname>table_id</declname>
+        </param>
+        <param>
+          <type>pagenum_t</type>
+          <declname>pagenum</declname>
+        </param>
+        <param>
+          <type>const <ref refid="group__DiskSpaceManager_1ga46b232fa234ff08da68a876589863216" kindref="member">page_t</ref> *</type>
+          <declname>src</declname>
+        </param>
+        <briefdescription>
+<para>Write an in-memory page(src) to the on-disk page. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>table_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>table id obtained with <computeroutput><ref refid="group__BufferManager_1gac94c20a2ecdf34a76eecd07b7c2533f1" kindref="member">buffered_open_table_file()</ref></computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pagenum</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>page index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the pointer of the page data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" line="243" column="6" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" bodystart="243" bodyend="246" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" declline="171" declcolumn="6"/>
+        <references refid="namespacebuffer__helper_1a04ef1a7b71e2268965ebc4791e7ff817" compoundref="buffer_8cc" startline="77" endline="96">buffer_helper::apply_buffer</references>
+      </memberdef>
+      <memberdef kind="function" id="group__BufferManager_1gad670dec3e27df044606af3c4282d97ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void buffered_release_page</definition>
+        <argsstring>(tableid_t table_id, pagenum_t pagenum)</argsstring>
+        <name>buffered_release_page</name>
+        <param>
+          <type>tableid_t</type>
+          <declname>table_id</declname>
+        </param>
+        <param>
+          <type>pagenum_t</type>
+          <declname>pagenum</declname>
+        </param>
+        <briefdescription>
+<para>Releases an in-memory buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>In case of conditional writing, instead of using R(read without pin) - R(read with pin) - W(write to clean pin) method, Just clearing pin without write any data is needed.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>table_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>table id obtained with <computeroutput><ref refid="group__BufferManager_1gac94c20a2ecdf34a76eecd07b7c2533f1" kindref="member">buffered_open_table_file()</ref></computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pagenum</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>page index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" line="248" column="6" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" bodystart="248" bodyend="250" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" declline="184" declcolumn="6"/>
+        <references refid="namespacebuffer__helper_1aed4e4b30a9dc8dc1dfd8d231f143c836" compoundref="buffer_8cc" startline="98" endline="106">buffer_helper::release_buffer</references>
+      </memberdef>
+      <memberdef kind="function" id="group__BufferManager_1ga0c529ae91595ade20c4c314ab4b194a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int shutdown_buffer</definition>
+        <argsstring>()</argsstring>
+        <name>shutdown_buffer</name>
+        <briefdescription>
+<para>Shutdown buffer manager. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>0</computeroutput> if success, non-zero value otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" line="252" column="5" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc" bodystart="252" bodyend="272" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/buffer.h" declline="191" declcolumn="5"/>
+        <references refid="group__BufferManager_1gaf0a958b81a6ef6c50ece8231eb6e8495" compoundref="buffer_8cc" startline="25">buffer_index</references>
+        <references refid="group__BufferManager_1gaf22ff4ab7a026e6c3b4b08eafb2df027" compoundref="buffer_8cc" startline="23">buffer_size</references>
+        <references refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" compoundref="buffer_8cc" startline="17">buffer_slot</references>
+        <references refid="group__DiskSpaceManager_1gafba49bd5055033aecb5c2f1c9416b648" compoundref="file_8cc" startline="200" endline="217">file_close_table_files</references>
+        <references refid="group__DiskSpaceManager_1ga0cc120c0de98d0bb7cabc476b739ab22" compoundref="file_8cc" startline="191" endline="198">file_write_page</references>
+        <references refid="structBufferBlock_1ad89fb09273ce3d0e9fc071f795a2afc6" compoundref="buffer_8h" startline="32">BufferBlock::is_dirty</references>
+        <references refid="structBufferBlock_1ae6e3e950155952976f74178b1951d09d" compoundref="buffer_8h" startline="27">BufferBlock::page</references>
+        <references refid="structBufferBlock_1aa11d7c4ecd1f920eece0b56df5b2b1b9" compoundref="buffer_8h" startline="29">BufferBlock::page_location</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;buffer.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;errors.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;file.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;sys/uio.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstring&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;new&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;unordered_map&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;utility&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;iostream&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17" refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" refkind="member"><highlight class="normal"><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>*<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="19" refid="group__BufferManager_1ga6675ef26738b0878ce5d2df48c71d93d" refkind="member"><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="group__BufferManager_1ga6675ef26738b0878ce5d2df48c71d93d" kindref="member">buffer_head_idx</ref><sp/>=<sp/>-1;</highlight></codeline>
+<codeline lineno="21" refid="group__BufferManager_1ga6d994e470b6e3c1d671c42e3f5dc9d02" refkind="member"><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="group__BufferManager_1ga6d994e470b6e3c1d671c42e3f5dc9d02" kindref="member">buffer_tail_idx</ref><sp/>=<sp/>-1;</highlight></codeline>
+<codeline lineno="23" refid="group__BufferManager_1gaf22ff4ab7a026e6c3b4b08eafb2df027" refkind="member"><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="group__BufferManager_1gaf22ff4ab7a026e6c3b4b08eafb2df027" kindref="member">buffer_size</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25" refid="group__BufferManager_1gaf0a958b81a6ef6c50ece8231eb6e8495" refkind="member"><highlight class="normal">std::unordered_map&lt;PageLocation,<sp/>int&gt;<sp/><ref refid="group__BufferManager_1gaf0a958b81a6ef6c50ece8231eb6e8495" kindref="member">buffer_index</ref>;</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacebuffer__helper" kindref="compound">buffer_helper</ref><sp/>{</highlight></codeline>
+<codeline lineno="28" refid="namespacebuffer__helper_1a74ed2677c259449b4dbd4d92476fb88c" refkind="member"><highlight class="normal"><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>*<sp/><ref refid="namespacebuffer__helper_1a74ed2677c259449b4dbd4d92476fb88c" kindref="member">load_buffer</ref>(tableid_t<sp/>table_id,<sp/>pagenum_t<sp/>pagenum,<sp/><ref refid="structPage" kindref="compound">page_t</ref>*<sp/>page,</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>pin)<sp/>{</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>page_location<sp/>=<sp/>std::make_pair(table_id,<sp/>pagenum);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>existing_buffer<sp/>=<sp/><ref refid="group__BufferManager_1gaf0a958b81a6ef6c50ece8231eb6e8495" kindref="member">buffer_index</ref>.find(page_location);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(existing_buffer<sp/>!=<sp/><ref refid="group__BufferManager_1gaf0a958b81a6ef6c50ece8231eb6e8495" kindref="member">buffer_index</ref>.end())<sp/>{</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>buffer_page_idx<sp/>=<sp/>existing_buffer-&gt;second;</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>*<sp/>buffer_page<sp/>=<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>+<sp/>buffer_page_idx;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a24a8a5676d2d1b502d09d0a6010ef692" kindref="member">detach_from_tree</ref>(buffer_page_idx);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a91e836462bed31cbc7e2bfec66844ec5" kindref="member">prepend_to_head</ref>(buffer_page_idx);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buffer_page-&gt;<ref refid="structBufferBlock_1a8a71a2ddf902615f30c43f49d499dc77" kindref="member">is_pinned</ref><sp/>=<sp/>(pin<sp/>?<sp/>1<sp/>:<sp/>0);</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(page<sp/>!=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>memcpy(page,<sp/>&amp;(buffer_page-&gt;<ref refid="structBufferBlock_1ae6e3e950155952976f74178b1951d09d" kindref="member">page</ref>),<sp/><ref refid="group__DiskSpaceManager_1ga02cae3c3ec7f57eeec642e2cade048f8" kindref="member">PAGE_SIZE</ref>);</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>+<sp/>buffer_page_idx;</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>evicted_idx<sp/>=<sp/><ref refid="namespacebuffer__helper_1acd01d8af2d203c124c36f77e9ea86575" kindref="member">evict</ref>();</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(evicted_idx<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>add</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>*<sp/>buffer_page<sp/>=<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>+<sp/>evicted_idx;</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>*<sp/>buffer_head<sp/>=<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>+<sp/><ref refid="group__BufferManager_1ga6675ef26738b0878ce5d2df48c71d93d" kindref="member">buffer_head_idx</ref>;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a24a8a5676d2d1b502d09d0a6010ef692" kindref="member">detach_from_tree</ref>(evicted_idx);</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1ga6d994e470b6e3c1d671c42e3f5dc9d02" kindref="member">buffer_tail_idx</ref><sp/>=<sp/>buffer_page-&gt;<ref refid="structBufferBlock_1a68a3b5efa5d3b6b940523417c1ca8730" kindref="member">prev_block_idx</ref>;</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a91e836462bed31cbc7e2bfec66844ec5" kindref="member">prepend_to_head</ref>(evicted_idx);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1gaf0a958b81a6ef6c50ece8231eb6e8495" kindref="member">buffer_index</ref>[page_location]<sp/>=<sp/>evicted_idx;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buffer_page-&gt;<ref refid="structBufferBlock_1ad89fb09273ce3d0e9fc071f795a2afc6" kindref="member">is_dirty</ref><sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buffer_page-&gt;<ref refid="structBufferBlock_1a8a71a2ddf902615f30c43f49d499dc77" kindref="member">is_pinned</ref><sp/>=<sp/>pin<sp/>?<sp/>1<sp/>:<sp/>0;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buffer_page-&gt;<ref refid="structBufferBlock_1aa11d7c4ecd1f920eece0b56df5b2b1b9" kindref="member">page_location</ref><sp/>=<sp/>page_location;</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__DiskSpaceManager_1ga9fa7bda853536232d02faa2acb612eb7" kindref="member">file_read_page</ref>(table_id,<sp/>pagenum,<sp/>&amp;(buffer_page-&gt;<ref refid="structBufferBlock_1ae6e3e950155952976f74178b1951d09d" kindref="member">page</ref>));</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(page<sp/>!=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>memcpy(page,<sp/>&amp;(buffer_page-&gt;<ref refid="structBufferBlock_1ae6e3e950155952976f74178b1951d09d" kindref="member">page</ref>),<sp/><ref refid="group__DiskSpaceManager_1ga02cae3c3ec7f57eeec642e2cade048f8" kindref="member">PAGE_SIZE</ref>);</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>buffer_page;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>direct<sp/>I/O<sp/>fallback</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(page<sp/>!=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__DiskSpaceManager_1ga9fa7bda853536232d02faa2acb612eb7" kindref="member">file_read_page</ref>(table_id,<sp/>pagenum,<sp/>page);</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="75"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77" refid="namespacebuffer__helper_1a04ef1a7b71e2268965ebc4791e7ff817" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespacebuffer__helper_1a04ef1a7b71e2268965ebc4791e7ff817" kindref="member">apply_buffer</ref>(tableid_t<sp/>table_id,<sp/>pagenum_t<sp/>pagenum,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structPage" kindref="compound">page_t</ref>*<sp/>page)<sp/>{</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>page_location<sp/>=<sp/>std::make_pair(table_id,<sp/>pagenum);</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>existing_buffer<sp/>=<sp/><ref refid="group__BufferManager_1gaf0a958b81a6ef6c50ece8231eb6e8495" kindref="member">buffer_index</ref>.find(page_location);</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(existing_buffer<sp/>!=<sp/><ref refid="group__BufferManager_1gaf0a958b81a6ef6c50ece8231eb6e8495" kindref="member">buffer_index</ref>.end())<sp/>{</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>buffer_page_idx<sp/>=<sp/>existing_buffer-&gt;second;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>*<sp/>buffer_page<sp/>=<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>+<sp/>buffer_page_idx;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a24a8a5676d2d1b502d09d0a6010ef692" kindref="member">detach_from_tree</ref>(buffer_page_idx);</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a91e836462bed31cbc7e2bfec66844ec5" kindref="member">prepend_to_head</ref>(buffer_page_idx);</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>memcpy(&amp;(buffer_page-&gt;<ref refid="structBufferBlock_1ae6e3e950155952976f74178b1951d09d" kindref="member">page</ref>),<sp/>page,<sp/><ref refid="group__DiskSpaceManager_1ga02cae3c3ec7f57eeec642e2cade048f8" kindref="member">PAGE_SIZE</ref>);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buffer_page-&gt;<ref refid="structBufferBlock_1ad89fb09273ce3d0e9fc071f795a2afc6" kindref="member">is_dirty</ref><sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buffer_page-&gt;<ref refid="structBufferBlock_1a8a71a2ddf902615f30c43f49d499dc77" kindref="member">is_pinned</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>direct<sp/>I/O<sp/>fallback</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__DiskSpaceManager_1ga0cc120c0de98d0bb7cabc476b739ab22" kindref="member">file_write_page</ref>(table_id,<sp/>pagenum,<sp/>page);</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98" refid="namespacebuffer__helper_1aed4e4b30a9dc8dc1dfd8d231f143c836" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespacebuffer__helper_1aed4e4b30a9dc8dc1dfd8d231f143c836" kindref="member">release_buffer</ref>(tableid_t<sp/>table_id,<sp/>pagenum_t<sp/>pagenum)<sp/>{</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>page_location<sp/>=<sp/>std::make_pair(table_id,<sp/>pagenum);</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>existing_buffer<sp/>=<sp/><ref refid="group__BufferManager_1gaf0a958b81a6ef6c50ece8231eb6e8495" kindref="member">buffer_index</ref>.find(page_location);</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(existing_buffer<sp/>!=<sp/><ref refid="group__BufferManager_1gaf0a958b81a6ef6c50ece8231eb6e8495" kindref="member">buffer_index</ref>.end())<sp/>{</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>buffer_page_idx<sp/>=<sp/>existing_buffer-&gt;second;</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>*<sp/>buffer_page<sp/>=<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>+<sp/>buffer_page_idx;</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buffer_page-&gt;<ref refid="structBufferBlock_1a8a71a2ddf902615f30c43f49d499dc77" kindref="member">is_pinned</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="106"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight></codeline>
+<codeline lineno="108" refid="namespacebuffer__helper_1acd01d8af2d203c124c36f77e9ea86575" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="namespacebuffer__helper_1acd01d8af2d203c124c36f77e9ea86575" kindref="member">evict</ref>()<sp/>{</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>evicted_idx<sp/>=<sp/><ref refid="group__BufferManager_1ga6d994e470b6e3c1d671c42e3f5dc9d02" kindref="member">buffer_tail_idx</ref>;</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>*<sp/>buffer_evict<sp/>=<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>+<sp/>evicted_idx;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(evicted_idx<sp/>!=<sp/>-1<sp/>&amp;&amp;<sp/>buffer_evict-&gt;<ref refid="structBufferBlock_1a8a71a2ddf902615f30c43f49d499dc77" kindref="member">is_pinned</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>evicted_idx<sp/>=<sp/>buffer_evict-&gt;<ref refid="structBufferBlock_1a68a3b5efa5d3b6b940523417c1ca8730" kindref="member">prev_block_idx</ref>;</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buffer_evict<sp/>=<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>+<sp/>evicted_idx;</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>All<sp/>the<sp/>buffers<sp/>are<sp/>using</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(evicted_idx<sp/>==<sp/>-1)<sp/>{</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1gaf0a958b81a6ef6c50ece8231eb6e8495" kindref="member">buffer_index</ref>.erase(buffer_evict-&gt;<ref refid="structBufferBlock_1aa11d7c4ecd1f920eece0b56df5b2b1b9" kindref="member">page_location</ref>);</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Flush<sp/>to<sp/>file<sp/>if<sp/>dirty</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(buffer_evict-&gt;<ref refid="structBufferBlock_1ad89fb09273ce3d0e9fc071f795a2afc6" kindref="member">is_dirty</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>tableid_t<sp/>table_id;</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pagenum_t<sp/>page_num;</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::tie(table_id,<sp/>page_num)<sp/>=<sp/>buffer_evict-&gt;<ref refid="structBufferBlock_1aa11d7c4ecd1f920eece0b56df5b2b1b9" kindref="member">page_location</ref>;</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__DiskSpaceManager_1ga0cc120c0de98d0bb7cabc476b739ab22" kindref="member">file_write_page</ref>(table_id,<sp/>page_num,<sp/>&amp;buffer_evict-&gt;<ref refid="structBufferBlock_1ae6e3e950155952976f74178b1951d09d" kindref="member">page</ref>);</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>evicted_idx;</highlight></codeline>
+<codeline lineno="133"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight></codeline>
+<codeline lineno="135" refid="namespacebuffer__helper_1a24a8a5676d2d1b502d09d0a6010ef692" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespacebuffer__helper_1a24a8a5676d2d1b502d09d0a6010ef692" kindref="member">detach_from_tree</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>buffer_idx)<sp/>{</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>*<sp/>buffer_page<sp/>=<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>+<sp/>buffer_idx;</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"></highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(buffer_page-&gt;<ref refid="structBufferBlock_1a68a3b5efa5d3b6b940523417c1ca8730" kindref="member">prev_block_idx</ref><sp/>!=<sp/>-1)<sp/>{</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>*<sp/>buffer_prev<sp/>=<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>+<sp/>(buffer_page-&gt;<ref refid="structBufferBlock_1a68a3b5efa5d3b6b940523417c1ca8730" kindref="member">prev_block_idx</ref>);</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buffer_prev-&gt;<ref refid="structBufferBlock_1a69a9ee672b7e833b568f524b6329a978" kindref="member">next_block_idx</ref><sp/>=<sp/>buffer_page-&gt;<ref refid="structBufferBlock_1a69a9ee672b7e833b568f524b6329a978" kindref="member">next_block_idx</ref>;</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(buffer_page-&gt;<ref refid="structBufferBlock_1a69a9ee672b7e833b568f524b6329a978" kindref="member">next_block_idx</ref><sp/>!=<sp/>-1)<sp/>{</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>*<sp/>buffer_next<sp/>=<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>+<sp/>(buffer_page-&gt;<ref refid="structBufferBlock_1a69a9ee672b7e833b568f524b6329a978" kindref="member">next_block_idx</ref>);</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buffer_next-&gt;<ref refid="structBufferBlock_1a68a3b5efa5d3b6b940523417c1ca8730" kindref="member">prev_block_idx</ref><sp/>=<sp/>buffer_page-&gt;<ref refid="structBufferBlock_1a68a3b5efa5d3b6b940523417c1ca8730" kindref="member">prev_block_idx</ref>;</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="147"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"></highlight></codeline>
+<codeline lineno="149" refid="namespacebuffer__helper_1a91e836462bed31cbc7e2bfec66844ec5" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespacebuffer__helper_1a91e836462bed31cbc7e2bfec66844ec5" kindref="member">prepend_to_head</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>buffer_idx)<sp/>{</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>*<sp/>buffer_page<sp/>=<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>+<sp/>buffer_idx;</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>*<sp/>buffer_head<sp/>=<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>+<sp/><ref refid="group__BufferManager_1ga6675ef26738b0878ce5d2df48c71d93d" kindref="member">buffer_head_idx</ref>;</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/>buffer_page-&gt;<ref refid="structBufferBlock_1a68a3b5efa5d3b6b940523417c1ca8730" kindref="member">prev_block_idx</ref><sp/>=<sp/>-1;</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/>buffer_page-&gt;<ref refid="structBufferBlock_1a69a9ee672b7e833b568f524b6329a978" kindref="member">next_block_idx</ref><sp/>=<sp/><ref refid="group__BufferManager_1ga6675ef26738b0878ce5d2df48c71d93d" kindref="member">buffer_head_idx</ref>;</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/>buffer_head-&gt;<ref refid="structBufferBlock_1a68a3b5efa5d3b6b940523417c1ca8730" kindref="member">prev_block_idx</ref><sp/>=<sp/>buffer_idx;</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1ga6675ef26738b0878ce5d2df48c71d93d" kindref="member">buffer_head_idx</ref><sp/>=<sp/>buffer_idx;</highlight></codeline>
+<codeline lineno="158"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="159"><highlight class="normal">}<sp/><sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>buffer_helper</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161" refid="group__BufferManager_1gab188c05b5d9ab0523d542f94bc318d98" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="group__BufferManager_1gab188c05b5d9ab0523d542f94bc318d98" kindref="member">init_buffer</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>_buffer_size)<sp/>{</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">try</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>!=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(_buffer_size<sp/>==<sp/><ref refid="group__BufferManager_1gaf22ff4ab7a026e6c3b4b08eafb2df027" kindref="member">buffer_size</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1gaf22ff4ab7a026e6c3b4b08eafb2df027" kindref="member">buffer_size</ref><sp/>=<sp/>_buffer_size;</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>[<ref refid="group__BufferManager_1gaf22ff4ab7a026e6c3b4b08eafb2df027" kindref="member">buffer_size</ref>];</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/><ref refid="group__BufferManager_1gaf22ff4ab7a026e6c3b4b08eafb2df027" kindref="member">buffer_size</ref>;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref>[i].<ref refid="structBufferBlock_1aa11d7c4ecd1f920eece0b56df5b2b1b9" kindref="member">page_location</ref><sp/>=<sp/>std::make_pair(<ref refid="group__DiskSpaceManager_1ga79a658b287e000805bc971b437b0cae0" kindref="member">MAX_TABLE_INSTANCE</ref><sp/>+<sp/>1,<sp/>0);</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref>[i].<ref refid="structBufferBlock_1ad89fb09273ce3d0e9fc071f795a2afc6" kindref="member">is_dirty</ref><sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref>[i].<ref refid="structBufferBlock_1a8a71a2ddf902615f30c43f49d499dc77" kindref="member">is_pinned</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"></highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(i<sp/>&lt;<sp/><ref refid="group__BufferManager_1gaf22ff4ab7a026e6c3b4b08eafb2df027" kindref="member">buffer_size</ref><sp/>-<sp/>1)<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref>[i].<ref refid="structBufferBlock_1a69a9ee672b7e833b568f524b6329a978" kindref="member">next_block_idx</ref><sp/>=<sp/>i<sp/>+<sp/>1;</highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(i<sp/>&gt;<sp/>0)<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref>[i].<ref refid="structBufferBlock_1a68a3b5efa5d3b6b940523417c1ca8730" kindref="member">prev_block_idx</ref><sp/>=<sp/>i<sp/>-<sp/>1;</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"></highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref>[0].<ref refid="structBufferBlock_1a68a3b5efa5d3b6b940523417c1ca8730" kindref="member">prev_block_idx</ref><sp/>=<sp/>-1;</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref>[<ref refid="group__BufferManager_1gaf22ff4ab7a026e6c3b4b08eafb2df027" kindref="member">buffer_size</ref><sp/>-<sp/>1].<ref refid="structBufferBlock_1a69a9ee672b7e833b568f524b6329a978" kindref="member">next_block_idx</ref><sp/>=<sp/>-1;</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1ga6675ef26738b0878ce5d2df48c71d93d" kindref="member">buffer_head_idx</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1ga6d994e470b6e3c1d671c42e3f5dc9d02" kindref="member">buffer_tail_idx</ref><sp/>=<sp/><ref refid="group__BufferManager_1gaf22ff4ab7a026e6c3b4b08eafb2df027" kindref="member">buffer_size</ref><sp/>-<sp/>1;</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"></highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">catch</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::bad_alloc&amp;<sp/>err)<sp/>{</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="191"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"></highlight></codeline>
+<codeline lineno="193" refid="group__BufferManager_1gac94c20a2ecdf34a76eecd07b7c2533f1" refkind="member"><highlight class="normal">tableid_t<sp/><ref refid="group__BufferManager_1gac94c20a2ecdf34a76eecd07b7c2533f1" kindref="member">buffered_open_table_file</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>path)<sp/>{</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="group__DiskSpaceManager_1ga400a17cdefa78574df2029ab4223a5da" kindref="member">file_open_table_file</ref>(path);</highlight></codeline>
+<codeline lineno="195"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"></highlight></codeline>
+<codeline lineno="197" refid="group__BufferManager_1ga029e5567b5d7f1ebacd02e0769cbfd1f" refkind="member"><highlight class="normal">pagenum_t<sp/><ref refid="group__BufferManager_1ga029e5567b5d7f1ebacd02e0769cbfd1f" kindref="member">buffered_alloc_page</ref>(tableid_t<sp/>table_id)<sp/>{</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacefile__helper_1ab6f797fad7afb1ec4909c88d21970b27" kindref="member">file_helper::extend_capacity</ref>(table_id);</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"></highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structHeaderPage" kindref="compound">headerpage_t</ref><sp/>header_page;</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"></highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a74ed2677c259449b4dbd4d92476fb88c" kindref="member">buffer_helper::load_buffer</ref>(table_id,<sp/>0,<sp/>&amp;header_page);</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"></highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Pop<sp/>the<sp/>first<sp/>page<sp/>from<sp/>free<sp/>page<sp/>stack.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/><sp/><sp/>pagenum_t<sp/>free_page_idx<sp/>=<sp/>header_page.<ref refid="structHeaderPage_1a4a94aded4d003eb992bb16f98038345a" kindref="member">free_page_idx</ref>;</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"></highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structFreePage" kindref="compound">freepage_t</ref><sp/>allocated_page;</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a74ed2677c259449b4dbd4d92476fb88c" kindref="member">buffer_helper::load_buffer</ref>(table_id,<sp/>free_page_idx,<sp/>&amp;allocated_page);</highlight></codeline>
+<codeline lineno="209"><highlight class="normal"></highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Move<sp/>the<sp/>first<sp/>free<sp/>page<sp/>index<sp/>to<sp/>the<sp/>next<sp/>page.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/>header_page.<ref refid="structHeaderPage_1a4a94aded4d003eb992bb16f98038345a" kindref="member">free_page_idx</ref><sp/>=<sp/>allocated_page.<ref refid="structFreePage_1a20ca90083caaf104b7e45d0a7a863ff3" kindref="member">next_free_idx</ref>;</highlight></codeline>
+<codeline lineno="212"><highlight class="normal"></highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a04ef1a7b71e2268965ebc4791e7ff817" kindref="member">buffer_helper::apply_buffer</ref>(table_id,<sp/>0,<sp/>&amp;header_page);</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a04ef1a7b71e2268965ebc4791e7ff817" kindref="member">buffer_helper::apply_buffer</ref>(table_id,<sp/>free_page_idx,<sp/>&amp;allocated_page);</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"></highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>free_page_idx;</highlight></codeline>
+<codeline lineno="217"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"></highlight></codeline>
+<codeline lineno="219" refid="group__BufferManager_1gadeb4470c5495d5b66689f395a1603fb5" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group__BufferManager_1gadeb4470c5495d5b66689f395a1603fb5" kindref="member">buffered_free_page</ref>(tableid_t<sp/>table_id,<sp/>pagenum_t<sp/>pagenum)<sp/>{</highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structHeaderPage" kindref="compound">headerpage_t</ref><sp/>header_page;</highlight></codeline>
+<codeline lineno="221"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a74ed2677c259449b4dbd4d92476fb88c" kindref="member">buffer_helper::load_buffer</ref>(table_id,<sp/>0,<sp/>&amp;header_page);</highlight></codeline>
+<codeline lineno="222"><highlight class="normal"></highlight></codeline>
+<codeline lineno="223"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Current<sp/>first<sp/>free<sp/>page<sp/>index</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/><sp/><sp/>pagenum_t<sp/>old_free_page_idx<sp/>=<sp/>header_page.<ref refid="structHeaderPage_1a4a94aded4d003eb992bb16f98038345a" kindref="member">free_page_idx</ref>;</highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Newly<sp/>freed<sp/>page</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="226"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structFreePage" kindref="compound">freepage_t</ref><sp/>new_free_page;</highlight></codeline>
+<codeline lineno="227"><highlight class="normal"></highlight></codeline>
+<codeline lineno="228"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Next<sp/>free<sp/>page<sp/>index<sp/>of<sp/>newly<sp/>freed<sp/>page<sp/>is<sp/>current<sp/>first<sp/>free<sp/>page</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="229"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>index.<sp/>Its<sp/>just<sp/>pushing<sp/>the<sp/>pagenum<sp/>into<sp/>free<sp/>page<sp/>stack.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="230"><highlight class="normal"><sp/><sp/><sp/><sp/>new_free_page.<ref refid="structFreePage_1a20ca90083caaf104b7e45d0a7a863ff3" kindref="member">next_free_idx</ref><sp/>=<sp/>old_free_page_idx;</highlight></codeline>
+<codeline lineno="231"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a04ef1a7b71e2268965ebc4791e7ff817" kindref="member">buffer_helper::apply_buffer</ref>(table_id,<sp/>pagenum,<sp/>&amp;new_free_page);</highlight></codeline>
+<codeline lineno="232"><highlight class="normal"></highlight></codeline>
+<codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Set<sp/>the<sp/>first<sp/>free<sp/>page<sp/>to<sp/>freed<sp/>page<sp/>number.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/>header_page.<ref refid="structHeaderPage_1a4a94aded4d003eb992bb16f98038345a" kindref="member">free_page_idx</ref><sp/>=<sp/>pagenum;</highlight></codeline>
+<codeline lineno="235"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a04ef1a7b71e2268965ebc4791e7ff817" kindref="member">buffer_helper::apply_buffer</ref>(table_id,<sp/>0,<sp/>&amp;header_page);</highlight></codeline>
+<codeline lineno="236"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="237"><highlight class="normal"></highlight></codeline>
+<codeline lineno="238" refid="group__BufferManager_1ga14df3d77c93d5ed2718ec3d4ac4b8f67" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group__BufferManager_1ga14df3d77c93d5ed2718ec3d4ac4b8f67" kindref="member">buffered_read_page</ref>(tableid_t<sp/>table_id,<sp/>pagenum_t<sp/>pagenum,<sp/><ref refid="structPage" kindref="compound">page_t</ref>*<sp/>dest,</highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>pin)<sp/>{</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a74ed2677c259449b4dbd4d92476fb88c" kindref="member">buffer_helper::load_buffer</ref>(table_id,<sp/>pagenum,<sp/>dest,<sp/>pin);</highlight></codeline>
+<codeline lineno="241"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"></highlight></codeline>
+<codeline lineno="243" refid="group__BufferManager_1ga3813c4a6ac17833c7b130b82705fefea" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group__BufferManager_1ga3813c4a6ac17833c7b130b82705fefea" kindref="member">buffered_write_page</ref>(tableid_t<sp/>table_id,<sp/>pagenum_t<sp/>pagenum,</highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structPage" kindref="compound">page_t</ref>*<sp/>src)<sp/>{</highlight></codeline>
+<codeline lineno="245"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1a04ef1a7b71e2268965ebc4791e7ff817" kindref="member">buffer_helper::apply_buffer</ref>(table_id,<sp/>pagenum,<sp/>src);</highlight></codeline>
+<codeline lineno="246"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="247"><highlight class="normal"></highlight></codeline>
+<codeline lineno="248" refid="group__BufferManager_1gad670dec3e27df044606af3c4282d97ba" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group__BufferManager_1gad670dec3e27df044606af3c4282d97ba" kindref="member">buffered_release_page</ref>(tableid_t<sp/>table_id,<sp/>pagenum_t<sp/>pagenum)<sp/>{</highlight></codeline>
+<codeline lineno="249"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacebuffer__helper_1aed4e4b30a9dc8dc1dfd8d231f143c836" kindref="member">buffer_helper::release_buffer</ref>(table_id,<sp/>pagenum);</highlight></codeline>
+<codeline lineno="250"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="251"><highlight class="normal"></highlight></codeline>
+<codeline lineno="252" refid="group__BufferManager_1ga0c529ae91595ade20c4c314ab4b194a4" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="group__BufferManager_1ga0c529ae91595ade20c4c314ab4b194a4" kindref="member">shutdown_buffer</ref>()<sp/>{</highlight></codeline>
+<codeline lineno="253"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>!=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="254"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/><ref refid="group__BufferManager_1gaf22ff4ab7a026e6c3b4b08eafb2df027" kindref="member">buffer_size</ref>;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>tableid_t<sp/>table_id;</highlight></codeline>
+<codeline lineno="256"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pagenum_t<sp/>page_num;</highlight></codeline>
+<codeline lineno="257"><highlight class="normal"></highlight></codeline>
+<codeline lineno="258"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structBufferBlock" kindref="compound">BufferBlock</ref>*<sp/>buffer<sp/>=<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>+<sp/>i;</highlight></codeline>
+<codeline lineno="259"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::tie(table_id,<sp/>page_num)<sp/>=<sp/>buffer-&gt;<ref refid="structBufferBlock_1aa11d7c4ecd1f920eece0b56df5b2b1b9" kindref="member">page_location</ref>;</highlight></codeline>
+<codeline lineno="260"><highlight class="normal"></highlight></codeline>
+<codeline lineno="261"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(buffer-&gt;<ref refid="structBufferBlock_1ad89fb09273ce3d0e9fc071f795a2afc6" kindref="member">is_dirty</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="262"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__DiskSpaceManager_1ga0cc120c0de98d0bb7cabc476b739ab22" kindref="member">file_write_page</ref>(table_id,<sp/>page_num,<sp/>&amp;buffer-&gt;<ref refid="structBufferBlock_1ae6e3e950155952976f74178b1951d09d" kindref="member">page</ref>);</highlight></codeline>
+<codeline lineno="263"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="264"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="265"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal">[]<sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref>;</highlight></codeline>
+<codeline lineno="266"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1ga57ae63bbf913487b006683b804b8435e" kindref="member">buffer_slot</ref><sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="267"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1gaf22ff4ab7a026e6c3b4b08eafb2df027" kindref="member">buffer_size</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="268"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__BufferManager_1gaf0a958b81a6ef6c50ece8231eb6e8495" kindref="member">buffer_index</ref>.clear();</highlight></codeline>
+<codeline lineno="269"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="270"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__DiskSpaceManager_1gafba49bd5055033aecb5c2f1c9416b648" kindref="member">file_close_table_files</ref>();</highlight></codeline>
+<codeline lineno="271"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="272"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc"/>
+  </compounddef>
+</doxygen>

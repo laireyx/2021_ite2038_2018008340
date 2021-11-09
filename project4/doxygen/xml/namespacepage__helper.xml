@@ -1,0 +1,549 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="namespacepage__helper" kind="namespace" language="C++">
+    <compoundname>page_helper</compoundname>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="namespacepage__helper_1aa8ddc40b0445e58446bee7702744feb6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structPageSlot" kindref="compound">PageSlot</ref> *</type>
+        <definition>PageSlot * page_helper::get_page_slot</definition>
+        <argsstring>(LeafPage *page)</argsstring>
+        <name>get_page_slot</name>
+        <param>
+          <type><ref refid="structLeafPage" kindref="compound">LeafPage</ref> *</type>
+          <declname>page</declname>
+        </param>
+        <briefdescription>
+<para>Get page slots. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>It just return the reserved area as <computeroutput>PageSlot*</computeroutput>, which means it does not give any hints for the number of slots. Anyway, you can still get the number of the slots by using <computeroutput>page-&gt;page_header.key_num</computeroutput></para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>leaf page. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>PageSlot*</computeroutput> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" line="10" column="10" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" bodystart="10" bodyend="12" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" declline="169" declcolumn="10"/>
+        <references refid="structLeafPage_1aea1e6d73b2a879fa8a8b4e6e590524b9" compoundref="page_8h" startline="148">LeafPage::reserved</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacepage__helper_1a156258314c74c8ccba98cc3372161b84" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void page_helper::get_leaf_value</definition>
+        <argsstring>(LeafPage *page, int value_idx, char *value, uint16_t *value_size=nullptr)</argsstring>
+        <name>get_leaf_value</name>
+        <param>
+          <type><ref refid="structLeafPage" kindref="compound">LeafPage</ref> *</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>value_idx</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>uint16_t *</type>
+          <declname>value_size</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Get leaf value. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Get a leaf value corresponds to index <computeroutput>value_idx</computeroutput>, using the page slot information. Then copies the value and its size into given pointer, which is given by caller.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>leaf page. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>value_idx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>index number of value. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>value will be set into this pointer if not null. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">value_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>value size will be set into this pointer if not null. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" line="14" column="6" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" bodystart="14" bodyend="22" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" declline="182" declcolumn="6"/>
+        <references refid="namespacepage__helper_1a156258314c74c8ccba98cc3372161b84" compoundref="page_8cc" startline="14" endline="22">get_leaf_value</references>
+        <references refid="namespacepage__helper_1aa8ddc40b0445e58446bee7702744feb6" compoundref="page_8cc" startline="10" endline="12">get_page_slot</references>
+        <references refid="structPageSlot_1ae968301f8baa23e1c7c08876ee7a0b53" compoundref="page_8h" startline="96">PageSlot::value_size</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacepage__helper_1ae98c75ecddf828c7ecf377dbe86cd0a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void page_helper::get_leaf_value</definition>
+        <argsstring>(LeafPage *page, uint16_t value_offset, uint16_t value_size, char *value)</argsstring>
+        <name>get_leaf_value</name>
+        <param>
+          <type><ref refid="structLeafPage" kindref="compound">LeafPage</ref> *</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>uint16_t</type>
+          <declname>value_offset</declname>
+        </param>
+        <param>
+          <type>uint16_t</type>
+          <declname>value_size</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Get leaf value. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Get a leaf value using exact offset and size. Usually it does not called from the outside, and just help the other function. Then copies the value and its size into given pointer, which is given by caller.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>leaf page. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>value_offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>value offset. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>value_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>value size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>value will be set into this pointer if not null. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" line="24" column="6" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" bodystart="24" bodyend="29" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" declline="195" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacepage__helper_1a26459fe64afd7eb1939844ffdd9255ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool page_helper::has_enough_space</definition>
+        <argsstring>(LeafPage *page, uint16_t value_size)</argsstring>
+        <name>has_enough_space</name>
+        <param>
+          <type><ref refid="structLeafPage" kindref="compound">LeafPage</ref> *</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>uint16_t</type>
+          <declname>value_size</declname>
+        </param>
+        <briefdescription>
+<para>Check if given page has enough space for given value size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Required size for the given <computeroutput>value_size</computeroutput> is <computeroutput>value_size + sizeof(PageSlot)</computeroutput>.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>leaf page. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>value_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>value size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if space is enough, <computeroutput>false</computeroutput> otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" line="31" column="6" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" bodystart="31" bodyend="34" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" declline="207" declcolumn="6"/>
+        <references refid="structPageHeader_1_1ReservedFooter_1a449cef91528e5426aec9c0d5b91805a8" compoundref="page_8h" startline="81">PageHeader::ReservedFooter::footer_1</references>
+        <references refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" compoundref="page_8h" startline="118">AllocatedPage::page_header</references>
+        <references refid="structPageHeader_1a23bd66b8517a497496740f0a44d47b8e">PageHeader::reserved_footer</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacepage__helper_1a48eb82f7d2e7347c9abcb7a15f517bc7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint64_t *</type>
+        <definition>uint64_t * page_helper::get_free_space</definition>
+        <argsstring>(LeafPage *page)</argsstring>
+        <name>get_free_space</name>
+        <param>
+          <type><ref refid="structLeafPage" kindref="compound">LeafPage</ref> *</type>
+          <declname>page</declname>
+        </param>
+        <briefdescription>
+<para>Get free space amount. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>In leaf page, <computeroutput>page-&gt;page_header.reserved_footer.footer_1</computeroutput> represents current free space amount.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Leaf page. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The pointer to the free space amount, which will be more useful than raw value in purpose like modifying. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" line="36" column="10" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" bodystart="36" bodyend="38" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" declline="215" declcolumn="10"/>
+        <references refid="structPageHeader_1_1ReservedFooter_1a449cef91528e5426aec9c0d5b91805a8" compoundref="page_8h" startline="81">PageHeader::ReservedFooter::footer_1</references>
+        <references refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" compoundref="page_8h" startline="118">AllocatedPage::page_header</references>
+        <references refid="structPageHeader_1a23bd66b8517a497496740f0a44d47b8e">PageHeader::reserved_footer</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacepage__helper_1adaafa18748744e81f5abd5540207af63" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pagenum_t *</type>
+        <definition>uint64_t * page_helper::get_sibling_idx</definition>
+        <argsstring>(LeafPage *page)</argsstring>
+        <name>get_sibling_idx</name>
+        <param>
+          <type><ref refid="structLeafPage" kindref="compound">LeafPage</ref> *</type>
+          <declname>page</declname>
+        </param>
+        <briefdescription>
+<para>Get next sibling index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>In leaf page, <computeroutput>page-&gt;page_header.reserved_footer.footer_2</computeroutput> represents the very next(it means right) sibling index.</para>
+<para><simplesect kind="return"><para>right sibling index if page is not rightmost child. <computeroutput>0</computeroutput> if it is. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" line="40" column="10" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" bodystart="40" bodyend="42" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" declline="225" declcolumn="11"/>
+        <references refid="structPageHeader_1_1ReservedFooter_1a501b83aebe4bb2732b7f20ecc1fe95e9" compoundref="page_8h" startline="84">PageHeader::ReservedFooter::footer_2</references>
+        <references refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" compoundref="page_8h" startline="118">AllocatedPage::page_header</references>
+        <references refid="structPageHeader_1a23bd66b8517a497496740f0a44d47b8e">PageHeader::reserved_footer</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacepage__helper_1a3b88342bb43352d25c5bc0cb73bdd873" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool page_helper::add_leaf_value</definition>
+        <argsstring>(LeafPage *page, int64_t key, const char *value, uint16_t value_size)</argsstring>
+        <name>add_leaf_value</name>
+        <param>
+          <type><ref refid="structLeafPage" kindref="compound">LeafPage</ref> *</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>int64_t</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>uint16_t</type>
+          <declname>value_size</declname>
+        </param>
+        <briefdescription>
+<para>Add a leaf value into the last position of the leaf page. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>leaf page. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>record key. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>record value. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>value_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>record value size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if the page has enough space and appending is successful, <computeroutput>false</computeroutput> otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" line="44" column="6" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" bodystart="44" bodyend="68" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" declline="237" declcolumn="6"/>
+        <references refid="namespacepage__helper_1a48eb82f7d2e7347c9abcb7a15f517bc7" compoundref="page_8cc" startline="36" endline="38">get_free_space</references>
+        <references refid="namespacepage__helper_1aa8ddc40b0445e58446bee7702744feb6" compoundref="page_8cc" startline="10" endline="12">get_page_slot</references>
+        <references refid="namespacepage__helper_1a26459fe64afd7eb1939844ffdd9255ba" compoundref="page_8cc" startline="31" endline="34">has_enough_space</references>
+        <references refid="structPageSlot_1ab133a4d483a0d718872413c37a9d8d79" compoundref="page_8h" startline="94">PageSlot::key</references>
+        <references refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" compoundref="page_8h" startline="74">PageHeader::key_num</references>
+        <references refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" compoundref="page_8h" startline="118">AllocatedPage::page_header</references>
+        <references refid="group__DiskSpaceManager_1ga02cae3c3ec7f57eeec642e2cade048f8" compoundref="page_8h" startline="11">PAGE_SIZE</references>
+        <references refid="structPageSlot_1a3ac75fd0061544a853d61fd09f90e47b" compoundref="page_8h" startline="98">PageSlot::value_offset</references>
+        <references refid="structPageSlot_1ae968301f8baa23e1c7c08876ee7a0b53" compoundref="page_8h" startline="96">PageSlot::value_size</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacepage__helper_1a46a6aea7dd6f29cd79ad905d94f748df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool page_helper::remove_leaf_value</definition>
+        <argsstring>(LeafPage *page, int64_t key)</argsstring>
+        <name>remove_leaf_value</name>
+        <param>
+          <type><ref refid="structLeafPage" kindref="compound">LeafPage</ref> *</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>int64_t</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Remove a record and compact reserved area in the leaf page. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>leaf page. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>record key. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if the key was inside the leaf record and deleted successfully, <computeroutput>false</computeroutput> otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" line="70" column="6" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" bodystart="70" bodyend="98" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" declline="247" declcolumn="6"/>
+        <references refid="namespacepage__helper_1a48eb82f7d2e7347c9abcb7a15f517bc7" compoundref="page_8cc" startline="36" endline="38">get_free_space</references>
+        <references refid="namespacepage__helper_1aa8ddc40b0445e58446bee7702744feb6" compoundref="page_8cc" startline="10" endline="12">get_page_slot</references>
+        <references refid="structPageSlot_1ab133a4d483a0d718872413c37a9d8d79" compoundref="page_8h" startline="94">PageSlot::key</references>
+        <references refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" compoundref="page_8h" startline="74">PageHeader::key_num</references>
+        <references refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" compoundref="page_8h" startline="118">AllocatedPage::page_header</references>
+        <references refid="structPageSlot_1a3ac75fd0061544a853d61fd09f90e47b" compoundref="page_8h" startline="98">PageSlot::value_offset</references>
+        <references refid="structPageSlot_1ae968301f8baa23e1c7c08876ee7a0b53" compoundref="page_8h" startline="96">PageSlot::value_size</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacepage__helper_1a9831b9695515a5c601a52d773b855e20" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool page_helper::add_internal_key</definition>
+        <argsstring>(InternalPage *page, int64_t key, pagenum_t page_idx)</argsstring>
+        <name>add_internal_key</name>
+        <param>
+          <type><ref refid="structInternalPage" kindref="compound">InternalPage</ref> *</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>int64_t</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>pagenum_t</type>
+          <declname>page_idx</declname>
+        </param>
+        <briefdescription>
+<para>Add a page branch into the last position of the internal page. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>internal page. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>branch key. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>page_idx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>branch page index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if the page has enough space and appending is successful, <computeroutput>false</computeroutput> otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" line="100" column="6" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" bodystart="100" bodyend="111" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" declline="258" declcolumn="6"/>
+        <references refid="structPageBranch_1a4fd447bb2fc5dcc00344ffb950be7050" compoundref="page_8h" startline="107">PageBranch::key</references>
+        <references refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" compoundref="page_8h" startline="74">PageHeader::key_num</references>
+        <references refid="structInternalPage_1a28bee8353c1552803f43534d4217ca57" compoundref="page_8h" startline="138">InternalPage::page_branches</references>
+        <references refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" compoundref="page_8h" startline="118">AllocatedPage::page_header</references>
+        <references refid="structPageBranch_1a4a96cb8f228eccff326785565f60cf4b" compoundref="page_8h" startline="109">PageBranch::page_idx</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacepage__helper_1afb596042de2e0d0b4efdc117e244a587" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool page_helper::remove_internal_key</definition>
+        <argsstring>(InternalPage *page, int64_t key)</argsstring>
+        <name>remove_internal_key</name>
+        <param>
+          <type><ref refid="structInternalPage" kindref="compound">InternalPage</ref> *</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>int64_t</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Remove a page branch and realign branches. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>internal page. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>branch key. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if the key was inside the internal branch and deleted successfully, <computeroutput>false</computeroutput> otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" line="113" column="6" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" bodystart="113" bodyend="129" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" declline="267" declcolumn="6"/>
+        <references refid="structPageBranch_1a4fd447bb2fc5dcc00344ffb950be7050" compoundref="page_8h" startline="107">PageBranch::key</references>
+        <references refid="structPageHeader_1ae8afd53dbd8e532f3cc78f848752e1b9" compoundref="page_8h" startline="74">PageHeader::key_num</references>
+        <references refid="structInternalPage_1a28bee8353c1552803f43534d4217ca57" compoundref="page_8h" startline="138">InternalPage::page_branches</references>
+        <references refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" compoundref="page_8h" startline="118">AllocatedPage::page_header</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacepage__helper_1ad8adbcd49de0f47797f74155ca978492" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>pagenum_t *</type>
+        <definition>uint64_t * page_helper::get_leftmost_child_idx</definition>
+        <argsstring>(InternalPage *page)</argsstring>
+        <name>get_leftmost_child_idx</name>
+        <param>
+          <type><ref refid="structInternalPage" kindref="compound">InternalPage</ref> *</type>
+          <declname>page</declname>
+        </param>
+        <briefdescription>
+<para>Get leftmost child page index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>In internal page, <computeroutput>page-&gt;page_header.reserved_footer.footer_2</computeroutput> represents current free space amount.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>internal page. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>leftmost child page index. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" line="131" column="10" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/page.cc" bodystart="131" bodyend="133" declfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" declline="277" declcolumn="11"/>
+        <references refid="structPageHeader_1_1ReservedFooter_1a501b83aebe4bb2732b7f20ecc1fe95e9" compoundref="page_8h" startline="84">PageHeader::ReservedFooter::footer_2</references>
+        <references refid="structAllocatedPage_1a6905d1bdddadea5b9d2603b254a3ae2c" compoundref="page_8h" startline="118">AllocatedPage::page_header</references>
+        <references refid="structPageHeader_1a23bd66b8517a497496740f0a44d47b8e">PageHeader::reserved_footer</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="structPage" kindref="compound">Page</ref> helper. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This namespace includes some helper functions which are used by APIs such as tree manager which uses direct page access. These functions do not call any other APIs, but modifying only given data. </para>
+    </detaileddescription>
+    <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="157" column="1"/>
+  </compounddef>
+</doxygen>

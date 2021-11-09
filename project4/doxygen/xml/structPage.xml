@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="structPage" kind="class" language="C++" prot="public">
+    <compoundname>Page</compoundname>
+    <derivedcompoundref refid="structAllocatedPage" prot="public" virt="non-virtual">AllocatedPage</derivedcompoundref>
+    <derivedcompoundref refid="structFreePage" prot="public" virt="non-virtual">FreePage</derivedcompoundref>
+    <derivedcompoundref refid="structFullPage" prot="public" virt="non-virtual">FullPage</derivedcompoundref>
+    <derivedcompoundref refid="structHeaderPage" prot="public" virt="non-virtual">HeaderPage</derivedcompoundref>
+    <includes local="no">page.h</includes>
+    <briefdescription>
+<para>struct for abstract page. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Actually this struct is empty for equalizing the size of all inherited pages. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>AllocatedFullPage</label>
+        <link refid="structAllocatedFullPage"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>AllocatedPage</label>
+        <link refid="structAllocatedPage"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>FreePage</label>
+        <link refid="structFreePage"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>FullPage</label>
+        <link refid="structFullPage"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>HeaderPage</label>
+        <link refid="structHeaderPage"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>InternalPage</label>
+        <link refid="structInternalPage"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>LeafPage</label>
+        <link refid="structLeafPage"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Page</label>
+        <link refid="structPage"/>
+      </node>
+    </inheritancegraph>
+    <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="25" column="1" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="25" bodyend="25"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

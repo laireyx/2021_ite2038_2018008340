@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="errors_8h" kind="file" language="C++">
+    <compoundname>errors.h</compoundname>
+    <includes local="no">errno.h</includes>
+    <includes local="no">cstdio</includes>
+    <includes local="no">cstdlib</includes>
+    <includes local="no">cstring</includes>
+    <includes local="no">string</includes>
+    <includedby refid="buffer_8cc" local="no">/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/buffer.cc</includedby>
+    <includedby refid="file_8cc" local="no">/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/file.cc</includedby>
+    <includedby refid="tree_8cc" local="no">/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/src/tree.cc</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/errors.h</label>
+        <link refid="errors_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>cstdio</label>
+      </node>
+      <node id="4">
+        <label>cstdlib</label>
+      </node>
+      <node id="5">
+        <label>cstring</label>
+      </node>
+      <node id="2">
+        <label>errno.h</label>
+      </node>
+      <node id="6">
+        <label>string</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="classerror_1_1Exception" prot="public">error::Exception</innerclass>
+    <innernamespace refid="namespaceerror">error</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;errno.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdio&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdlib&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstring&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15" refid="namespaceerror" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespaceerror" kindref="compound">error</ref><sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18" refid="namespaceerror_1a07ce247c58709ae5dcc1ed9597926fa9" refkind="member"><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="namespaceerror_1a07ce247c58709ae5dcc1ed9597926fa9" kindref="member">SILENT</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>0x0001;</highlight></codeline>
+<codeline lineno="20" refid="namespaceerror_1ab695e2ac067c537c81e892cb6f3f3eba" refkind="member"><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="namespaceerror_1ab695e2ac067c537c81e892cb6f3f3eba" kindref="member">PRINT_ERROR</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>0x0002;</highlight></codeline>
+<codeline lineno="22" refid="namespaceerror_1a06b5fe5301a1fab2ad790e609caeebd5" refkind="member"><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="namespaceerror_1a06b5fe5301a1fab2ad790e609caeebd5" kindref="member">THROW_EXCEPTION</ref><sp/><sp/><sp/>=<sp/>0x0004;</highlight></codeline>
+<codeline lineno="24" refid="namespaceerror_1ab7891d96d9ef415122d6bb4c1b9df417" refkind="member"><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="namespaceerror_1ab7891d96d9ef415122d6bb4c1b9df417" kindref="member">EXIT_PROGRAM</ref><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>0x0008;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26" refid="classerror_1_1Exception" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classerror_1_1Exception" kindref="compound">Exception</ref><sp/>{</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="29" refid="classerror_1_1Exception_1a3e48bac71ae700781d4b15bcfa04ca0f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/><ref refid="classerror_1_1Exception_1a3e48bac71ae700781d4b15bcfa04ca0f" kindref="member">error_message</ref>;</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="32" refid="classerror_1_1Exception_1a97240bbb61582181e1feb1f97d689e26" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classerror_1_1Exception_1a97240bbb61582181e1feb1f97d689e26" kindref="member">Exception</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classerror_1_1Exception" kindref="compound">Exception</ref>&amp;<sp/>rhs);</highlight></codeline>
+<codeline lineno="34" refid="classerror_1_1Exception_1ad1c697bcf029ca57c3bba6e7f659a8e6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classerror_1_1Exception" kindref="compound">Exception</ref>&amp;<sp/><ref refid="classerror_1_1Exception_1ad1c697bcf029ca57c3bba6e7f659a8e6" kindref="member">operator=</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classerror_1_1Exception" kindref="compound">Exception</ref>&amp;);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="36" refid="classerror_1_1Exception_1a41b9e62f75deeaf8e8f2de7dd5f202d8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classerror_1_1Exception_1a41b9e62f75deeaf8e8f2de7dd5f202d8" kindref="member">Exception</ref>(std::string<sp/>message)<sp/>:<sp/><ref refid="classerror_1_1Exception_1a3e48bac71ae700781d4b15bcfa04ca0f" kindref="member">error_message</ref>(message)<sp/>{<sp/>}</highlight></codeline>
+<codeline lineno="37" refid="classerror_1_1Exception_1a1350d8f9d039facfd991b6782387eae5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classerror_1_1Exception_1a1350d8f9d039facfd991b6782387eae5" kindref="member">~Exception</ref>()<sp/>{<sp/>}</highlight></codeline>
+<codeline lineno="38"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="50" refid="namespaceerror_1a5f1d0a19754385c3275cde0d1c4b058d" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="namespaceerror_1a5f1d0a19754385c3275cde0d1c4b058d" kindref="member">print</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>exit_flag<sp/>=<sp/><ref refid="namespaceerror_1ab695e2ac067c537c81e892cb6f3f3eba" kindref="member">PRINT_ERROR</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(exit_flag<sp/>&amp;<sp/><ref refid="namespaceerror_1a07ce247c58709ae5dcc1ed9597926fa9" kindref="member">SILENT</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-errno;</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(exit_flag<sp/>&amp;<sp/><ref refid="namespaceerror_1ab695e2ac067c537c81e892cb6f3f3eba" kindref="member">PRINT_ERROR</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>perror(</highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(exit_flag<sp/>&amp;<sp/><ref refid="namespaceerror_1a06b5fe5301a1fab2ad790e609caeebd5" kindref="member">THROW_EXCEPTION</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">throw</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classerror_1_1Exception" kindref="compound">Exception</ref>(</highlight><highlight class="stringliteral">&quot;Error&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(exit_flag<sp/>&amp;<sp/><ref refid="namespaceerror_1ab7891d96d9ef415122d6bb4c1b9df417" kindref="member">EXIT_PROGRAM</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>exit(1);</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-errno;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77" refid="namespaceerror_1a5785a46a2d7171d2954c349f640eb7eb" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespaceerror_1a5785a46a2d7171d2954c349f640eb7eb" kindref="member">ok</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>assertion,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>exit_flag<sp/>=<sp/><ref refid="namespaceerror_1a06b5fe5301a1fab2ad790e609caeebd5" kindref="member">THROW_EXCEPTION</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!assertion)<sp/>{</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(exit_flag<sp/>&amp;<sp/><ref refid="namespaceerror_1a07ce247c58709ae5dcc1ed9597926fa9" kindref="member">SILENT</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(exit_flag<sp/>&amp;<sp/><ref refid="namespaceerror_1ab695e2ac067c537c81e892cb6f3f3eba" kindref="member">PRINT_ERROR</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespaceerror_1a5f1d0a19754385c3275cde0d1c4b058d" kindref="member">print</ref>(exit_flag);</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(exit_flag<sp/>&amp;<sp/><ref refid="namespaceerror_1a06b5fe5301a1fab2ad790e609caeebd5" kindref="member">THROW_EXCEPTION</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">throw</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classerror_1_1Exception" kindref="compound">Exception</ref>(</highlight><highlight class="stringliteral">&quot;Error&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(exit_flag<sp/>&amp;<sp/><ref refid="namespaceerror_1ab7891d96d9ef415122d6bb4c1b9df417" kindref="member">EXIT_PROGRAM</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>exit(1);</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal">}<sp/><sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>error</highlight></codeline>
+    </programlisting>
+    <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/errors.h"/>
+  </compounddef>
+</doxygen>

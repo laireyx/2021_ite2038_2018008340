@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="structFreePage" kind="class" language="C++" prot="public">
+    <compoundname>FreePage</compoundname>
+    <basecompoundref refid="structPage" prot="public" virt="non-virtual">Page</basecompoundref>
+    <includes local="no">page.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structFreePage_1a20ca90083caaf104b7e45d0a7a863ff3" prot="public" static="no" mutable="no">
+        <type>pagenum_t</type>
+        <definition>pagenum_t FreePage::next_free_idx</definition>
+        <argsstring></argsstring>
+        <name>next_free_idx</name>
+        <briefdescription>
+<para>Index of the very next free page. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="58" column="15" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structFreePage_1aa6eeb336f5f0369e27b6b206ba27985b" prot="public" static="no" mutable="no">
+        <type>uint8_t</type>
+        <definition>uint8_t FreePage::reserved[PAGE_SIZE - 8]</definition>
+        <argsstring>[PAGE_SIZE - 8]</argsstring>
+        <name>reserved</name>
+        <briefdescription>
+<para>Reserved area for next project. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="61" column="13" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>struct for the free page. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>FreePage</label>
+        <link refid="structFreePage"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Page</label>
+        <link refid="structPage"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>FreePage</label>
+        <link refid="structFreePage"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Page</label>
+        <link refid="structPage"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" line="56" column="1" bodyfile="/home/eliot/DBMS/2021_ite2038_2018008340/project3/db_project/db/include/page.h" bodystart="56" bodyend="62"/>
+    <listofallmembers>
+      <member refid="structFreePage_1a20ca90083caaf104b7e45d0a7a863ff3" prot="public" virt="non-virtual"><scope>FreePage</scope><name>next_free_idx</name></member>
+      <member refid="structFreePage_1aa6eeb336f5f0369e27b6b206ba27985b" prot="public" virt="non-virtual"><scope>FreePage</scope><name>reserved</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
