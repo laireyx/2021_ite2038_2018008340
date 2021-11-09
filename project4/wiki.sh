@@ -12,7 +12,7 @@ cp -r manual-wiki/* ../../../2021_ite2038_2018008340.wiki/
 
 node wiki-gen.js
 
-cd ../../../2021_ite2038_2018008340.wiki/
+cd ../../2021_ite2038_2018008340.wiki/
 
 git add .
 git commit -m "Wiki update"
