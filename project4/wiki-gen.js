@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const startPath = '../../../2021_ite2038_2018008340.wiki';
+const startPath = '../../2021_ite2038_2018008340.wiki';
 
 const fileNameMapping = {};
 const linkMapping = {};
