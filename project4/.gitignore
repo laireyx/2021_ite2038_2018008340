@@ -2,6 +2,7 @@ test_lock_table
 *.swp
 *.o
 *.o.d
+doxygen/
 build/
 bin/
 lib/
