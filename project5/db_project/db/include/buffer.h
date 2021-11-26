@@ -7,18 +7,6 @@
 #include <page.h>
 #include <types.h>
 
-namespace std {
-template <>
-struct hash<PageLocation> {
-    size_t operator()(const PageLocation& location) const {
-        size_t hash_value = 17;
-        hash_value = hash_value * 31 + std::hash<tableid_t>()(location.first);
-        hash_value = hash_value * 31 + std::hash<tableid_t>()(location.second);
-        return hash_value;
-    }
-};
-}  // namespace std
-
 typedef struct BufferBlock {
     /// @brief buffered page.
     fullpage_t page;

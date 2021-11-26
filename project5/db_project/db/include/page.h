@@ -93,9 +93,12 @@ struct PageSlot {
     /// @brief The page key.
     recordkey_t key;
     /// @brief The value size(in bytes).
-    uint16_t value_size;
+    valsize_t value_size;
     /// @brief The value offset(in bytes).
     uint16_t value_offset;
+    /// @brief Transaction id which is implicitly locked this record.
+    /// @todo this project.
+    // trxid_t trx_id;
 } __attribute__((packed));
 
 /**
@@ -178,7 +181,7 @@ PageSlot* get_page_slot(LeafPage* page);
  * null.
  */
 void get_leaf_value(LeafPage* page, int value_idx, char* value,
-                    uint16_t* value_size = nullptr);
+                    valsize_t* value_size = nullptr);
 /**
  * @brief Get leaf value.
  * @details Get a leaf value using exact offset and size. Usually it does not
@@ -190,7 +193,7 @@ void get_leaf_value(LeafPage* page, int value_idx, char* value,
  * @param value_size    value size.
  * @param[out] value    value will be set into this pointer if not null.
  */
-void get_leaf_value(LeafPage* page, uint16_t value_offset, uint16_t value_size,
+void get_leaf_value(LeafPage* page, uint16_t value_offset, valsize_t value_size,
                     char* value);
 /**
  * @brief Check if given page has enough space for given value size.
@@ -202,7 +205,7 @@ void get_leaf_value(LeafPage* page, uint16_t value_offset, uint16_t value_size,
  * @returns             <code>true</code> if space is enough, <code>false</code>
  * otherwise.
  */
-bool has_enough_space(LeafPage* page, uint16_t value_size);
+bool has_enough_space(LeafPage* page, valsize_t value_size);
 /**
  * @brief Get free space amount.
  * @details In leaf page,
@@ -236,7 +239,7 @@ pagenum_t* get_sibling_idx(LeafPage* page);
  * appending is successful, <code>false</code> otherwise.
  */
 bool add_leaf_value(LeafPage* page, recordkey_t key, const char* value,
-                    uint16_t value_size);
+                    valsize_t value_size);
 /**
  * @brief Remove a record and compact reserved area in the leaf page.
  *
@@ -246,6 +249,20 @@ bool add_leaf_value(LeafPage* page, recordkey_t key, const char* value,
  * and deleted successfully, <code>false</code> otherwise.
  */
 bool remove_leaf_value(LeafPage* page, recordkey_t key);
+
+/**
+ * @brief Update the record value in the page and returns old record value size.
+ *
+ * @param page              record page.
+ * @param key               record key.
+ * @param[out] old_val_size old record value size.
+ * @param new_value         new record value.
+ * @param new_val_size      new record value size.
+ * @return <code>true</code> if update successfully, <code>false</code>
+ * otherwise.
+ */
+bool set_leaf_value(LeafPage* page, recordkey_t key, valsize_t* old_val_size,
+                    const char* new_value, valsize_t new_val_size);
 
 /**
  * @brief Add a page branch into the last position of the internal page.

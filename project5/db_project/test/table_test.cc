@@ -56,7 +56,7 @@ TEST_F(BasicTableTest, RandomInsertTest) {
     static uint8_t temp_value[test_count][128] = {};
 
     for (int i = 0; i < test_count; i++) {
-        uint16_t value_size;
+        valsize_t value_size;
         uint8_t return_value[128] = {};
 
         temp_size[test_order[i]] = 50 + rand() % 63;
@@ -71,7 +71,7 @@ TEST_F(BasicTableTest, RandomInsertTest) {
     }
 
     for (int i = 0; i < test_count; i++) {
-        uint16_t value_size;
+        valsize_t value_size;
         uint8_t return_value[128] = {};
 
         ASSERT_FALSE(db_find(table_id, test_order[i],
@@ -109,7 +109,7 @@ TEST_F(BasicTableTest, RandomDeletionTest) {
     }
 
     for (int i = 0; i < test_count; i++) {
-        uint16_t value_size;
+        valsize_t value_size;
         uint8_t return_value[128] = {};
 
         ASSERT_EQ(db_delete(table_id, test_order[i]), 0);

@@ -8,6 +8,7 @@ set(DB_SOURCES
   ${DB_SOURCE_DIR}/tree.cc
   ${DB_SOURCE_DIR}/buffer.cc
   ${DB_SOURCE_DIR}/lock.cc
+  ${DB_SOURCE_DIR}/transaction.cc
   ${DB_SOURCE_DIR}/db.cc
   )
 
@@ -23,6 +24,7 @@ set(DB_HEADERS
   ${DB_HEADER_DIR}/tree.h
   ${DB_HEADER_DIR}/buffer.h
   ${DB_HEADER_DIR}/lock.h
+  ${DB_HEADER_DIR}/transaction.h
   ${DB_HEADER_DIR}/db.h
   )
 

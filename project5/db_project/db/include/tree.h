@@ -37,7 +37,7 @@ pagenum_t make_node(tableid_t table_id, pagenum_t parent_page_idx = 0);
  * @returns             root page index.
  */
 pagenum_t create_tree(tableid_t table_id, recordkey_t key, const char* value,
-                      uint16_t value_size);
+                      valsize_t value_size);
 
 /**
  * @brief Find a leaf node which contains given key.
@@ -58,11 +58,12 @@ pagenum_t find_leaf(tableid_t table_id, recordkey_t key);
  * for it.
  * @param[out] value_size   If the record is found successful, then this value
  * is set to record size.
+ * @param trx_id            transaction id.
  * @return                  <code>true</code> if found successful.
  * <code>false</code> otherwise.
  */
 bool find_by_key(tableid_t table_id, recordkey_t key, char* value = nullptr,
-                 uint16_t* value_size = nullptr);
+                 valsize_t* value_size = nullptr, trxid_t trx_id = 0);
 
 /**
  * @brief Insert a <code>(key, right_page_idx)</code> tuple in parent page.
@@ -117,7 +118,7 @@ pagenum_t insert_into_parent(tableid_t table_id, pagenum_t left_page_idx,
 pagenum_t insert_into_leaf_after_splitting(tableid_t table_id,
                                            pagenum_t leaf_page_idx,
                                            recordkey_t key, const char* value,
-                                           uint16_t value_size);
+                                           valsize_t value_size);
 
 /**
  * @brief Find appropriate leaf page and insert a record into it.
@@ -129,7 +130,7 @@ pagenum_t insert_into_leaf_after_splitting(tableid_t table_id,
  * @returns                 root page number.
  */
 pagenum_t insert_node(tableid_t table_id, recordkey_t key, const char* value,
-                      uint16_t value_size);
+                      valsize_t value_size);
 
 /**
  * @brief Adjust root page.
@@ -195,4 +196,19 @@ pagenum_t delete_leaf_key(tableid_t table_id, pagenum_t leaf_page_idx,
  * @returns                 root page number.
  */
 pagenum_t delete_node(tableid_t table_id, recordkey_t key);
+
+/**
+ * @brief Update a record value.
+ *
+ * @param       table_id        table id.
+ * @param       key             record key.
+ * @param       value           new record value.
+ * @param       new_val_size    new record value size.
+ * @param[out]  old_val_size    old record value size.
+ * @param       trx_id          transaction id.
+ * @return                      updated record page number.
+ */
+pagenum_t update_node(tableid_t table_id, recordkey_t key, const char* value,
+                      valsize_t new_val_size, valsize_t* old_val_size,
+                      trxid_t trx_id);
 /** @}*/

@@ -11,7 +11,7 @@ PageSlot* get_page_slot(LeafPage* page) {
 }
 
 void get_leaf_value(LeafPage* page, int value_idx, char* value,
-                    uint16_t* value_size) {
+                    valsize_t* value_size) {
     PageSlot* leaf_slot = get_page_slot(page);
 
     if (value_size) *value_size = leaf_slot[value_idx].value_size;
@@ -20,14 +20,14 @@ void get_leaf_value(LeafPage* page, int value_idx, char* value,
                    leaf_slot[value_idx].value_size, value);
 }
 
-void get_leaf_value(LeafPage* page, uint16_t value_offset, uint16_t value_size,
+void get_leaf_value(LeafPage* page, uint16_t value_offset, valsize_t value_size,
                     char* value) {
     if (value)
         memcpy(value, reinterpret_cast<uint8_t*>(page) + value_offset,
                value_size);
 }
 
-bool has_enough_space(LeafPage* page, uint16_t value_size) {
+bool has_enough_space(LeafPage* page, valsize_t value_size) {
     uint64_t free_space_amount = page->page_header.reserved_footer.footer_1;
     return free_space_amount >= value_size + sizeof(PageSlot);
 }
@@ -41,7 +41,7 @@ uint64_t* get_sibling_idx(LeafPage* page) {
 }
 
 bool add_leaf_value(LeafPage* page, recordkey_t key, const char* value,
-                    uint16_t value_size) {
+                    valsize_t value_size) {
     if (!has_enough_space(page, value_size)) {
         return false;
     }
@@ -91,6 +91,27 @@ bool remove_leaf_value(LeafPage* page, recordkey_t key) {
             }
             page->page_header.key_num--;
             *get_free_space(page) += offset_shift + sizeof(PageSlot);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool set_leaf_value(LeafPage* page, recordkey_t key, valsize_t* old_val_size,
+                    const char* new_value, valsize_t new_val_size) {
+    PageSlot* leaf_slot = get_page_slot(page);
+
+    uint16_t start_offset;
+    uint16_t offset_shift;
+
+    for (int i = 0; i < page->page_header.key_num; i++) {
+        if (leaf_slot[i].key == key) {
+            /// @todo update at here
+            *old_val_size = leaf_slot[i].value_size;
+            leaf_slot[i].value_size = new_val_size;
+            memcpy(reinterpret_cast<uint8_t*>(page) + leaf_slot[i].value_offset,
+                   new_value, new_val_size);
             return true;
         }
     }

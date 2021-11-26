@@ -5,6 +5,7 @@
 #include <buffer.h>
 #include <errors.h>
 #include <page.h>
+#include <transaction.h>
 #include <tree.h>
 
 #include <algorithm>
@@ -43,7 +44,7 @@ pagenum_t make_leaf(tableid_t table_id, pagenum_t parent_page_idx) {
 }
 
 pagenum_t create_tree(tableid_t table_id, recordkey_t key, const char* value,
-                      uint16_t value_size) {
+                      valsize_t value_size) {
     headerpage_t header_page;
 
     leafpage_t leaf_page;
@@ -95,12 +96,15 @@ pagenum_t find_leaf(tableid_t table_id, recordkey_t key) {
 }
 
 bool find_by_key(tableid_t table_id, recordkey_t key, char* value,
-                 uint16_t* value_size) {
+                 valsize_t* value_size, trxid_t trx_id) {
     int i = 0;
     leafpage_t leaf_page;
     pagenum_t leaf_page_idx = find_leaf(table_id, key);
 
     if (!leaf_page_idx) return false;
+    if (trx_id &&
+        !trx_helper::lock(table_id, leaf_page_idx, key, trx_id, SHARED))
+        return false;
     buffered_read_page(table_id, leaf_page_idx, &leaf_page, false);
 
     PageSlot* leaf_slot = page_helper::get_page_slot(&leaf_page);
@@ -266,7 +270,7 @@ pagenum_t insert_into_parent(tableid_t table_id, pagenum_t left_page_idx,
 pagenum_t insert_into_leaf_after_splitting(tableid_t table_id,
                                            pagenum_t leaf_page_idx,
                                            recordkey_t key, const char* value,
-                                           uint16_t value_size) {
+                                           valsize_t value_size) {
     recordkey_t new_key;
     leafpage_t leaf_page, new_leaf_page;
     pagenum_t new_leaf_page_idx;
@@ -344,7 +348,7 @@ pagenum_t insert_into_leaf_after_splitting(tableid_t table_id,
 }
 
 pagenum_t insert_node(tableid_t table_id, recordkey_t key, const char* value,
-                      uint16_t value_size) {
+                      valsize_t value_size) {
     headerpage_t header_page;
 
     leafpage_t leaf_page;
@@ -870,5 +874,25 @@ pagenum_t delete_node(tableid_t table_id, recordkey_t key) {
     }
 
     return 0;
+}
+
+pagenum_t update_node(tableid_t table_id, recordkey_t key, const char* value,
+                      valsize_t new_val_size, valsize_t* old_val_size,
+                      trxid_t trx_id) {
+    pagenum_t leaf_page_idx = find_leaf(table_id, key);
+    leafpage_t leaf_page;
+
+    if (!trx_helper::lock(table_id, leaf_page_idx, key, trx_id, EXCLUSIVE)) {
+        return -1;
+    }
+
+    buffered_read_page(table_id, leaf_page_idx, &leaf_page);
+    if (page_helper::set_leaf_value(&leaf_page, key, old_val_size, value,
+                                    new_val_size)) {
+        buffered_write_page(table_id, leaf_page_idx, &leaf_page);
+        return 0;
+    }
+
+    return -1;
 }
 /** @}*/
