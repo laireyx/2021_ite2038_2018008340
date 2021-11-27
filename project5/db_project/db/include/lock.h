@@ -29,6 +29,8 @@ struct LockList {
 struct Lock {
     /// @brief Lock mode.
     LockMode lock_mode;
+    /// @brief <code>true</code> if acquired, <code>false</code> if sleeping.
+    bool acquired;
 
     /// @brief Conditional variable for this lock.
     pthread_cond_t* cond;
@@ -38,8 +40,11 @@ struct Lock {
 
     /// @brief Transaction id.
     trxid_t trx_id;
+    /// @brief Record key.
+    recordkey_t key;
     /// @brief Lock mask.
-    lockmask_t mask;
+    /// @todo .
+    /// lockmask_t mask;
 
     /// @brief Previous waiting lock.
     Lock* prev;

@@ -58,13 +58,27 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
 
     auto lock_list = lock_instances[lock_location];
 
+    Lock* existing_lock = lock_list->head;
+
+    while(existing_lock) {
+        if(existing_lock->key == key) {
+            if(existing_lock->trx_id != trx_id) {
+                if(existing_lock->lock_mode == EXCLUSIVE) {
+                    pthread_mutex_unlock(lock_manager_mutex);
+                    return nullptr;
+                }
+            }
+        }
+        existing_lock = existing_lock->next;
+    }
+
     lock_instance->prev = lock_list->tail;
     lock_instance->next = nullptr;
     lock_instance->next_trx = nullptr;
     lock_list->tail->next = lock_instance;
     lock_list->tail = lock_instance;
 
-    pthread_cond_wait(lock_instance->cond, lock_manager_mutex);
+    //pthread_cond_wait(lock_instance->cond, lock_manager_mutex);
     pthread_mutex_unlock(lock_manager_mutex);
     return lock_instance;
 };

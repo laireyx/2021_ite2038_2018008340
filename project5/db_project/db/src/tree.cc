@@ -5,7 +5,7 @@
 #include <buffer.h>
 #include <errors.h>
 #include <page.h>
-#include <transaction.h>
+#include <lock.h>
 #include <tree.h>
 
 #include <algorithm>
@@ -103,7 +103,7 @@ bool find_by_key(tableid_t table_id, recordkey_t key, char* value,
 
     if (!leaf_page_idx) return false;
     if (trx_id &&
-        !trx_helper::lock(table_id, leaf_page_idx, key, trx_id, SHARED))
+        !lock_acquire(table_id, leaf_page_idx, key, trx_id, SHARED))
         return false;
     buffered_read_page(table_id, leaf_page_idx, &leaf_page, false);
 
@@ -882,7 +882,7 @@ pagenum_t update_node(tableid_t table_id, recordkey_t key, const char* value,
     pagenum_t leaf_page_idx = find_leaf(table_id, key);
     leafpage_t leaf_page;
 
-    if (!trx_helper::lock(table_id, leaf_page_idx, key, trx_id, EXCLUSIVE)) {
+    if (!lock_acquire(table_id, leaf_page_idx, key, trx_id, EXCLUSIVE)) {
         return -1;
     }
 

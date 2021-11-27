@@ -52,19 +52,6 @@ typedef struct TransactionLog trxlog_t;
 
 namespace trx_helper {
 /**
- * @brief Acquire a lock corresponding to given table id and key.
- * @details It is a wrapper of <code>lock_acquire</code> in lock.cc.
- *
- * @param table_id  table id.
- * @param page_id   page id.
- * @param key       row key.
- * @param trx_id    transaction id.
- * @param lock_mode lock mode.
- * @return non-null lock instance if success, <code>nullptr</code> otherwise.
- */
-lock_t* lock(int table_id, pagenum_t page_id, recordkey_t key, trxid_t trx_id,
-             int lock_mode);
-/**
  * @brief Verify if transaction is on good state.
  * @details check if the transaction is already finished(by commit or abort).
  *

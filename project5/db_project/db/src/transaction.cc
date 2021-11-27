@@ -19,16 +19,6 @@ std::unordered_map<trxlogid_t, TransactionLog> trx_log;
 
 namespace trx_helper {
 
-lock_t* lock(int table_id, pagenum_t page_id, recordkey_t key, trxid_t trx_id,
-             int lock_mode) {
-    TransactionInstance& instance = transaction_instances[trx_id];
-
-    // Check if transaction already has a lock
-
-    // Check deadlock
-    return ::lock_acquire(table_id, page_id, key, trx_id, lock_mode);
-}
-
 bool verify_trx(const TransactionInstance& instance) {
     return !instance.is_finished;
 }

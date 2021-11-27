@@ -5,10 +5,15 @@
 #include <buffer.h>
 #include <db.h>
 #include <tree.h>
+#include <lock.h>
 
 #include <cstring>
 
-int init_db(int num_buf) { return init_buffer(num_buf); }
+int init_db(int num_buf) {
+    if(init_lock_table() != 0) return -1;
+    if(init_buffer(num_buf) != 0) return -1;
+    return 0;
+}
 
 tableid_t open_table(char* pathname) {
     return buffered_open_table_file(pathname);
