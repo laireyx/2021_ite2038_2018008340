@@ -42,6 +42,9 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
     lock_instance->lock_mode = static_cast<LockMode>(lock_mode);
     lock_instance->trx_id = trx_id;
 
+    /// @todo remove it.
+    return lock_instance;
+
     if (lock_instances.find(lock_location) == lock_instances.end()) {
         LockList* new_lock_list = new LockList;
         new_lock_list->lock_location = lock_location;
