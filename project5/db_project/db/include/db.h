@@ -5,6 +5,7 @@
 #pragma once
 
 #include <types.h>
+#include <const.h>
 
 /**
  * @brief   Initialize database management system.
@@ -12,7 +13,7 @@
  * @param num_buf   Number of buffered pages.
  * @returns         If success, return 0. Otherwise return non-zero value.
  */
-int init_db(int num_buf = 1024);
+int init_db(int num_buf = DEFAULT_BUFFER_SIZE);
 
 /**
  * @brief   Open existing data file using ‘pathname’ or create one if not

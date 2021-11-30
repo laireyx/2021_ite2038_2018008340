@@ -6,17 +6,7 @@
 
 #include <page.h>
 #include <types.h>
-
-/// @brief      Initial size(in bytes) of newly created table file.
-/// @details    It means 10MiB.
-constexpr int INITIAL_TABLE_FILE_SIZE = 10 * 1024 * 1024;
-
-/// @brief      Maximum number of table instances count.
-constexpr int MAX_TABLE_INSTANCE = 32;
-
-/// @brief      Initial number of page count in newly created table file.
-/// @details    Its value is 2560.
-constexpr int INITIAL_TABLE_CAPS = INITIAL_TABLE_FILE_SIZE / MAX_TABLE_INSTANCE;
+#include <const.h>
 
 /**
  * @class   TableInstance

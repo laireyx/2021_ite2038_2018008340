@@ -21,6 +21,7 @@ set(DB_HEADERS
   ${DB_HEADER_DIR}/errors.h
   ${DB_HEADER_DIR}/page.h
   ${DB_HEADER_DIR}/types.h
+  ${DB_HEADER_DIR}/const.h
   ${DB_HEADER_DIR}/tree.h
   ${DB_HEADER_DIR}/buffer.h
   ${DB_HEADER_DIR}/lock.h

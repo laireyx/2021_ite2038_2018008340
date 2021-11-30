@@ -30,9 +30,11 @@ if(USE_GOOGLE_TEST)
   add_subdirectory(test)
 endif()
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
 add_executable(${CMAKE_PROJECT_NAME} main.cc)
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
+target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC ${EXTRA_LIBS} Threads::Threads)
 
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
   "${PROJECT_BINARY_DIR}"

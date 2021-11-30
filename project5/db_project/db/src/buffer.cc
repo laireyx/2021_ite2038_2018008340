@@ -6,6 +6,7 @@
 #include <errors.h>
 #include <file.h>
 
+#include <pthread.h>
 #include <cstring>
 #include <iostream>
 #include <new>
@@ -22,6 +23,8 @@ int buffer_tail_idx = -1;
 int buffer_size = 0;
 
 std::unordered_map<PageLocation, int> buffer_index;
+
+pthread_mutex_t* buffer_manager_mutex[MAX_TABLE_INSTANCE + 1];
 
 namespace buffer_helper {
 BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,

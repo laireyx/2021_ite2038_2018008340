@@ -137,6 +137,13 @@ trxlogid_t log_update(tableid_t table_id, recordkey_t key,
 int init_trx();
 
 /**
+ * @brief Cleanup a transaction manager.
+ * 
+ * @return <code>0</code> if success, negative value otherwise.
+ */
+int cleanup_trx();
+
+/**
  * @brief Begin a transaction.
  *
  * @return positive transaction id if success. <code>0</code> or negative

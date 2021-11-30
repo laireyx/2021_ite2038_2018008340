@@ -6,9 +6,6 @@
 
 #include <types.h>
 
-constexpr int REDISTRIBUTE_THRESHOLD = 2500;
-constexpr int MAX_VALUE_SIZE = 112;
-
 /**
  * @brief Allocate and make a leaf page.
  *

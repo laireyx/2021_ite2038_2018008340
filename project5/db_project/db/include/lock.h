@@ -54,8 +54,6 @@ struct Lock {
     Lock* prev;
     /// @brief Next waiting lock.
     Lock* next;
-    /// @brief Previous transaction lock.
-    Lock* prev_trx;
     /// @brief Next transaction lock.
     Lock* next_trx;
 };
@@ -112,12 +110,18 @@ pagenum_t get_page_num_from_lock(const Lock* lock);
 /* APIs for lock table */
 
 /**
- * @brief
- * @details
+ * @brief Initialize lock table.
  *
- * @return 0 if success, nonzero otherwise.
+ * @return <code>0</code> if success, negative value otherwise.
  */
 int init_lock_table();
+
+/**
+ * @brief Cleanup lock table.
+ * 
+ * @return <code>0</code> if success, negative value otherwise.
+ */
+int cleanup_lock_table();
 
 /**
  * @brief Acquire a lock corresponding to given table id and key.

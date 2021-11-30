@@ -4,17 +4,9 @@
  */
 #pragma once
 #include <types.h>
+#include <const.h>
 
 #include <cstdint>
-
-/// @brief  Size of each page(in bytes).
-constexpr int PAGE_SIZE = 4096;
-
-/// @brief  Size of page header(in bytes).
-constexpr int PAGE_HEADER_SIZE = 128;
-
-/// @brief  Maximum number of page branches.
-constexpr int MAX_PAGE_BRANCHES = 248;
 
 /**
  * @class   Page

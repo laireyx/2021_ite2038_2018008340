@@ -8,9 +8,10 @@
 #include <pthread.h>
 #include <cstring>
 #include <map>
+#include <new>
 
 /// @brief Transaction manager mutex.
-pthread_mutex_t* trx_manager_mutex;
+pthread_mutex_t* trx_manager_mutex = nullptr;
 
 /// @brief Accumulated trx id.
 trxid_t accumulated_trx_id = 0;
@@ -45,8 +46,7 @@ lock_t* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
         instance.lock_head = lock;
         instance.lock_tail = lock;
     } else {
-        instance.lock_tail->next = lock;
-        lock->prev = instance.lock_tail;
+        instance.lock_tail->next_trx = lock;
         instance.lock_tail = lock;
     }
 
@@ -71,17 +71,15 @@ trxid_t new_trx_instance() {
 void release_trx_locks(TransactionInstance& instance) {
     lock_t* lock_ptr = instance.lock_head;
     while (lock_ptr != nullptr) {
-        lock_t* next_lock = lock_ptr->next;
+        lock_t* next_lock = lock_ptr->next_trx;
         lock_release(lock_ptr);
         lock_ptr = next_lock;
     }
 }
 
 void trx_rollback(trxid_t trx_id) {
-    pthread_mutex_lock(trx_manager_mutex);
     TransactionInstance& instance = transaction_instances[trx_id];
     if (!verify_trx(instance)) {
-        pthread_mutex_unlock(trx_manager_mutex);
         return;
     }
 
@@ -91,7 +89,6 @@ void trx_rollback(trxid_t trx_id) {
         update_node(log.table_id, log.key, log.old_value, log.old_val_size,
                     nullptr, trx_id);
     }
-    pthread_mutex_unlock(trx_manager_mutex);
 }
 
 void flush_trx_log() {
@@ -137,7 +134,27 @@ trxlogid_t log_update(tableid_t table_id, recordkey_t key,
 }  // namespace trx_helper
 
 int init_trx() {
-    trx_manager_mutex = new pthread_mutex_t;
+    try {
+        if(trx_manager_mutex != nullptr) {
+            return -1;
+        }
+        trx_manager_mutex = new pthread_mutex_t;
+        if(pthread_mutex_init(trx_manager_mutex, nullptr)) {
+            return -1;
+        }
+        transaction_instances.clear();
+    } catch (std::bad_alloc exception) {
+        return -1;
+    }
+    return 0;
+}
+
+int cleanup_trx() {
+    if(trx_manager_mutex) {
+        pthread_mutex_destroy(trx_manager_mutex);
+        delete trx_manager_mutex;
+        trx_manager_mutex = nullptr;
+    }
     return 0;
 }
 

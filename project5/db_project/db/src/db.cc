@@ -57,6 +57,8 @@ int db_delete(tableid_t table_id, recordkey_t key) {
 
 int shutdown_db() {
     shutdown_buffer();
+    cleanup_trx();
+    cleanup_lock_table();
     return 0;
 }
 /** @}*/

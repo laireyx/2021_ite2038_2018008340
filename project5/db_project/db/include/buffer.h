@@ -7,11 +7,17 @@
 #include <page.h>
 #include <types.h>
 
+#include <pthread.h>
+
 typedef struct BufferBlock {
     /// @brief buffered page.
     fullpage_t page;
     /// @brief page location.
     PageLocation page_location;
+
+    /// @brief page latch.
+    pthread_cond_t cond;
+
     /// @brief <code>true</code> if this buffer has been modified,
     /// <code>false</code> otherwise.
     bool is_dirty;
