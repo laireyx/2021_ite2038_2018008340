@@ -6,11 +6,13 @@
 #include <db.h>
 #include <tree.h>
 #include <lock.h>
+#include <transaction.h>
 
 #include <cstring>
 
 int init_db(int num_buf) {
     if(init_lock_table() != 0) return -1;
+    if(init_trx() != 0) return -1;
     if(init_buffer(num_buf) != 0) return -1;
     return 0;
 }

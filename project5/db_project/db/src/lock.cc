@@ -6,11 +6,15 @@
 
 #include <map>
 #include <new>
+#include <iostream>
 
+/// @brief Lock manager mutex.
 pthread_mutex_t* lock_manager_mutex;
 
 /** @todo change it to MAX_TABLE_INSTANCE */
-std::map<PageLocation, LockList*> lock_instances;
+std::unordered_map<PageLocation, LockList*> lock_instances;
+/// @brief Transaction waiting list.
+std::unordered_map<trxid_t, trxid_t> trx_wait;
 
 namespace lock_helper {
 tableid_t get_table_id_from_lock(const Lock* lock) {
@@ -42,9 +46,6 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
     lock_instance->lock_mode = static_cast<LockMode>(lock_mode);
     lock_instance->trx_id = trx_id;
 
-    /// @todo remove it.
-    return lock_instance;
-
     if (lock_instances.find(lock_location) == lock_instances.end()) {
         LockList* new_lock_list = new LockList;
         new_lock_list->lock_location = lock_location;
@@ -63,16 +64,33 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
 
     Lock* existing_lock = lock_list->head;
 
+    trx_wait[trx_id] = 0;
     while(existing_lock) {
         if(existing_lock->key == key) {
             if(existing_lock->trx_id != trx_id) {
-                if(existing_lock->lock_mode == EXCLUSIVE) {
+                if(existing_lock->lock_mode == EXCLUSIVE || lock_mode == EXCLUSIVE) {
+                    trx_wait[trx_id] = existing_lock->trx_id;
+                }
+            } else {
+                if(existing_lock->lock_mode == EXCLUSIVE || lock_mode == SHARED) {
+                    trx_wait.erase(trx_id);
                     pthread_mutex_unlock(lock_manager_mutex);
-                    return nullptr;
+                    return existing_lock;
                 }
             }
         }
         existing_lock = existing_lock->next;
+    }
+
+    trxid_t waiting_ancestor = trx_wait[trx_id];
+    while(waiting_ancestor) {
+        if(trx_wait.find(waiting_ancestor) == trx_wait.end()) break;
+        if(waiting_ancestor == trx_id) {
+            // Deadlock found.
+            pthread_mutex_unlock(lock_manager_mutex);
+            return nullptr;
+        }
+        waiting_ancestor = trx_wait[waiting_ancestor];
     }
 
     lock_instance->prev = lock_list->tail;
@@ -81,7 +99,10 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
     lock_list->tail->next = lock_instance;
     lock_list->tail = lock_instance;
 
-    //pthread_cond_wait(lock_instance->cond, lock_manager_mutex);
+    if(trx_wait[trx_id] != 0) {
+        pthread_cond_wait(lock_instance->cond, lock_manager_mutex);
+    }
+    trx_wait.erase(trx_id);
     pthread_mutex_unlock(lock_manager_mutex);
     return lock_instance;
 };

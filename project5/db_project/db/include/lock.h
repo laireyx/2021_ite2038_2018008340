@@ -12,6 +12,10 @@
 
 enum LockMode { SHARED = 0, EXCLUSIVE = 1 };
 struct Lock;
+/**
+ * @class LockList
+ * @brief Lock list.
+ */
 struct LockList {
     /// @brief Lock table and key information
     PageLocation lock_location;

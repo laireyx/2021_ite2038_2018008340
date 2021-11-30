@@ -34,12 +34,17 @@ struct TransactionLog {
 };
 
 /**
+ * @brief Transaction running state.
+ */
+enum TransactionState { RUNNING = 0, WAITING = 1, COMMITTING = 2, COMMITTED = 3, ABORTING = 4, ABORTED = 5 };
+
+/**
  * @brief Transaction instance.
  *
  */
 struct TransactionInstance {
-    /// @brief <code>true</code> if already committed(or aborted).
-    bool is_finished;
+    /// @brief Transaction running state.
+    TransactionState state;
     /// @brief The last log of this transaction.
     trxlogid_t log_tail;
     /// @brief Transaction lock head.
@@ -51,6 +56,19 @@ struct TransactionInstance {
 typedef struct TransactionLog trxlog_t;
 
 namespace trx_helper {
+
+/**
+ * @brief Wrapper for <code>lock_acquire()</code>
+ * 
+ * @param table_id 
+ * @param page_id 
+ * @param key 
+ * @param trx_id 
+ * @param lock_mode 
+ * @return lock_t* 
+ */
+lock_t* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
+                   trxid_t trx_id, int lock_mode);
 /**
  * @brief Verify if transaction is on good state.
  * @details check if the transaction is already finished(by commit or abort).
@@ -102,6 +120,13 @@ trxlogid_t log_update(tableid_t table_id, recordkey_t key,
                       const char* old_value, valsize_t old_val_size,
                       trxid_t trx_id);
 };  // namespace trx_helper
+
+/**
+ * @brief Initialize a transaction manager.
+ * 
+ * @return <code>0</code> if success, negative value otherwise.
+ */
+int init_trx();
 
 /**
  * @brief Begin a transaction.
