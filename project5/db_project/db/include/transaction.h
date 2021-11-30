@@ -58,6 +58,14 @@ typedef struct TransactionLog trxlog_t;
 namespace trx_helper {
 
 /**
+ * @brief Get the trx instance object
+ * @details Quickfix. Expects dragon ahead.
+ *
+ * @param trx_id
+ * @return TransactionInstance&
+ */
+TransactionInstance& get_trx_instance(trxid_t trx_id);
+/**
  * @brief Wrapper for <code>lock_acquire()</code>
  * 
  * @param table_id 

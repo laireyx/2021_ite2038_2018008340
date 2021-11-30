@@ -47,18 +47,6 @@ class BasicTableTest : public ::testing::Test {
     ~BasicTableTest() { shutdown_db(); }
 };
 
-void* trx(void* data) {
-    int trx = *reinterpret_cast<int*>(data);
-    trxid_t trx_id = trx_begin();
-
-    for(int i = 0; i < test_count; i++) {
-        db_find(table_id, i, nullptr, nullptr, trx_id);
-    }
-
-    trx_commit(trx_id);
-    return nullptr;
-}
-
 /**
  * @brief   Tests database insertion API.
  * @details 1. Open a database and write random values in random order.
@@ -72,7 +60,6 @@ TEST_F(BasicTableTest, RandomInsertTest) {
 
     for (int i = 0; i < test_count; i++) {
         valsize_t value_size;
-        uint8_t return_value[128] = {};
 
         temp_size[test_order[i]] = 50 + rand() % 63;
         for (int j = 0; j < 128; j++) {
@@ -85,13 +72,20 @@ TEST_F(BasicTableTest, RandomInsertTest) {
                   0);
     }
 
-    pthread_t trx_thread[trx_count];
-    for (int i = 0; i < trx_count; i++) {
-        pthread_create(&trx_thread[i], nullptr, trx, reinterpret_cast<void*>(&i));
-    }
+    trxid_t trx_ids[trx_count];
     for(int i = 0; i < trx_count; i++) {
-        pthread_join(trx_thread[i], nullptr);
+        trx_ids[i] = trx_begin();
+        ASSERT_TRUE(trx_ids[i] > 0);
     }
+
+    valsize_t return_size;
+    uint8_t return_value[128] = {};
+    db_find(table_id, 0, reinterpret_cast<char*>(return_value), &return_size,
+            trx_ids[0]);
+    db_find(table_id, 0, reinterpret_cast<char*>(return_value), &return_size,
+            trx_ids[1]);
+    db_update(table_id, 0, reinterpret_cast<char*>(temp_value[0]), temp_size[0],
+              &return_size, trx_ids[2]);
 
     for (int i = 0; i < test_count; i++) {
         valsize_t value_size;

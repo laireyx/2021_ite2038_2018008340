@@ -23,6 +23,9 @@ std::unordered_map<trxlogid_t, TransactionLog> trx_log;
 
 namespace trx_helper {
 
+TransactionInstance& get_trx_instance(trxid_t trx_id) {
+    return transaction_instances[trx_id];
+}
 lock_t* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
                    trxid_t trx_id, int lock_mode) {
     pthread_mutex_lock(trx_manager_mutex);
@@ -36,6 +39,15 @@ lock_t* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
         pthread_mutex_unlock(trx_manager_mutex);
         trx_abort(trx_id);
         return nullptr;
+    }
+
+    if (instance.lock_head == nullptr) {
+        instance.lock_head = lock;
+        instance.lock_tail = lock;
+    } else {
+        instance.lock_tail->next = lock;
+        lock->prev = instance.lock_tail;
+        instance.lock_tail = lock;
     }
 
     instance.state = RUNNING;
