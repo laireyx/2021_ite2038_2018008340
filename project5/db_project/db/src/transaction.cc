@@ -2,10 +2,10 @@
  * @addtogroup DiskSpaceManager
  * @{
  */
+#include <pthread.h>
 #include <transaction.h>
 #include <tree.h>
 
-#include <pthread.h>
 #include <cstring>
 #include <map>
 #include <new>
@@ -135,11 +135,11 @@ trxlogid_t log_update(tableid_t table_id, recordkey_t key,
 
 int init_trx() {
     try {
-        if(trx_manager_mutex != nullptr) {
+        if (trx_manager_mutex != nullptr) {
             return -1;
         }
         trx_manager_mutex = new pthread_mutex_t;
-        if(pthread_mutex_init(trx_manager_mutex, nullptr)) {
+        if (pthread_mutex_init(trx_manager_mutex, nullptr)) {
             return -1;
         }
         transaction_instances.clear();
@@ -150,7 +150,7 @@ int init_trx() {
 }
 
 int cleanup_trx() {
-    if(trx_manager_mutex) {
+    if (trx_manager_mutex) {
         pthread_mutex_destroy(trx_manager_mutex);
         delete trx_manager_mutex;
         trx_manager_mutex = nullptr;

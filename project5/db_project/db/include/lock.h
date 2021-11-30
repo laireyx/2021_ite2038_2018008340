@@ -118,7 +118,7 @@ int init_lock_table();
 
 /**
  * @brief Cleanup lock table.
- * 
+ *
  * @return <code>0</code> if success, negative value otherwise.
  */
 int cleanup_lock_table();

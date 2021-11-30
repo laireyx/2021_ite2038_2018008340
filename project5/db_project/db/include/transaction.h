@@ -138,7 +138,7 @@ int init_trx();
 
 /**
  * @brief Cleanup a transaction manager.
- * 
+ *
  * @return <code>0</code> if success, negative value otherwise.
  */
 int cleanup_trx();

@@ -4,9 +4,9 @@
  */
 #pragma once
 
+#include <const.h>
 #include <page.h>
 #include <types.h>
-#include <const.h>
 
 /**
  * @class   TableInstance

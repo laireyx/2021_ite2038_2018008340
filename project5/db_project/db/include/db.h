@@ -4,8 +4,8 @@
  */
 #pragma once
 
-#include <types.h>
 #include <const.h>
+#include <types.h>
 
 /**
  * @brief   Initialize database management system.

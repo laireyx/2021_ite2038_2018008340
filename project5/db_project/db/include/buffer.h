@@ -5,9 +5,8 @@
 #pragma once
 
 #include <page.h>
-#include <types.h>
-
 #include <pthread.h>
+#include <types.h>
 
 typedef struct BufferBlock {
     /// @brief buffered page.

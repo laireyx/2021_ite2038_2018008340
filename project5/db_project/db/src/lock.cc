@@ -2,9 +2,9 @@
  * @addtogroup LockManager
  * @{
  */
+#include <const.h>
 #include <lock.h>
 #include <transaction.h>
-#include <const.h>
 
 #include <iostream>
 #include <new>
@@ -51,9 +51,9 @@ bool find_deadlock(trxid_t root) {
 
 int init_lock_table() {
     try {
-        for(int i = 0; i < MAX_TABLE_INSTANCE; i++) {
+        for (int i = 0; i < MAX_TABLE_INSTANCE; i++) {
             lock_manager_mutex[i] = new pthread_mutex_t;
-            if(pthread_mutex_init(lock_manager_mutex[i], nullptr)) {
+            if (pthread_mutex_init(lock_manager_mutex[i], nullptr)) {
                 return -1;
             }
 
@@ -67,8 +67,8 @@ int init_lock_table() {
 }
 
 int cleanup_lock_table() {
-    if(lock_manager_mutex) {
-        for(int i = 0; i < MAX_TABLE_INSTANCE; i++) {
+    if (lock_manager_mutex) {
+        for (int i = 0; i < MAX_TABLE_INSTANCE; i++) {
             pthread_mutex_destroy(lock_manager_mutex[i]);
             delete lock_manager_mutex[i];
             lock_manager_mutex[i] = nullptr;
@@ -92,7 +92,8 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
     lock_instance->trx_id = trx_id;
     lock_instance->key = key;
 
-    if (lock_instances[table_id].find(page_id) == lock_instances[table_id].end()) {
+    if (lock_instances[table_id].find(page_id) ==
+        lock_instances[table_id].end()) {
         LockList* new_lock_list = new LockList;
         new_lock_list->lock_location = lock_location;
         new_lock_list->head = new_lock_list->tail = lock_instance;
@@ -172,19 +173,20 @@ int lock_release(Lock* lock_obj) {
     if (lock_obj->prev != nullptr) {
         lock_obj->prev->next = lock_obj->next;
     }
-    if(lock_obj->next != nullptr) {
+    if (lock_obj->next != nullptr) {
         lock_obj->next->prev = lock_obj->prev;
     }
 
-    if(lock_obj->list->head == lock_obj) {
+    if (lock_obj->list->head == lock_obj) {
         lock_obj->list->head = lock_obj->next;
     }
-    if(lock_obj->list->tail == lock_obj) {
+    if (lock_obj->list->tail == lock_obj) {
         lock_obj->list->tail = lock_obj->prev;
     }
 
-    if(lock_obj->list->head == nullptr) {
-        lock_instances[table_id].erase(lock_helper::get_page_num_from_lock(lock_obj));
+    if (lock_obj->list->head == nullptr) {
+        lock_instances[table_id].erase(
+            lock_helper::get_page_num_from_lock(lock_obj));
 
         delete lock_obj->list;
         delete lock_obj;
@@ -193,7 +195,7 @@ int lock_release(Lock* lock_obj) {
         return 0;
     }
 
-    if(lock_obj->next != nullptr) {
+    if (lock_obj->next != nullptr) {
         pthread_cond_signal(lock_obj->next->cond);
     }
     delete lock_obj;

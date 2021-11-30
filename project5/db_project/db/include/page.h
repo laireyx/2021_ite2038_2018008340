@@ -3,8 +3,8 @@
  * @{
  */
 #pragma once
-#include <types.h>
 #include <const.h>
+#include <types.h>
 
 #include <cstdint>
 
