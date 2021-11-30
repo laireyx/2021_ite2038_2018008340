@@ -47,12 +47,10 @@ namespace buffer_helper {
  *
  * @param       table_id        table id.
  * @param       pagenum         page number.
- * @param[out]  page            page.
  * @param       pin             pin.
- * @return loaded buffer.
+ * @return                      loaded page.
  */
-BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
-                         bool pin = true);
+page_t* load_buffer(tableid_t table_id, pagenum_t pagenum, bool pin = true);
 /**
  * @brief   Apply a page into buffer.
  * @details Apply page content into buffer block if exists. If not, return
@@ -60,11 +58,10 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
  *
  * @param table_id      table id.
  * @param pagenum       page number.
- * @param page          page content.
  * @returns <code>true</code> if buffer write success, <code>false</code> if
  * fallback method is used.
  */
-bool apply_buffer(tableid_t table_id, pagenum_t pagenum, const page_t* page);
+bool apply_buffer(tableid_t table_id, pagenum_t pagenum);
 /**
  * @brief   Release a buffer page.
  * @details Remove the pin from the buffer.
@@ -143,12 +140,11 @@ void buffered_free_page(tableid_t table_id, pagenum_t pagenum);
  * @param   table_id        table id obtained with
  *                          <code>buffered_open_table_file()</code>.
  * @param   pagenum         page index.
- * @param   dest            the pointer of the page data.
  * @param   pin             <code>true</code> if this buffer will be writed
  * after.
+ * @return                  the pointer of the page data.
  */
-void buffered_read_page(tableid_t table_id, pagenum_t pagenum, page_t* dest,
-                        bool pin = true);
+page_t* buffered_read_page(tableid_t table_id, pagenum_t pagenum, bool pin = true);
 
 /**
  * @brief   Write an in-memory page(src) to the on-disk page
@@ -156,10 +152,8 @@ void buffered_read_page(tableid_t table_id, pagenum_t pagenum, page_t* dest,
  * @param   table_id        table id obtained with
  *                          <code>buffered_open_table_file()</code>.
  * @param   pagenum         page index.
- * @param   src             the pointer of the page data.
  */
-void buffered_write_page(tableid_t table_id, pagenum_t pagenum,
-                         const page_t* src);
+void buffered_write_page(tableid_t table_id, pagenum_t pagenum);
 
 /**
  * @brief   Releases an in-memory buffer.

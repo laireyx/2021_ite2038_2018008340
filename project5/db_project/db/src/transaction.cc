@@ -33,15 +33,16 @@ lock_t* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
     TransactionInstance& instance = transaction_instances[trx_id];
 
     instance.state = WAITING;
+    pthread_mutex_unlock(trx_manager_mutex);
     
     lock_t* lock;
     if(!(lock = ::lock_acquire(table_id, page_id, key, trx_id, lock_mode))) {
         // Lock failed. abort this transaction.
-        pthread_mutex_unlock(trx_manager_mutex);
         trx_abort(trx_id);
         return nullptr;
     }
 
+    pthread_mutex_lock(trx_manager_mutex);
     if (instance.lock_head == nullptr) {
         instance.lock_head = lock;
         instance.lock_tail = lock;
@@ -96,7 +97,6 @@ void flush_trx_log() {
 }
 
 void trx_abort(trxid_t trx_id) {
-    pthread_mutex_lock(trx_manager_mutex);
     TransactionInstance& instance = transaction_instances[trx_id];
 
     instance.state = ABORTING;
@@ -105,7 +105,6 @@ void trx_abort(trxid_t trx_id) {
     release_trx_locks(instance);
 
     transaction_instances.erase(trx_id);
-    pthread_mutex_unlock(trx_manager_mutex);
 }
 
 trxlogid_t log_update(tableid_t table_id, recordkey_t key,

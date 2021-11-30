@@ -31,7 +31,7 @@ bool _find_deadlock(trxid_t current, trxid_t root) {
     if (current == root) {
         return true;
     }
-    for (auto& occupant : trx_wait[root]) {
+    for (auto& occupant : trx_wait[current]) {
         if (_find_deadlock(occupant, root)) {
             return true;
         }
@@ -51,7 +51,7 @@ bool find_deadlock(trxid_t root) {
 
 int init_lock_table() {
     try {
-        for (int i = 0; i < MAX_TABLE_INSTANCE; i++) {
+        for (int i = 0; i <= MAX_TABLE_INSTANCE; i++) {
             lock_manager_mutex[i] = new pthread_mutex_t;
             if (pthread_mutex_init(lock_manager_mutex[i], nullptr)) {
                 return -1;
@@ -67,8 +67,8 @@ int init_lock_table() {
 }
 
 int cleanup_lock_table() {
-    if (lock_manager_mutex) {
-        for (int i = 0; i < MAX_TABLE_INSTANCE; i++) {
+    for (int i = 0; i <= MAX_TABLE_INSTANCE; i++) {
+        if (lock_manager_mutex[i]) {
             pthread_mutex_destroy(lock_manager_mutex[i]);
             delete lock_manager_mutex[i];
             lock_manager_mutex[i] = nullptr;
@@ -195,9 +195,14 @@ int lock_release(Lock* lock_obj) {
         return 0;
     }
 
-    if (lock_obj->next != nullptr) {
-        pthread_cond_signal(lock_obj->next->cond);
+    lock_t* next_lock = lock_obj->next;
+    while(next_lock != nullptr) {
+        if(next_lock->key == lock_obj->key && !next_lock->acquired) {
+            pthread_cond_signal(next_lock->cond);
+        }
+        next_lock = next_lock->next;
     }
+    
     delete lock_obj;
     pthread_mutex_unlock(lock_manager_mutex[table_id]);
     return 0;

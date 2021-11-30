@@ -27,8 +27,7 @@ std::unordered_map<PageLocation, int> buffer_index;
 pthread_mutex_t* buffer_manager_mutex[MAX_TABLE_INSTANCE + 1];
 
 namespace buffer_helper {
-BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
-                         bool pin) {
+page_t* load_buffer(tableid_t table_id, pagenum_t pagenum, bool pin) {
     auto page_location = std::make_pair(table_id, pagenum);
     const auto& existing_buffer = buffer_index.find(page_location);
     if (existing_buffer != buffer_index.end()) {
@@ -40,10 +39,7 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
 
         buffer_page->is_pinned = (pin ? 1 : 0);
 
-        if (page != nullptr) {
-            memcpy(page, &(buffer_page->page), PAGE_SIZE);
-        }
-        return buffer_slot + buffer_page_idx;
+        return &(buffer_page->page);
     }
 
     int evicted_idx = evict();
@@ -63,20 +59,14 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
         buffer_page->page_location = page_location;
 
         file_read_page(table_id, pagenum, &(buffer_page->page));
-        if (page != nullptr) {
-            memcpy(page, &(buffer_page->page), PAGE_SIZE);
-        }
-        return buffer_page;
+        return &(buffer_page->page);
     }
 
     // direct I/O fallback
-    if (page != nullptr) {
-        file_read_page(table_id, pagenum, page);
-    }
     return nullptr;
 }
 
-bool apply_buffer(tableid_t table_id, pagenum_t pagenum, const page_t* page) {
+bool apply_buffer(tableid_t table_id, pagenum_t pagenum) {
     auto page_location = std::make_pair(table_id, pagenum);
     const auto& existing_buffer = buffer_index.find(page_location);
     if (existing_buffer != buffer_index.end()) {
@@ -86,14 +76,12 @@ bool apply_buffer(tableid_t table_id, pagenum_t pagenum, const page_t* page) {
         detach_from_tree(buffer_page_idx);
         prepend_to_head(buffer_page_idx);
 
-        memcpy(&(buffer_page->page), page, PAGE_SIZE);
         buffer_page->is_dirty = true;
         buffer_page->is_pinned = 0;
         return true;
     }
 
     // direct I/O fallback
-    file_write_page(table_id, pagenum, page);
     return false;
 }
 
@@ -162,6 +150,13 @@ void prepend_to_head(int buffer_idx) {
 
 int init_buffer(int _buffer_size) {
     try {
+        for (int i = 0; i <= MAX_TABLE_INSTANCE; i++) {
+            buffer_manager_mutex[i] = new pthread_mutex_t;
+            if (pthread_mutex_init(buffer_manager_mutex[i], nullptr)) {
+                return -1;
+            }
+        }
+
         if (buffer_slot != nullptr) {
             if (_buffer_size == buffer_size) {
                 return 0;
@@ -200,59 +195,67 @@ tableid_t buffered_open_table_file(const char* path) {
 pagenum_t buffered_alloc_page(tableid_t table_id) {
     file_helper::extend_capacity(table_id);
 
-    headerpage_t header_page;
-
-    buffer_helper::load_buffer(table_id, 0, &header_page);
+    headerpage_t *header_page = reinterpret_cast<headerpage_t*>(buffer_helper::load_buffer(table_id, 0));
 
     // Pop the first page from free page stack.
-    pagenum_t free_page_idx = header_page.free_page_idx;
+    pagenum_t free_page_idx = header_page->free_page_idx;
 
-    freepage_t allocated_page;
-    buffer_helper::load_buffer(table_id, free_page_idx, &allocated_page);
+    freepage_t *allocated_page = reinterpret_cast<freepage_t*>(buffer_helper::load_buffer(table_id, free_page_idx));
 
     // Move the first free page index to the next page.
-    header_page.free_page_idx = allocated_page.next_free_idx;
+    header_page->free_page_idx = allocated_page->next_free_idx;
 
-    buffer_helper::apply_buffer(table_id, 0, &header_page);
-    buffer_helper::apply_buffer(table_id, free_page_idx, &allocated_page);
+    buffer_helper::apply_buffer(table_id, 0);
+    buffer_helper::apply_buffer(table_id, free_page_idx);
 
     return free_page_idx;
 }
 
 void buffered_free_page(tableid_t table_id, pagenum_t pagenum) {
-    headerpage_t header_page;
-    buffer_helper::load_buffer(table_id, 0, &header_page);
+    headerpage_t *header_page = reinterpret_cast<headerpage_t*>(buffer_helper::load_buffer(table_id, 0));
 
     // Current first free page index
-    pagenum_t old_free_page_idx = header_page.free_page_idx;
+    pagenum_t old_free_page_idx = header_page->free_page_idx;
     // Newly freed page
-    freepage_t new_free_page;
+    freepage_t *new_free_page = reinterpret_cast<freepage_t*>(buffer_helper::load_buffer(table_id, pagenum));
 
     // Next free page index of newly freed page is current first free page
     // index. Its just pushing the pagenum into free page stack.
-    new_free_page.next_free_idx = old_free_page_idx;
-    buffer_helper::apply_buffer(table_id, pagenum, &new_free_page);
+    new_free_page->next_free_idx = old_free_page_idx;
+    buffer_helper::apply_buffer(table_id, pagenum);
 
     // Set the first free page to freed page number.
-    header_page.free_page_idx = pagenum;
-    buffer_helper::apply_buffer(table_id, 0, &header_page);
+    header_page->free_page_idx = pagenum;
+    buffer_helper::apply_buffer(table_id, 0);
 }
 
-void buffered_read_page(tableid_t table_id, pagenum_t pagenum, page_t* dest,
-                        bool pin) {
-    buffer_helper::load_buffer(table_id, pagenum, dest, pin);
+page_t* buffered_read_page(tableid_t table_id, pagenum_t pagenum, bool pin) {
+    pthread_mutex_lock(buffer_manager_mutex[table_id]);
+    page_t* buffer = buffer_helper::load_buffer(table_id, pagenum, pin);
+    pthread_mutex_unlock(buffer_manager_mutex[table_id]);
+    return buffer;
 }
 
-void buffered_write_page(tableid_t table_id, pagenum_t pagenum,
-                         const page_t* src) {
-    buffer_helper::apply_buffer(table_id, pagenum, src);
+void buffered_write_page(tableid_t table_id, pagenum_t pagenum) {
+    pthread_mutex_lock(buffer_manager_mutex[table_id]);
+    buffer_helper::apply_buffer(table_id, pagenum);
+    pthread_mutex_unlock(buffer_manager_mutex[table_id]);
 }
 
 void buffered_release_page(tableid_t table_id, pagenum_t pagenum) {
+    pthread_mutex_lock(buffer_manager_mutex[table_id]);
     buffer_helper::release_buffer(table_id, pagenum);
+    pthread_mutex_unlock(buffer_manager_mutex[table_id]);
 }
 
 int shutdown_buffer() {
+    for(int i = 0; i <= MAX_TABLE_INSTANCE; i++) {
+        if(buffer_manager_mutex[i]) {
+            pthread_mutex_destroy(buffer_manager_mutex[i]);
+            delete buffer_manager_mutex[i];
+            buffer_manager_mutex[i] = nullptr;
+        }
+    }
     if (buffer_slot != nullptr) {
         for (int i = 0; i < buffer_size; i++) {
             tableid_t table_id;
