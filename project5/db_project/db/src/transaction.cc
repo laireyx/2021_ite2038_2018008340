@@ -47,8 +47,10 @@ lock_t* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
         instance.lock_head = lock;
         instance.lock_tail = lock;
     } else {
-        instance.lock_tail->next_trx = lock;
-        instance.lock_tail = lock;
+        if(!lock->next_trx && instance.lock_tail != lock) {
+            instance.lock_tail->next_trx = lock;
+            instance.lock_tail = lock;
+        }
     }
 
     instance.state = RUNNING;
