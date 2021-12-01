@@ -24,11 +24,11 @@ int buffer_size = 0;
 
 std::unordered_map<PageLocation, int> buffer_index;
 
-pthread_mutex_t* buffer_manager_mutex[MAX_TABLE_INSTANCE + 1];
+pthread_mutex_t* buffer_manager_mutex;
 
 namespace buffer_helper {
 page_t* load_buffer(tableid_t table_id, pagenum_t pagenum, bool pin) {
-    pthread_mutex_lock(buffer_manager_mutex[table_id]);
+    pthread_mutex_lock(buffer_manager_mutex);
     auto page_location = std::make_pair(table_id, pagenum);
     const auto& existing_buffer = buffer_index.find(page_location);
     if (existing_buffer != buffer_index.end()) {
@@ -40,7 +40,7 @@ page_t* load_buffer(tableid_t table_id, pagenum_t pagenum, bool pin) {
 
         buffer_page->is_pinned = (pin ? 1 : 0);
 
-        pthread_mutex_unlock(buffer_manager_mutex[table_id]);
+        pthread_mutex_unlock(buffer_manager_mutex);
         return &(buffer_page->page);
     }
 
@@ -61,17 +61,17 @@ page_t* load_buffer(tableid_t table_id, pagenum_t pagenum, bool pin) {
         buffer_page->page_location = page_location;
 
         file_read_page(table_id, pagenum, &(buffer_page->page));
-        pthread_mutex_unlock(buffer_manager_mutex[table_id]);
+        pthread_mutex_unlock(buffer_manager_mutex);
         return &(buffer_page->page);
     }
 
     // direct I/O fallback
-    pthread_mutex_unlock(buffer_manager_mutex[table_id]);
+    pthread_mutex_unlock(buffer_manager_mutex);
     return nullptr;
 }
 
 bool apply_buffer(tableid_t table_id, pagenum_t pagenum) {
-    pthread_mutex_lock(buffer_manager_mutex[table_id]);
+    pthread_mutex_lock(buffer_manager_mutex);
     auto page_location = std::make_pair(table_id, pagenum);
     const auto& existing_buffer = buffer_index.find(page_location);
     if (existing_buffer != buffer_index.end()) {
@@ -83,17 +83,17 @@ bool apply_buffer(tableid_t table_id, pagenum_t pagenum) {
 
         buffer_page->is_dirty = true;
         buffer_page->is_pinned = 0;
-        pthread_mutex_unlock(buffer_manager_mutex[table_id]);
+        pthread_mutex_unlock(buffer_manager_mutex);
         return true;
     }
 
     // direct I/O fallback
-    pthread_mutex_unlock(buffer_manager_mutex[table_id]);
+    pthread_mutex_unlock(buffer_manager_mutex);
     return false;
 }
 
 void release_buffer(tableid_t table_id, pagenum_t pagenum) {
-    pthread_mutex_lock(buffer_manager_mutex[table_id]);
+    pthread_mutex_lock(buffer_manager_mutex);
     auto page_location = std::make_pair(table_id, pagenum);
     const auto& existing_buffer = buffer_index.find(page_location);
     if (existing_buffer != buffer_index.end()) {
@@ -101,7 +101,7 @@ void release_buffer(tableid_t table_id, pagenum_t pagenum) {
         BufferBlock* buffer_page = buffer_slot + buffer_page_idx;
         buffer_page->is_pinned = 0;
     }
-    pthread_mutex_unlock(buffer_manager_mutex[table_id]);
+    pthread_mutex_unlock(buffer_manager_mutex);
 }
 
 int evict() {
@@ -159,11 +159,9 @@ void prepend_to_head(int buffer_idx) {
 
 int init_buffer(int _buffer_size) {
     try {
-        for (int i = 0; i <= MAX_TABLE_INSTANCE; i++) {
-            buffer_manager_mutex[i] = new pthread_mutex_t;
-            if (pthread_mutex_init(buffer_manager_mutex[i], nullptr)) {
-                return -1;
-            }
+        buffer_manager_mutex = new pthread_mutex_t;
+        if (pthread_mutex_init(buffer_manager_mutex, nullptr)) {
+            return -1;
         }
 
         if (buffer_slot != nullptr) {
@@ -252,12 +250,10 @@ void buffered_release_page(tableid_t table_id, pagenum_t pagenum) {
 }
 
 int shutdown_buffer() {
-    for(int i = 0; i <= MAX_TABLE_INSTANCE; i++) {
-        if(buffer_manager_mutex[i]) {
-            pthread_mutex_destroy(buffer_manager_mutex[i]);
-            delete buffer_manager_mutex[i];
-            buffer_manager_mutex[i] = nullptr;
-        }
+    if(buffer_manager_mutex) {
+        pthread_mutex_destroy(buffer_manager_mutex);
+        delete buffer_manager_mutex;
+        buffer_manager_mutex = nullptr;
     }
     if (buffer_slot != nullptr) {
         for (int i = 0; i < buffer_size; i++) {
