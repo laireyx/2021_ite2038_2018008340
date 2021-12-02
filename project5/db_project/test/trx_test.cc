@@ -26,7 +26,7 @@ class BasicTableTest : public ::testing::Test {
     int test_order[test_count];
 
     BasicTableTest() {
-        init_db();
+        init_db(20000);
         srand(1);
 
         // Generate random indexes
@@ -52,7 +52,7 @@ class BasicTableTest : public ::testing::Test {
  * @details 1. Open a database and write random values in random order.
  *          2. Find the value using the key and compare it to the value.
  */
-TEST_F(BasicTableTest, RandomInsertTest) {
+TEST_F(BasicTableTest, TransactionTest) {
     table_id = open_table("test_trx.db");
     // Check if the file is opened
     ASSERT_TRUE(table_id >=
@@ -80,12 +80,21 @@ TEST_F(BasicTableTest, RandomInsertTest) {
 
     valsize_t return_size;
     uint8_t return_value[128] = {};
-    db_find(table_id, 0, reinterpret_cast<char*>(return_value), &return_size,
-            trx_ids[0]);
-    db_find(table_id, 0, reinterpret_cast<char*>(return_value), &return_size,
-            trx_ids[1]);
-    db_update(table_id, 0, reinterpret_cast<char*>(temp_value[0]), temp_size[0],
-              &return_size, trx_ids[2]);
+    for (int i = 0; i < trx_count; i++) {
+        EXPECT_EQ(
+            db_update(table_id, i, reinterpret_cast<char*>(temp_value[i + 1]),
+                      temp_size[i + 1], &return_size, trx_ids[i]),
+            0);
+        EXPECT_EQ(db_find(table_id, i, reinterpret_cast<char*>(return_value),
+                          &return_size, trx_ids[i]),
+                  0);
+    }
+
+    for (int i = 0; i < trx_count; i++) {
+        EXPECT_EQ(db_update(table_id, i, reinterpret_cast<char*>(temp_value[i]),
+                            temp_size[i], &return_size, trx_ids[i]),
+                  0);
+    }
 
     for (int i = 0; i < test_count; i++) {
         valsize_t value_size;
