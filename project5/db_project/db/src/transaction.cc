@@ -84,9 +84,6 @@ void release_trx_locks(TransactionInstance& instance) {
 
 void trx_rollback(trxid_t trx_id) {
     TransactionInstance& instance = transaction_instances[trx_id];
-    if (!verify_trx(instance)) {
-        return;
-    }
 
     trxid_t current_log_id = instance.log_tail;
     while (current_log_id != 0) {
@@ -95,7 +92,7 @@ void trx_rollback(trxid_t trx_id) {
 
         update_node(log.table_id, log.key, log.old_value, log.old_val_size,
                     nullptr, trx_id);
-                    
+
         trx_logs.erase(current_log_id);
         current_log_id = next_log_id;
     }
