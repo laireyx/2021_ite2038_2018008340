@@ -151,7 +151,6 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
 };
 
 int lock_release(Lock* lock_obj) {
-    tableid_t table_id = lock_helper::get_table_id_from_lock(lock_obj);
     pthread_mutex_lock(lock_manager_mutex);
 
     pthread_cond_destroy(lock_obj->cond);
