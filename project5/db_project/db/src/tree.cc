@@ -821,13 +821,19 @@ pagenum_t update_node(tableid_t table_id, recordkey_t key, const char* value,
         return -1;
     }
     leafpage_t *leaf_page = reinterpret_cast<leafpage_t*>(buffered_read_page(table_id, leaf_page_idx));
+    
+    char* old_value = new char[MAX_VALUE_SIZE];
 
-    if (page_helper::set_leaf_value(leaf_page, key, old_val_size, value,
+    if (page_helper::set_leaf_value(leaf_page, key, old_value, old_val_size, value,
                                     new_val_size)) {
+        trx_helper::log_update(table_id, key, old_value, *old_val_size, trx_id);
         buffered_write_page(table_id, leaf_page_idx);
+        
+        delete[] old_value;
         return 0;
     }
 
+    delete[] old_value;
     return -1;
 }
 /** @}*/

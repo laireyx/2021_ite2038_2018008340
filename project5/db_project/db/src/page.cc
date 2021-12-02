@@ -98,7 +98,7 @@ bool remove_leaf_value(LeafPage* page, recordkey_t key) {
     return false;
 }
 
-bool set_leaf_value(LeafPage* page, recordkey_t key, valsize_t* old_val_size,
+bool set_leaf_value(LeafPage* page, recordkey_t key, char* old_value, valsize_t* old_val_size,
                     const char* new_value, valsize_t new_val_size) {
     PageSlot* leaf_slot = get_page_slot(page);
 
@@ -109,6 +109,8 @@ bool set_leaf_value(LeafPage* page, recordkey_t key, valsize_t* old_val_size,
         if (leaf_slot[i].key == key) {
             /// @todo update at here
             *old_val_size = leaf_slot[i].value_size;
+            memcpy(old_value, reinterpret_cast<uint8_t*>(page) + leaf_slot[i].value_offset, leaf_slot[i].value_size);
+            
             leaf_slot[i].value_size = new_val_size;
             memcpy(reinterpret_cast<uint8_t*>(page) + leaf_slot[i].value_offset,
                    new_value, new_val_size);

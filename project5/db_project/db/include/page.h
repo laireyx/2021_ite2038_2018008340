@@ -247,13 +247,14 @@ bool remove_leaf_value(LeafPage* page, recordkey_t key);
  *
  * @param page              record page.
  * @param key               record key.
+ * @param[out] old_value    old record value.
  * @param[out] old_val_size old record value size.
  * @param new_value         new record value.
  * @param new_val_size      new record value size.
  * @return <code>true</code> if update successfully, <code>false</code>
  * otherwise.
  */
-bool set_leaf_value(LeafPage* page, recordkey_t key, valsize_t* old_val_size,
+bool set_leaf_value(LeafPage* page, recordkey_t key, char* old_value, valsize_t* old_val_size,
                     const char* new_value, valsize_t new_val_size);
 
 /**

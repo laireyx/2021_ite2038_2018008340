@@ -61,21 +61,22 @@ namespace trx_helper {
  * @brief Get the trx instance object
  * @details Quickfix. Expects dragon ahead.
  *
- * @param trx_id
- * @return TransactionInstance&
+ * @param trx_id    transaction id.
+ * @return          transaction instance.
  */
 TransactionInstance& get_trx_instance(trxid_t trx_id);
+
 /**
  * @brief Wrapper for <code>lock_acquire()</code>
  * 
- * @param table_id 
- * @param page_id 
- * @param key 
- * @param trx_id 
- * @param lock_mode 
- * @return lock_t* 
+ * @param table_id  table id.
+ * @param page_idx  page index.
+ * @param key       record key.
+ * @param trx_id    transaction id.
+ * @param lock_mode lock mode.
+ * @return          acquired lock.
  */
-lock_t* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
+lock_t* lock_acquire(int table_id, pagenum_t page_idx, recordkey_t key,
                    trxid_t trx_id, int lock_mode);
 /**
  * @brief Verify if transaction is on good state.
@@ -118,11 +119,12 @@ void trx_abort(trxid_t trx_id);
 /**
  * @brief Log an update query into transaction log.
  *
- * @param table_id
- * @param key
- * @param old_value
- * @param old_val_size
- * @param trx_id
+ * @param table_id      table id.
+ * @param key           record key.
+ * @param old_value     old record value.
+ * @param old_val_size  old value size.
+ * @param trx_id        transaction id.
+ * @return              created log id.
  */
 trxlogid_t log_update(tableid_t table_id, recordkey_t key,
                       const char* old_value, valsize_t old_val_size,

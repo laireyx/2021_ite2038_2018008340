@@ -20,7 +20,7 @@ trxid_t accumulated_trxlog_id = 0;
 /// @brief Transaction instances.
 std::unordered_map<trxid_t, TransactionInstance> transaction_instances;
 /// @brief Transaction log.
-std::unordered_map<trxlogid_t, TransactionLog> trx_log;
+std::unordered_map<trxlogid_t, TransactionLog> trx_logs;
 
 namespace trx_helper {
 
@@ -63,12 +63,18 @@ bool verify_trx(const TransactionInstance& instance) {
 }
 
 trxid_t new_trx_instance() {
+    pthread_mutex_lock(trx_manager_mutex);
+
+    trxid_t instance_id = ++accumulated_trx_id;
     TransactionInstance instance;
+    
     instance.state = RUNNING;
     instance.lock_head = instance.lock_tail = nullptr;
+    instance.log_tail = 0;
     transaction_instances[++accumulated_trx_id] = instance;
 
-    return accumulated_trx_id;
+    pthread_mutex_unlock(trx_manager_mutex);
+    return instance_id;
 }
 
 void release_trx_locks(TransactionInstance& instance) {
@@ -88,9 +94,10 @@ void trx_rollback(trxid_t trx_id) {
 
     trxid_t current_log_id = instance.log_tail;
     while (current_log_id != 0) {
-        TransactionLog& log = trx_log[current_log_id];
+        TransactionLog& log = trx_logs[current_log_id];
         update_node(log.table_id, log.key, log.old_value, log.old_val_size,
                     nullptr, trx_id);
+        current_log_id = log.prev_trx_log;
     }
 }
 
@@ -112,8 +119,10 @@ void trx_abort(trxid_t trx_id) {
 trxlogid_t log_update(tableid_t table_id, recordkey_t key,
                       const char* old_value, valsize_t old_val_size,
                       trxid_t trx_id) {
+    pthread_mutex_lock(trx_manager_mutex);
     TransactionLog update_log;
     TransactionInstance& instance = transaction_instances[trx_id];
+    trxlogid_t log_id = ++accumulated_trxlog_id;
 
     update_log.type = UPDATE;
     update_log.table_id = table_id;
@@ -121,15 +130,16 @@ trxlogid_t log_update(tableid_t table_id, recordkey_t key,
     memcpy(update_log.old_value, old_value, old_val_size);
     update_log.old_val_size = old_val_size;
 
-    trx_log[++accumulated_trxlog_id] = update_log;
+    trx_logs[log_id] = update_log;
 
     // connect a trx log list.
-    trx_log[instance.log_tail].prev_trx_log = instance.log_tail;
+    trx_logs[instance.log_tail].prev_trx_log = instance.log_tail;
     if (instance.log_tail == 0) {
         instance.log_tail = accumulated_trxlog_id;
     }
 
-    return accumulated_trxlog_id;
+    pthread_mutex_unlock(trx_manager_mutex);
+    return log_id;
 }
 
 }  // namespace trx_helper
