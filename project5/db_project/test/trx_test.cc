@@ -26,7 +26,7 @@ class BasicTableTest : public ::testing::Test {
     int test_order[test_count];
 
     BasicTableTest() {
-        init_db(20000);
+        init_db();
         srand(1);
 
         // Generate random indexes
@@ -80,20 +80,13 @@ TEST_F(BasicTableTest, TransactionTest) {
 
     valsize_t return_size;
     uint8_t return_value[128] = {};
-    for (int i = 0; i < trx_count; i++) {
-        EXPECT_EQ(
-            db_update(table_id, i, reinterpret_cast<char*>(temp_value[i + 1]),
-                      temp_size[i + 1], &return_size, trx_ids[i]),
-            0);
-        EXPECT_EQ(db_find(table_id, i, reinterpret_cast<char*>(return_value),
-                          &return_size, trx_ids[i]),
-                  0);
+    for(int i = 0; i < trx_count; i++) {
+        EXPECT_EQ(db_update(table_id, i, reinterpret_cast<char*>(temp_value[i + 1]), temp_size[i + 1], &return_size, trx_ids[i]), 0);
+        EXPECT_EQ(db_find(table_id, i, reinterpret_cast<char*>(return_value), &return_size, trx_ids[i]), 0);
     }
 
-    for (int i = 0; i < trx_count; i++) {
-        EXPECT_EQ(db_update(table_id, i, reinterpret_cast<char*>(temp_value[i]),
-                            temp_size[i], &return_size, trx_ids[i]),
-                  0);
+    for(int i = 0; i < trx_count; i++) {
+        EXPECT_EQ(db_update(table_id, i, reinterpret_cast<char*>(temp_value[i]), temp_size[i], &return_size, trx_ids[i]), 0);
     }
 
     for (int i = 0; i < test_count; i++) {
