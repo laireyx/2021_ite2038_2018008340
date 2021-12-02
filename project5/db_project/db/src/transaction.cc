@@ -69,7 +69,7 @@ trxid_t new_trx_instance() {
     instance.state = RUNNING;
     instance.lock_head = instance.lock_tail = nullptr;
     instance.log_tail = 0;
-    transaction_instances[++accumulated_trx_id] = instance;
+    transaction_instances[instance_id] = instance;
     return instance_id;
 }
 
