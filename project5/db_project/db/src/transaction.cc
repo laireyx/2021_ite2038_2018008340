@@ -63,8 +63,6 @@ bool verify_trx(const TransactionInstance& instance) {
 }
 
 trxid_t new_trx_instance() {
-    pthread_mutex_lock(trx_manager_mutex);
-
     trxid_t instance_id = ++accumulated_trx_id;
     TransactionInstance instance;
     
@@ -72,8 +70,6 @@ trxid_t new_trx_instance() {
     instance.lock_head = instance.lock_tail = nullptr;
     instance.log_tail = 0;
     transaction_instances[++accumulated_trx_id] = instance;
-
-    pthread_mutex_unlock(trx_manager_mutex);
     return instance_id;
 }
 
@@ -95,9 +91,13 @@ void trx_rollback(trxid_t trx_id) {
     trxid_t current_log_id = instance.log_tail;
     while (current_log_id != 0) {
         TransactionLog& log = trx_logs[current_log_id];
+        trxid_t next_log_id = log.prev_trx_log;
+
         update_node(log.table_id, log.key, log.old_value, log.old_val_size,
                     nullptr, trx_id);
-        current_log_id = log.prev_trx_log;
+                    
+        trx_logs.erase(current_log_id);
+        current_log_id = next_log_id;
     }
 }
 
@@ -166,6 +166,9 @@ int cleanup_trx() {
         delete trx_manager_mutex;
         trx_manager_mutex = nullptr;
     }
+
+    transaction_instances.clear();
+    trx_logs.clear();
     return 0;
 }
 
