@@ -826,7 +826,7 @@ pagenum_t update_node(tableid_t table_id, recordkey_t key, const char* value,
 
     if (page_helper::set_leaf_value(leaf_page, key, old_value, old_val_size, value,
                                     new_val_size)) {
-        trx_helper::log_update(table_id, key, old_value, *old_val_size, trx_id);
+        //trx_helper::log_update(table_id, key, old_value, *old_val_size, trx_id);
         buffered_write_page(table_id, leaf_page_idx);
         
         delete[] old_value;

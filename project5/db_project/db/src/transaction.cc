@@ -192,6 +192,14 @@ trxid_t trx_commit(trxid_t trx_id) {
     }
 
     instance.state = COMMITTING;
+
+    trxid_t current_log_id = instance.log_tail;
+    while (current_log_id != 0) {
+        trxid_t next_log_id = trx_logs[current_log_id].prev_trx_log;
+        trx_logs.erase(current_log_id);
+        current_log_id = next_log_id;
+    }
+
     trx_helper::release_trx_locks(instance);
     trx_helper::flush_trx_log();
     instance.state = COMMITTED;
