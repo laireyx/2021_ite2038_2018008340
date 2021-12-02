@@ -18,7 +18,7 @@ struct Lock;
  */
 struct LockList {
     /// @brief Lock table and key information
-    PageLocation lock_location;
+    LockLocation lock_location;
 
     /// @brief Head of lock list.
     Lock* head;
@@ -90,20 +90,6 @@ constexpr int set_bit(uint64_t& mask, int pos) {
 constexpr int clear_bit(uint64_t& mask, int pos) {
     return mask |= ~(uint64_t(1) << pos);
 }
-/**
- * @brief Get table id of the lock.
- *
- * @param lock  lock instance.
- * @return      table id.
- */
-tableid_t get_table_id_from_lock(const Lock* lock);
-/**
- * @brief Get page number of the lock.
- *
- * @param lock  lock instance.
- * @return      page number.
- */
-pagenum_t get_page_num_from_lock(const Lock* lock);
 
 }  // namespace lock_helper
 

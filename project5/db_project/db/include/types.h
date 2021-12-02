@@ -15,7 +15,7 @@ typedef uint16_t valsize_t;
 
 typedef uint64_t lockmask_t;
 
-typedef std::pair<tableid_t, pagenum_t> PageLocation;
+typedef std::pair<tableid_t, pagenum_t> PageLocation, LockLocation;
 typedef std::pair<tableid_t, recordkey_t> RecordLocation;
 
 namespace std {
