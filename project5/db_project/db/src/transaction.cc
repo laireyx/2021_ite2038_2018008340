@@ -119,6 +119,12 @@ trxlogid_t log_update(tableid_t table_id, recordkey_t key,
     pthread_mutex_lock(trx_manager_mutex);
     TransactionLog update_log;
     TransactionInstance& instance = transaction_instances[trx_id];
+
+    if(instance.state != RUNNING) {
+        pthread_mutex_unlock(trx_manager_mutex);
+        return 0;
+    }
+
     trxlogid_t log_id = ++accumulated_trxlog_id;
 
     update_log.type = UPDATE;
