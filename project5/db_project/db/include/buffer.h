@@ -179,6 +179,4 @@ void buffered_release_page(tableid_t table_id, pagenum_t pagenum);
  * @return  <code>0</code> if success, non-zero value otherwise.
  */
 int shutdown_buffer();
-
-int buffer_usage();
 /** @}*/

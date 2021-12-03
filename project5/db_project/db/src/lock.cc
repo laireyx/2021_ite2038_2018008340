@@ -101,8 +101,8 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
 
     lock_instance->list = lock_instances[lock_location];
 
-    Lock* existing_lock = lock_instance->list->tail;
-    
+    Lock* existing_lock = lock_instances[lock_location]->tail;
+
     // Check if this lock is already acquired.
     while(existing_lock) {
         if (existing_lock->key == key &&
@@ -123,12 +123,12 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
 
     // Check if this lock is waiting consecutive slocks.
     bool consecutive_slocks = false;
-    bool should_wait = false;
 
     if (trx_wait.find(trx_id) == trx_wait.end()) {
         trx_wait[trx_id] = std::unordered_set<trxid_t>();
     }
 
+    existing_lock = lock_instances[lock_location]->tail;
     while(existing_lock) {
         if (existing_lock->key == key &&
             existing_lock->trx_id != trx_id
@@ -165,7 +165,7 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
     lock_instance->list->tail->next = lock_instance;
     lock_instance->list->tail = lock_instance;
 
-    if (should_wait) {
+    if (trx_wait[trx_id].size() > 0) {
         pthread_cond_wait(lock_instance->cond, lock_manager_mutex);
     }
     trx_wait.erase(trx_id);

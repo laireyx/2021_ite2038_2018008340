@@ -108,9 +108,14 @@ bool set_leaf_value(LeafPage* page, recordkey_t key, char* old_value, valsize_t*
     for (int i = 0; i < page->page_header.key_num; i++) {
         if (leaf_slot[i].key == key) {
             /// @todo update at here
-            *old_val_size = leaf_slot[i].value_size;
-            memcpy(old_value, reinterpret_cast<uint8_t*>(page) + leaf_slot[i].value_offset, leaf_slot[i].value_size);
-            
+            if (old_val_size != nullptr)
+                *old_val_size = leaf_slot[i].value_size;
+            if (old_value != nullptr)
+                memcpy(old_value,
+                       reinterpret_cast<uint8_t*>(page) +
+                           leaf_slot[i].value_offset,
+                       leaf_slot[i].value_size);
+
             leaf_slot[i].value_size = new_val_size;
             memcpy(reinterpret_cast<uint8_t*>(page) + leaf_slot[i].value_offset,
                    new_value, new_val_size);

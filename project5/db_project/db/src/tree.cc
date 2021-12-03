@@ -917,6 +917,7 @@ pagenum_t update_node(tableid_t table_id, recordkey_t key, const char* value,
         delete[] old_value;
         return leaf_page_idx;
     }
+
     buffered_release_page(table_id, leaf_page_idx);
 
     delete[] old_value;
