@@ -22,6 +22,9 @@ std::unordered_map<trxid_t, std::unordered_set<trxid_t>> trx_wait;
 namespace lock_helper {
 
 bool _find_deadlock(trxid_t current, trxid_t root) {
+    if (current == 0) {
+        return false;
+    }
     if (current == root) {
         return true;
     }
@@ -98,35 +101,57 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
 
     lock_instance->list = lock_instances[lock_location];
 
+    Lock* existing_lock = lock_instance->list->tail;
+    
+    // Check if this lock is already acquired.
+    while(existing_lock) {
+        if (existing_lock->key == key &&
+            existing_lock->trx_id == trx_id
+        ) {
+            if (existing_lock->acquired &&
+                (existing_lock->lock_mode == EXCLUSIVE ||
+                    lock_mode == SHARED)) {
+                pthread_cond_destroy(lock_instance->cond);
+                delete lock_instance->cond;
+                delete lock_instance;
+                pthread_mutex_unlock(lock_manager_mutex);
+                return existing_lock;
+            }
+        }
+        existing_lock = existing_lock->prev;
+    }
+
+    // Check if this lock is waiting consecutive slocks.
+    bool consecutive_slocks = false;
     bool should_wait = false;
-    Lock* existing_lock = lock_instance->list->head;
 
     if (trx_wait.find(trx_id) == trx_wait.end()) {
         trx_wait[trx_id] = std::unordered_set<trxid_t>();
     }
+
     while(existing_lock) {
-        if(existing_lock->key == key) {
-            if(existing_lock->trx_id != trx_id) {
-                if(existing_lock->lock_mode == EXCLUSIVE || lock_mode == EXCLUSIVE) {
-                    should_wait = true;
-                    if (trx_helper::get_trx_instance(existing_lock->trx_id)
-                            .state == WAITING) {
+        if (existing_lock->key == key &&
+            existing_lock->trx_id != trx_id
+        ) {
+            if((existing_lock->lock_mode == EXCLUSIVE || lock_instance->lock_mode == EXCLUSIVE)) {
+                if(!consecutive_slocks) {
+                    if(existing_lock->lock_mode == SHARED) {
+                        consecutive_slocks = true;
                         trx_wait[trx_id].insert(existing_lock->trx_id);
+                    } else {
+                        trx_wait[trx_id].insert(existing_lock->trx_id);
+                        break;
                     }
-                }
-            } else {
-                if (existing_lock->acquired &&
-                    (existing_lock->lock_mode == EXCLUSIVE ||
-                     lock_mode == SHARED)) {
-                    pthread_cond_destroy(lock_instance->cond);
-                    delete lock_instance->cond;
-                    delete lock_instance;
-                    pthread_mutex_unlock(lock_manager_mutex);
-                    return existing_lock;
+                } else {
+                    if(existing_lock->lock_mode == SHARED) {
+                        trx_wait[trx_id].insert(existing_lock->trx_id);
+                    } else {
+                        break;
+                    }
                 }
             }
         }
-        existing_lock = existing_lock->next;
+        existing_lock = existing_lock->prev;
     }
 
     if (lock_helper::find_deadlock(trx_id)) {
@@ -183,7 +208,10 @@ int lock_release(Lock* lock_obj) {
     lock_t* next_lock = lock_obj->next;
     while(next_lock != nullptr) {
         if(next_lock->key == lock_obj->key && !next_lock->acquired) {
-            pthread_cond_signal(next_lock->cond);
+            trx_wait[next_lock->trx_id].erase(lock_obj->trx_id);
+            if(trx_wait[next_lock->trx_id].size() == 0) {
+                pthread_cond_signal(next_lock->cond);
+            }
         }
         next_lock = next_lock->next;
     }
