@@ -44,8 +44,11 @@ int db_find(tableid_t table_id, recordkey_t key, char* ret_val,
 
 int db_update(tableid_t table_id, recordkey_t key, char* value,
               valsize_t new_val_size, valsize_t* old_val_size, trxid_t trx_id) {
-    return update_node(table_id, key, value, new_val_size, old_val_size,
-                       trx_id);
+    if (!update_node(table_id, key, value, new_val_size, old_val_size,
+                     trx_id)) {
+        return -1;
+    }
+    return 0;
 }
 
 int db_delete(tableid_t table_id, recordkey_t key) {

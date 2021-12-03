@@ -28,7 +28,7 @@ pthread_mutex_t* buffer_manager_mutex;
 
 namespace buffer_helper {
 BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
-                         bool pin) {
+                         trxid_t trx_id, bool pin) {
     pthread_mutex_lock(buffer_manager_mutex);
     auto page_location = std::make_pair(table_id, pagenum);
     const auto& existing_buffer = buffer_index.find(page_location);
@@ -36,13 +36,21 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
         int buffer_page_idx = existing_buffer->second;
         BufferBlock* buffer_page = buffer_slot + buffer_page_idx;
 
-        move_to_head(buffer_page_idx);
+        if (pin && buffer_page->pin_owner != trx_id) {
+            buffer_page->someone_waiting++;
+            pthread_mutex_unlock(buffer_manager_mutex);
+            pthread_mutex_lock(&buffer_page->mutex);
+            pthread_mutex_lock(buffer_manager_mutex);
+            buffer_page->someone_waiting--;
+            buffer_page->pin_owner = trx_id;
+        }
 
-        buffer_page->is_pinned += (pin ? 1 : 0);
+        move_to_head(buffer_page_idx);
 
         if (page != nullptr) {
             memcpy(page, &(buffer_page->page), PAGE_SIZE);
         }
+
         pthread_mutex_unlock(buffer_manager_mutex);
         return buffer_slot + buffer_page_idx;
     }
@@ -51,25 +59,35 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
     if (evicted_idx >= 0) {
         // add
         BufferBlock* buffer_page = buffer_slot + evicted_idx;
-        BufferBlock* buffer_head = buffer_slot + buffer_head_idx;
+
+        if (pin) {
+            buffer_page->someone_waiting++;
+            pthread_mutex_unlock(buffer_manager_mutex);
+            pthread_mutex_lock(&buffer_page->mutex);
+            pthread_mutex_lock(buffer_manager_mutex);
+            buffer_page->someone_waiting--;
+            buffer_page->pin_owner = trx_id;
+        }
 
         move_to_head(evicted_idx);
 
         buffer_index[page_location] = evicted_idx;
 
         buffer_page->is_dirty = false;
-        buffer_page->is_pinned = pin ? 1 : 0;
+
         buffer_page->page_location = page_location;
 
         file_read_page(table_id, pagenum, &(buffer_page->page));
         if (page != nullptr) {
             memcpy(page, &(buffer_page->page), PAGE_SIZE);
         }
+
         pthread_mutex_unlock(buffer_manager_mutex);
         return buffer_page;
     }
 
     // direct I/O fallback
+    evict();
     if (page != nullptr) {
         file_read_page(table_id, pagenum, page);
     }
@@ -89,7 +107,9 @@ bool apply_buffer(tableid_t table_id, pagenum_t pagenum, const page_t* page) {
 
         memcpy(&(buffer_page->page), page, PAGE_SIZE);
         buffer_page->is_dirty = true;
-        buffer_page->is_pinned -= 1;
+        buffer_page->pin_owner = -1;
+
+        pthread_mutex_unlock(&buffer_page->mutex);
         pthread_mutex_unlock(buffer_manager_mutex);
         return true;
     }
@@ -107,7 +127,9 @@ void release_buffer(tableid_t table_id, pagenum_t pagenum) {
     if (existing_buffer != buffer_index.end()) {
         int buffer_page_idx = existing_buffer->second;
         BufferBlock* buffer_page = buffer_slot + buffer_page_idx;
-        buffer_page->is_pinned -= 1;
+
+        buffer_page->pin_owner = -1;
+        pthread_mutex_unlock(&buffer_page->mutex);
     }
     pthread_mutex_unlock(buffer_manager_mutex);
 }
@@ -116,7 +138,8 @@ int evict() {
     int evicted_idx = buffer_tail_idx;
     BufferBlock* buffer_evict = buffer_slot + evicted_idx;
 
-    while (evicted_idx != -1 && buffer_evict->is_pinned) {
+    while (evicted_idx != -1 &&
+           (buffer_evict->pin_owner != -1 || buffer_evict->someone_waiting)) {
         evicted_idx = buffer_evict->prev_block_idx;
         buffer_evict = buffer_slot + evicted_idx;
     }
@@ -135,7 +158,6 @@ int evict() {
         std::tie(table_id, page_num) = buffer_evict->page_location;
         file_write_page(table_id, page_num, &buffer_evict->page);
     }
-
     return evicted_idx;
 }
 
@@ -164,7 +186,6 @@ void move_to_head(int buffer_idx) {
     buffer_head->prev_block_idx = buffer_idx;
 
     buffer_head_idx = buffer_idx;
-
 }
 }  // namespace buffer_helper
 
@@ -187,8 +208,11 @@ int init_buffer(int _buffer_size) {
         for (int i = 0; i < buffer_size; i++) {
             buffer_slot[i].page_location =
                 std::make_pair(MAX_TABLE_INSTANCE + 1, 0);
+
+            pthread_mutex_init(&buffer_slot[i].mutex, nullptr);
             buffer_slot[i].is_dirty = false;
-            buffer_slot[i].is_pinned = 0;
+            buffer_slot[i].pin_owner = -1;
+            buffer_slot[i].someone_waiting = 0;
 
             if (i < buffer_size - 1) buffer_slot[i].next_block_idx = i + 1;
             if (i > 0) buffer_slot[i].prev_block_idx = i - 1;
@@ -210,18 +234,19 @@ tableid_t buffered_open_table_file(const char* path) {
     return file_open_table_file(path);
 }
 
-pagenum_t buffered_alloc_page(tableid_t table_id) {
+pagenum_t buffered_alloc_page(tableid_t table_id, trxid_t trx_id) {
     file_helper::extend_capacity(table_id);
 
     headerpage_t header_page;
 
-    buffer_helper::load_buffer(table_id, 0, &header_page);
+    buffer_helper::load_buffer(table_id, 0, &header_page, trx_id);
 
     // Pop the first page from free page stack.
     pagenum_t free_page_idx = header_page.free_page_idx;
 
     freepage_t allocated_page;
-    buffer_helper::load_buffer(table_id, free_page_idx, &allocated_page);
+    buffer_helper::load_buffer(table_id, free_page_idx, &allocated_page,
+                               trx_id);
 
     // Move the first free page index to the next page.
     header_page.free_page_idx = allocated_page.next_free_idx;
@@ -232,15 +257,15 @@ pagenum_t buffered_alloc_page(tableid_t table_id) {
     return free_page_idx;
 }
 
-void buffered_free_page(tableid_t table_id, pagenum_t pagenum) {
+void buffered_free_page(tableid_t table_id, pagenum_t pagenum, trxid_t trx_id) {
     headerpage_t header_page;
-    buffer_helper::load_buffer(table_id, 0, &header_page);
+    buffer_helper::load_buffer(table_id, 0, &header_page, trx_id);
 
     // Current first free page index
     pagenum_t old_free_page_idx = header_page.free_page_idx;
     // Newly freed page
     freepage_t new_free_page;
-    buffer_helper::load_buffer(table_id, pagenum, &new_free_page);
+    buffer_helper::load_buffer(table_id, pagenum, &new_free_page, trx_id);
 
     // Next free page index of newly freed page is current first free page
     // index. Its just pushing the pagenum into free page stack.
@@ -253,8 +278,8 @@ void buffered_free_page(tableid_t table_id, pagenum_t pagenum) {
 }
 
 void buffered_read_page(tableid_t table_id, pagenum_t pagenum, page_t* dest,
-                        bool pin) {
-    buffer_helper::load_buffer(table_id, pagenum, dest, pin);
+                        trxid_t trx_id, bool pin) {
+    buffer_helper::load_buffer(table_id, pagenum, dest, trx_id, pin);
 }
 
 void buffered_write_page(tableid_t table_id, pagenum_t pagenum,
@@ -278,6 +303,7 @@ int shutdown_buffer() {
             if (buffer->is_dirty) {
                 file_write_page(table_id, page_num, &buffer->page);
             }
+            pthread_mutex_destroy(&buffer_slot[i].mutex);
         }
         delete[] buffer_slot;
         buffer_slot = nullptr;

@@ -15,14 +15,16 @@ typedef struct BufferBlock {
     PageLocation page_location;
 
     /// @brief page latch.
-    pthread_cond_t cond;
+    pthread_mutex_t mutex;
+    /// @brief owner transaction id of this buffer page.
+    trxid_t pin_owner;
+    /// @brief <code>true</code> if some transactions are waiting this buffer,
+    /// <code>false</code> otherwise.
+    int someone_waiting;
 
     /// @brief <code>true</code> if this buffer has been modified,
     /// <code>false</code> otherwise.
     bool is_dirty;
-    /// @brief <code>true</code> if this buffer is currently using,
-    /// <code>false</code> otherwise.
-    int is_pinned;
 
     /// @brief revious buffer block index of Recently-Used linked list.
     /// <code>-1</code> if this buffer is the first item.
@@ -48,11 +50,12 @@ namespace buffer_helper {
  * @param       table_id        table id.
  * @param       pagenum         page number.
  * @param[out]  page            page.
+ * @param       trx_id          transaction id.
  * @param       pin             pin.
  * @return loaded buffer.
  */
 BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
-                         bool pin = true);
+                         trxid_t trx_id = 0, bool pin = true);
 /**
  * @brief   Apply a page into buffer.
  * @details Apply page content into buffer block if exists. If not, return
@@ -116,19 +119,22 @@ tableid_t buffered_open_table_file(const char* path);
  *
  * @param   table_id        table id obtained with
  *                          <code>buffered_open_table_file()</code>.
+ * @param   trx_id          transaction id.
  * @return  >0  Page index number if allocation success.
  *          0   Zero if allocation failed.
  */
-pagenum_t buffered_alloc_page(tableid_t table_id);
+pagenum_t buffered_alloc_page(tableid_t table_id, trxid_t trx_id = 0);
 
 /**
  * @brief   Free an on-disk page to the free page list
  *
  * @param   table_id        table id obtained with
  *                          <code>buffered_open_table_file()</code>.
+ * @param   trx_id          transaction id.
  * @param   pagenum         page index.
  */
-void buffered_free_page(tableid_t table_id, pagenum_t pagenum);
+void buffered_free_page(tableid_t table_id, pagenum_t pagenum,
+                        trxid_t trx_id = 0);
 
 /**
  * @brief   Read an on-disk page into the in-memory page structure(dest)
@@ -137,11 +143,12 @@ void buffered_free_page(tableid_t table_id, pagenum_t pagenum);
  *                          <code>buffered_open_table_file()</code>.
  * @param   pagenum         page index.
  * @param   dest            the pointer of the page data.
+ * @param   trx_id          transaction id.
  * @param   pin             <code>true</code> if this buffer will be writed
  * after.
  */
 void buffered_read_page(tableid_t table_id, pagenum_t pagenum, page_t* dest,
-                        bool pin = true);
+                        trxid_t trx_id = 0, bool pin = true);
 
 /**
  * @brief   Write an in-memory page(src) to the on-disk page
@@ -173,4 +180,5 @@ void buffered_release_page(tableid_t table_id, pagenum_t pagenum);
  */
 int shutdown_buffer();
 
+int buffer_usage();
 /** @}*/
