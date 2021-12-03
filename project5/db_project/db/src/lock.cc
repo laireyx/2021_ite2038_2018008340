@@ -212,7 +212,7 @@ int lock_release(Lock* lock_obj) {
         return 0;
     }
 
-    lock_t* next_lock = lock_obj->list->head;
+    lock_t* next_lock = lock_obj->next;
     while(next_lock != nullptr) {
         if(next_lock->key == lock_obj->key && !next_lock->acquired) {
             trx_wait[next_lock->trx_id].erase(lock_obj->trx_id);
