@@ -87,7 +87,6 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
     }
 
     // direct I/O fallback
-    evict();
     if (page != nullptr) {
         file_read_page(table_id, pagenum, page);
     }

@@ -48,7 +48,7 @@ struct Lock {
     recordkey_t key;
     /// @brief Lock mask.
     /// @todo .
-    /// lockmask_t mask;
+    /* lockmask_t mask; */
 
     /// @brief Previous waiting lock.
     Lock* prev;

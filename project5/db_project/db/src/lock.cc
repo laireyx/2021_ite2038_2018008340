@@ -111,11 +111,15 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
             if (existing_lock->acquired &&
                 (existing_lock->lock_mode == EXCLUSIVE ||
                     lock_mode == SHARED)) {
-                pthread_cond_destroy(lock_instance->cond);
-                delete lock_instance->cond;
-                delete lock_instance;
+                lock_instance->next_trx = nullptr;
+                lock_instance->next = nullptr;
+                lock_instance->prev = lock_instance->list->tail;
+                lock_instance->list->tail->next = lock_instance;
+                lock_instance->list->tail = lock_instance;
+
+                lock_instance->acquired = true;
                 pthread_mutex_unlock(lock_manager_mutex);
-                return existing_lock;
+                return lock_instance;
             }
         }
         existing_lock = existing_lock->prev;
@@ -155,6 +159,7 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
     }
 
     if (lock_helper::find_deadlock(trx_id)) {
+        trx_wait.erase(trx_id);
         pthread_mutex_unlock(lock_manager_mutex);
         return nullptr;
     }
@@ -177,6 +182,8 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
 
 int lock_release(Lock* lock_obj) {
     pthread_mutex_lock(lock_manager_mutex);
+
+    trx_wait.erase(lock_obj->trx_id);
 
     pthread_cond_destroy(lock_obj->cond);
     delete lock_obj->cond;
@@ -205,7 +212,7 @@ int lock_release(Lock* lock_obj) {
         return 0;
     }
 
-    lock_t* next_lock = lock_obj->next;
+    lock_t* next_lock = lock_obj->list->head;
     while(next_lock != nullptr) {
         if(next_lock->key == lock_obj->key && !next_lock->acquired) {
             trx_wait[next_lock->trx_id].erase(lock_obj->trx_id);
