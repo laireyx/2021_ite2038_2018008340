@@ -16,11 +16,9 @@ typedef struct BufferBlock {
 
     /// @brief page latch.
     pthread_cond_t latch;
-    /// @brief owner transaction id of this buffer page.
     trxid_t pin_owner;
-    /// @brief <code>true</code> if some transactions are waiting this buffer,
-    /// <code>false</code> otherwise.
-    int someone_waiting;
+    /// @brief how many threads are using(or waiting) this buffer block.
+    int pin_count;
 
     /// @brief <code>true</code> if this buffer has been modified,
     /// <code>false</code> otherwise.

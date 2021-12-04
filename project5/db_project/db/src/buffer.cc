@@ -36,12 +36,13 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
         int buffer_page_idx = existing_buffer->second;
         BufferBlock* buffer_page = buffer_slot + buffer_page_idx;
 
-        if (pin && buffer_page->pin_owner != trx_id) {
-            buffer_page->someone_waiting++;
-            if(buffer_page->pin_owner != -1)
-                pthread_cond_wait(&buffer_page->latch, buffer_manager_mutex);
+        if (pin && buffer_page->pin_count > 0) {
+            buffer_page->pin_count++;
+            if(buffer_page->pin_owner == trx_id) {
+                std::cout << "wow" << std::endl;
+            }
+            pthread_cond_wait(&buffer_page->latch, buffer_manager_mutex);
             //pthread_mutex_lock(&buffer_page->mutex);
-            buffer_page->someone_waiting--;
             buffer_page->pin_owner = trx_id;
         }
 
@@ -66,6 +67,7 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
             // pthread_mutex_lock(&buffer_page->mutex);
             // pthread_mutex_lock(buffer_manager_mutex);
             // buffer_page->someone_waiting--;
+            buffer_page->pin_count++;
             buffer_page->pin_owner = trx_id;
         }
 
@@ -106,6 +108,7 @@ bool apply_buffer(tableid_t table_id, pagenum_t pagenum, const page_t* page) {
 
         memcpy(&(buffer_page->page), page, PAGE_SIZE);
         buffer_page->is_dirty = true;
+        buffer_page->pin_count--;
         buffer_page->pin_owner = -1;
 
         pthread_cond_signal(&buffer_page->latch);
@@ -128,6 +131,7 @@ void release_buffer(tableid_t table_id, pagenum_t pagenum) {
         int buffer_page_idx = existing_buffer->second;
         BufferBlock* buffer_page = buffer_slot + buffer_page_idx;
 
+        buffer_page->pin_count--;
         buffer_page->pin_owner = -1;
         pthread_cond_signal(&buffer_page->latch);
         //pthread_mutex_unlock(&buffer_page->mutex);
@@ -139,8 +143,7 @@ int evict() {
     int evicted_idx = buffer_tail_idx;
     BufferBlock* buffer_evict = buffer_slot + evicted_idx;
 
-    while (evicted_idx != -1 &&
-           (buffer_evict->pin_owner != -1 || buffer_evict->someone_waiting)) {
+    while (evicted_idx != -1 && buffer_evict->pin_count > 0) {
         evicted_idx = buffer_evict->prev_block_idx;
         buffer_evict = buffer_slot + evicted_idx;
     }
@@ -212,8 +215,8 @@ int init_buffer(int _buffer_size) {
 
             pthread_cond_init(&buffer_slot[i].latch, nullptr);
             buffer_slot[i].is_dirty = false;
+            buffer_slot[i].pin_count = 0;
             buffer_slot[i].pin_owner = -1;
-            buffer_slot[i].someone_waiting = 0;
 
             if (i < buffer_size - 1) buffer_slot[i].next_block_idx = i + 1;
             if (i > 0) buffer_slot[i].prev_block_idx = i - 1;

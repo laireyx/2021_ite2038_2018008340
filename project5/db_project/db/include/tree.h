@@ -41,10 +41,11 @@ pagenum_t create_tree(tableid_t table_id, recordkey_t key, const char* value,
  *
  * @param table_id          table id.
  * @param key               key to query with.
+ * @param trx_id            transaction id.
  * @returns                 page index if found.
  *                          <code>0</code> if the key does not exist.
  */
-pagenum_t find_leaf(tableid_t table_id, recordkey_t key);
+pagenum_t find_leaf(tableid_t table_id, recordkey_t key, trxid_t trx_id = 0);
 /**
  * @brief Find a record with key
  *

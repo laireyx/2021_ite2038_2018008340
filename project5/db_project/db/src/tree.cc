@@ -64,7 +64,7 @@ pagenum_t create_tree(tableid_t table_id, recordkey_t key, const char* value,
     return leaf_page_idx;
 }
 
-pagenum_t find_leaf(tableid_t table_id, recordkey_t key) {
+pagenum_t find_leaf(tableid_t table_id, recordkey_t key, trxid_t trx_id) {
     headerpage_t header_page;
     buffered_read_page(table_id, 0, &header_page, 0, false);
 
@@ -76,7 +76,7 @@ pagenum_t find_leaf(tableid_t table_id, recordkey_t key) {
     }
 
     buffered_read_page(table_id, header_page.root_page_idx, &current_page,
-                       false);
+                       trx_id, false);
     while (!current_page.page_header.is_leaf_page) {
         int i = 0;
         for (i = 0; i < current_page.page_header.key_num; i++) {
@@ -90,7 +90,7 @@ pagenum_t find_leaf(tableid_t table_id, recordkey_t key) {
             current_page_idx = *page_helper::get_leftmost_child_idx(
                 reinterpret_cast<internalpage_t*>(&current_page));
         }
-        buffered_read_page(table_id, current_page_idx, &current_page, 0, false);
+        buffered_read_page(table_id, current_page_idx, &current_page, trx_id, false);
     }
 
     return current_page_idx;
