@@ -892,6 +892,9 @@ pagenum_t delete_node(tableid_t table_id, recordkey_t key) {
 pagenum_t update_node(tableid_t table_id, recordkey_t key, const char* value,
                       valsize_t new_val_size, valsize_t* old_val_size,
                       trxid_t trx_id) {
+    if (!find_by_key(table_id, key)) {
+        return 0;
+    }
     pagenum_t leaf_page_idx = find_leaf(table_id, key);
 
     if (leaf_page_idx == 0) return 0;
