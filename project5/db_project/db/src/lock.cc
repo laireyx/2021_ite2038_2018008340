@@ -110,35 +110,6 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
 
     Lock* existing_lock = lock_instances[lock_location]->tail;
 
-    // Check if this lock is already acquired.
-    // Also check if this lock is compressible.
-    while(existing_lock) {
-        if (existing_lock->trx_id == trx_id && existing_lock->acquired) {
-            if(lock_helper::get_bit(existing_lock, key_idx)) {
-                // Already acquired lcok
-                if (existing_lock->lock_mode == EXCLUSIVE ||
-                        lock_mode == SHARED) {
-                    pthread_cond_destroy(lock_instance->cond);
-                    delete lock_instance->cond;
-                    delete lock_instance;
-                    pthread_mutex_unlock(lock_manager_mutex);
-                    return existing_lock;
-                }
-            } else {
-                // Lock compression
-                if(existing_lock->lock_mode == SHARED && lock_mode == SHARED) {
-                    lock_helper::set_bit(existing_lock, key_idx);
-                    pthread_cond_destroy(lock_instance->cond);
-                    delete lock_instance->cond;
-                    delete lock_instance;
-                    pthread_mutex_unlock(lock_manager_mutex);
-                    return existing_lock;
-                }
-            }
-        }
-        existing_lock = existing_lock->prev;
-    }
-
     // Check if this lock is waiting consecutive slocks.
     bool consecutive_slocks = false;
 
@@ -146,7 +117,6 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
         trx_wait[trx_id] = std::unordered_set<trxid_t>();
     }
 
-    existing_lock = lock_instances[lock_location]->tail;
     while(existing_lock) {
         if (lock_helper::get_bit(existing_lock, key_idx) &&
             existing_lock->trx_id != trx_id
@@ -172,10 +142,42 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
         existing_lock = existing_lock->prev;
     }
 
+    bool should_wait = trx_wait[trx_id].size() > 0;
+
     if (lock_helper::find_deadlock(trx_id)) {
         trx_wait.erase(trx_id);
         pthread_mutex_unlock(lock_manager_mutex);
         return nullptr;
+    }
+
+    // Check if this lock is already acquired.
+    // Also check if this lock is compressible.
+    existing_lock = lock_instances[lock_location]->tail;
+    while(existing_lock) {
+        if (existing_lock->trx_id == trx_id && existing_lock->acquired) {
+            if(lock_helper::get_bit(existing_lock, key_idx)) {
+                // Already acquired lcok
+                if (existing_lock->lock_mode == EXCLUSIVE ||
+                        lock_mode == SHARED) {
+                    pthread_cond_destroy(lock_instance->cond);
+                    delete lock_instance->cond;
+                    delete lock_instance;
+                    pthread_mutex_unlock(lock_manager_mutex);
+                    return existing_lock;
+                }
+            } else if(!should_wait) {
+                // Lock compression
+                if(existing_lock->lock_mode == SHARED && lock_mode == SHARED) {
+                    lock_helper::set_bit(existing_lock, key_idx);
+                    pthread_cond_destroy(lock_instance->cond);
+                    delete lock_instance->cond;
+                    delete lock_instance;
+                    pthread_mutex_unlock(lock_manager_mutex);
+                    return existing_lock;
+                }
+            }
+        }
+        existing_lock = existing_lock->prev;
     }
 
     lock_instance->next_trx = nullptr;
@@ -184,7 +186,7 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
     lock_instance->list->tail->next = lock_instance;
     lock_instance->list->tail = lock_instance;
 
-    if (trx_wait[trx_id].size() > 0) {
+    if (should_wait) {
         pthread_cond_wait(lock_instance->cond, lock_manager_mutex);
     }
     trx_wait.erase(trx_id);
