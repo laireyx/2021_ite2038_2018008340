@@ -27,7 +27,7 @@ namespace trx_helper {
 TransactionInstance& get_trx_instance(trxid_t trx_id) {
     return transaction_instances[trx_id];
 }
-lock_t* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
+lock_t* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
                    trxid_t trx_id, int lock_mode) {
     pthread_mutex_lock(trx_manager_mutex);
     TransactionInstance& instance = transaction_instances[trx_id];
@@ -36,7 +36,7 @@ lock_t* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
     pthread_mutex_unlock(trx_manager_mutex);
     
     lock_t* lock;
-    if(!(lock = ::lock_acquire(table_id, page_id, key, trx_id, lock_mode))) {
+    if(!(lock = ::lock_acquire(table_id, page_id, key_idx, trx_id, lock_mode))) {
         // Lock failed. abort this transaction.
         trx_abort(trx_id);
         return nullptr;

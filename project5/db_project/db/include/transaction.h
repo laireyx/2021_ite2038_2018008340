@@ -71,12 +71,12 @@ TransactionInstance& get_trx_instance(trxid_t trx_id);
  * 
  * @param table_id  table id.
  * @param page_idx  page index.
- * @param key       record key.
+ * @param key       record key index.
  * @param trx_id    transaction id.
  * @param lock_mode lock mode.
  * @return          acquired lock.
  */
-lock_t* lock_acquire(int table_id, pagenum_t page_idx, recordkey_t key,
+lock_t* lock_acquire(int table_id, pagenum_t page_idx, int key_idx,
                    trxid_t trx_id, int lock_mode);
 /**
  * @brief Verify if transaction is on good state.

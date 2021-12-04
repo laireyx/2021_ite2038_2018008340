@@ -10,6 +10,17 @@ PageSlot* get_page_slot(LeafPage* page) {
     return reinterpret_cast<PageSlot*>(page->reserved);
 }
 
+int get_record_idx(LeafPage* page, recordkey_t key) {
+    PageSlot* leaf_slot = get_page_slot(page);
+    for(int i = 0; i < page->page_header.key_num; i++) {
+        if(leaf_slot[i].key == key) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 void get_leaf_value(LeafPage* page, int value_idx, char* value,
                     valsize_t* value_size) {
     PageSlot* leaf_slot = get_page_slot(page);

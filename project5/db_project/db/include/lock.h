@@ -44,11 +44,8 @@ struct Lock {
 
     /// @brief Transaction id.
     trxid_t trx_id;
-    /// @brief Record key.
-    recordkey_t key;
-    /// @brief Lock mask.
-    /// @todo .
-    /* lockmask_t mask; */
+    /// @brief Lock mask for shared lock compression.
+    lockmask_t mask;
 
     /// @brief Previous waiting lock.
     Lock* prev;
@@ -61,24 +58,24 @@ struct Lock {
 namespace lock_helper {
 
 /**
- * @brief Get the pos-th bit of the mask.
+ * @brief Get the pos-th bit of the lock key mask.
  *
- * @param mask  bit mask.
+ * @param lock  lock object.
  * @param pos   position.
  * @return 0 or 1.
  */
-constexpr int get_bit(uint64_t mask, int pos) {
-    return (mask & (uint64_t(1) << pos)) >> pos;
+constexpr int get_bit(Lock* lock, int pos) {
+    return (lock->mask & (uint64_t(1) << pos)) >> pos;
 }
 /**
- * @brief Set the pos-th bit of the mask.
+ * @brief Set the pos-th bit of the lock key mask.
  *
- * @param mask  bit mask.
+ * @param lock  lock object.
  * @param pos   position.
  * @return 0 or 1.
  */
-constexpr int set_bit(uint64_t& mask, int pos) {
-    return mask |= (uint64_t(1) << pos);
+constexpr int set_bit(Lock* lock, int pos) {
+    return lock->mask |= (uint64_t(1) << pos);
 }
 /**
  * @brief Clear the pos-th bit of the mask.
@@ -116,12 +113,12 @@ int cleanup_lock_table();
  *
  * @param table_id  table id.
  * @param page_id   page id.
- * @param key       row key.
+ * @param key       record key index.
  * @param trx_id    transaction id.
  * @param lock_mode lock mode.
  * @return non-null lock instance if success, <code>nullptr</code> otherwise.
  */
-Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
+Lock* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
                    trxid_t trx_id, int lock_mode);
 
 /**

@@ -161,6 +161,15 @@ namespace page_helper {
  */
 PageSlot* get_page_slot(LeafPage* page);
 /**
+ * @brief Get the record index.
+ * @details Search record key from the leaf page slot and return its index.
+ * 
+ * @param page  leaf page.
+ * @param key   record key
+ * @return record index if found, <code>-1</code> otherwise.
+ */
+int get_record_idx(LeafPage* page, recordkey_t key);
+/**
  * @brief Get leaf value.
  * @details Get a leaf value corresponds to index <code>value_idx</code>, using
  * the page slot information. Then copies the value and its size into given

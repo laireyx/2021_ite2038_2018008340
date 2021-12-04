@@ -103,10 +103,12 @@ bool find_by_key(tableid_t table_id, recordkey_t key, char* value,
     pagenum_t leaf_page_idx = find_leaf(table_id, key);
 
     if (!leaf_page_idx) return false;
-    if (trx_id &&
-        !trx_helper::lock_acquire(table_id, leaf_page_idx, key, trx_id, SHARED))
-        return false;
     buffered_read_page(table_id, leaf_page_idx, &leaf_page, trx_id, false);
+    int key_idx = page_helper::get_record_idx(&leaf_page, key);
+    
+    if (trx_id &&
+        !trx_helper::lock_acquire(table_id, leaf_page_idx, key_idx, trx_id, SHARED))
+        return false;
 
     PageSlot* leaf_slot = page_helper::get_page_slot(&leaf_page);
 
@@ -899,13 +901,16 @@ pagenum_t update_node(tableid_t table_id, recordkey_t key, const char* value,
 
     if (leaf_page_idx == 0) return 0;
 
-    if (!trx_helper::lock_acquire(table_id, leaf_page_idx, key, trx_id,
+    leafpage_t leaf_page;
+    buffered_read_page(table_id, leaf_page_idx, &leaf_page, trx_id, false);
+
+    int key_idx = page_helper::get_record_idx(&leaf_page, key);
+
+    if (!trx_helper::lock_acquire(table_id, leaf_page_idx, key_idx, trx_id,
                                   EXCLUSIVE)) {
         return 0;
     }
-    leafpage_t leaf_page;
-
-    buffered_read_page(table_id, leaf_page_idx, &leaf_page, trx_id);
+    buffered_read_page(table_id, leaf_page_idx, &leaf_page, trx_id, true);
 
     char* old_value = new char[MAX_VALUE_SIZE];
 

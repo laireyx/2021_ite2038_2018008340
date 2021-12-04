@@ -71,8 +71,11 @@ int cleanup_lock_table() {
     return 0;
 }
 
-Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
+Lock* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
                    trxid_t trx_id, int lock_mode) {
+    if(key_idx < 0 || key_idx >= 64) {
+        return nullptr;
+    }
     pthread_mutex_lock(lock_manager_mutex);
     Lock* lock_instance = new Lock;
     LockLocation lock_location = std::make_pair(table_id, page_id);
@@ -84,7 +87,8 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
     pthread_cond_init(lock_instance->cond, nullptr);
 
     lock_instance->trx_id = trx_id;
-    lock_instance->key = key;
+    lock_instance->mask = 0;
+    lock_helper::set_bit(lock_instance, key_idx);
 
     if (lock_instances.find(lock_location) == lock_instances.end()) {
         LockList* new_lock_list = new LockList;
@@ -107,27 +111,29 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
     Lock* existing_lock = lock_instances[lock_location]->tail;
 
     // Check if this lock is already acquired.
+    // Also check if this lock is compressible.
     while(existing_lock) {
-        if (existing_lock->key == key &&
-            existing_lock->trx_id == trx_id
-        ) {
-            if (existing_lock->acquired &&
-                (existing_lock->lock_mode == EXCLUSIVE ||
-                    lock_mode == SHARED)) {
-                // lock_instance->next_trx = nullptr;
-                // lock_instance->next = nullptr;
-                // lock_instance->prev = lock_instance->list->tail;
-                // lock_instance->list->tail->next = lock_instance;
-                // lock_instance->list->tail = lock_instance;
-
-                // lock_instance->acquired = true;
-                // pthread_mutex_unlock(lock_manager_mutex);
-                // return lock_instance;
-                pthread_cond_destroy(lock_instance->cond);
-                delete lock_instance->cond;
-                delete lock_instance;
-                pthread_mutex_unlock(lock_manager_mutex);
-                return existing_lock;
+        if (existing_lock->trx_id == trx_id && existing_lock->acquired) {
+            if(lock_helper::get_bit(existing_lock, key_idx)) {
+                // Already acquired lcok
+                if (existing_lock->lock_mode == EXCLUSIVE ||
+                        lock_mode == SHARED) {
+                    pthread_cond_destroy(lock_instance->cond);
+                    delete lock_instance->cond;
+                    delete lock_instance;
+                    pthread_mutex_unlock(lock_manager_mutex);
+                    return existing_lock;
+                }
+            } else {
+                // Lock compression
+                if(existing_lock->lock_mode == SHARED && lock_mode == SHARED) {
+                    lock_helper::set_bit(existing_lock, key_idx);
+                    pthread_cond_destroy(lock_instance->cond);
+                    delete lock_instance->cond;
+                    delete lock_instance;
+                    pthread_mutex_unlock(lock_manager_mutex);
+                    return existing_lock;
+                }
             }
         }
         existing_lock = existing_lock->prev;
@@ -142,7 +148,7 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
 
     existing_lock = lock_instances[lock_location]->tail;
     while(existing_lock) {
-        if (existing_lock->key == key &&
+        if (lock_helper::get_bit(existing_lock, key_idx) &&
             existing_lock->trx_id != trx_id
         ) {
             if((existing_lock->lock_mode == EXCLUSIVE || lock_instance->lock_mode == EXCLUSIVE)) {
@@ -220,15 +226,24 @@ int lock_release(Lock* lock_obj) {
         return 0;
     }
 
-    lock_t* next_lock = lock_obj->list->head;
-    while(next_lock != nullptr) {
-        if(next_lock->key == lock_obj->key && !next_lock->acquired) {
-            trx_wait[next_lock->trx_id].erase(lock_obj->trx_id);
-            if(trx_wait[next_lock->trx_id].size() == 0) {
-                pthread_cond_signal(next_lock->cond);
+    for(int key_idx = 0; key_idx < 64; key_idx++) {
+        if(lock_helper::get_bit(lock_obj, key_idx)) {
+            lock_t* next_lock = lock_obj->list->head;
+            while(next_lock != nullptr) {
+                if(lock_helper::get_bit(next_lock, key_idx) && !next_lock->acquired) {
+                    trx_wait[next_lock->trx_id].erase(lock_obj->trx_id);
+                    if(trx_wait[next_lock->trx_id].size() == 0) {
+                        pthread_cond_signal(next_lock->cond);
+                    }
+                }
+                next_lock = next_lock->next;
+            }
+
+            // Multiple lock mask is only for shared locks.
+            if(lock_obj->lock_mode == EXCLUSIVE) {
+                break;
             }
         }
-        next_lock = next_lock->next;
     }
     
     delete lock_obj;
