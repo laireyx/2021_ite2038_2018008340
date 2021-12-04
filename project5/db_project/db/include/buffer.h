@@ -15,7 +15,7 @@ typedef struct BufferBlock {
     PageLocation page_location;
 
     /// @brief page latch.
-    pthread_mutex_t mutex;
+    pthread_cond_t latch;
     /// @brief owner transaction id of this buffer page.
     trxid_t pin_owner;
     /// @brief <code>true</code> if some transactions are waiting this buffer,

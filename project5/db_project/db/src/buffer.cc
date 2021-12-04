@@ -38,9 +38,9 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
 
         if (pin && buffer_page->pin_owner != trx_id) {
             buffer_page->someone_waiting++;
-            pthread_mutex_unlock(buffer_manager_mutex);
+            if(buffer_page->pin_owner != -1)
+                pthread_cond_wait(&buffer_page->latch, buffer_manager_mutex);
             //pthread_mutex_lock(&buffer_page->mutex);
-            pthread_mutex_lock(buffer_manager_mutex);
             buffer_page->someone_waiting--;
             buffer_page->pin_owner = trx_id;
         }
@@ -61,11 +61,11 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
         BufferBlock* buffer_page = buffer_slot + evicted_idx;
 
         if (pin) {
-            buffer_page->someone_waiting++;
-            pthread_mutex_unlock(buffer_manager_mutex);
-            //pthread_mutex_lock(&buffer_page->mutex);
-            pthread_mutex_lock(buffer_manager_mutex);
-            buffer_page->someone_waiting--;
+            // buffer_page->someone_waiting++;
+            // pthread_mutex_unlock(buffer_manager_mutex);
+            // pthread_mutex_lock(&buffer_page->mutex);
+            // pthread_mutex_lock(buffer_manager_mutex);
+            // buffer_page->someone_waiting--;
             buffer_page->pin_owner = trx_id;
         }
 
@@ -108,6 +108,7 @@ bool apply_buffer(tableid_t table_id, pagenum_t pagenum, const page_t* page) {
         buffer_page->is_dirty = true;
         buffer_page->pin_owner = -1;
 
+        pthread_cond_signal(&buffer_page->latch);
         //pthread_mutex_unlock(&buffer_page->mutex);
         pthread_mutex_unlock(buffer_manager_mutex);
         return true;
@@ -128,6 +129,7 @@ void release_buffer(tableid_t table_id, pagenum_t pagenum) {
         BufferBlock* buffer_page = buffer_slot + buffer_page_idx;
 
         buffer_page->pin_owner = -1;
+        pthread_cond_signal(&buffer_page->latch);
         //pthread_mutex_unlock(&buffer_page->mutex);
     }
     pthread_mutex_unlock(buffer_manager_mutex);
@@ -208,7 +210,7 @@ int init_buffer(int _buffer_size) {
             buffer_slot[i].page_location =
                 std::make_pair(MAX_TABLE_INSTANCE + 1, 0);
 
-            pthread_mutex_init(&buffer_slot[i].mutex, nullptr);
+            pthread_cond_init(&buffer_slot[i].latch, nullptr);
             buffer_slot[i].is_dirty = false;
             buffer_slot[i].pin_owner = -1;
             buffer_slot[i].someone_waiting = 0;
@@ -302,7 +304,7 @@ int shutdown_buffer() {
             if (buffer->is_dirty) {
                 file_write_page(table_id, page_num, &buffer->page);
             }
-            pthread_mutex_destroy(&buffer_slot[i].mutex);
+            pthread_cond_destroy(&buffer_slot[i].latch);
         }
         delete[] buffer_slot;
         buffer_slot = nullptr;
