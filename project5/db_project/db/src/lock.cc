@@ -140,7 +140,7 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
         trx_wait[trx_id] = std::unordered_set<trxid_t>();
     }
 
-    existing_lock = lock_instances[lock_location]->tail;
+    /*existing_lock = lock_instances[lock_location]->tail;
     while(existing_lock) {
         if (existing_lock->key == key &&
             existing_lock->trx_id != trx_id
@@ -170,7 +170,7 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
         trx_wait.erase(trx_id);
         pthread_mutex_unlock(lock_manager_mutex);
         return nullptr;
-    }
+    }*/
 
     lock_instance->next_trx = nullptr;
     lock_instance->next = nullptr;
