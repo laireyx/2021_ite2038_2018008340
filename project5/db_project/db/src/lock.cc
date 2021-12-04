@@ -111,15 +111,20 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, recordkey_t key,
             if (existing_lock->acquired &&
                 (existing_lock->lock_mode == EXCLUSIVE ||
                     lock_mode == SHARED)) {
-                lock_instance->next_trx = nullptr;
-                lock_instance->next = nullptr;
-                lock_instance->prev = lock_instance->list->tail;
-                lock_instance->list->tail->next = lock_instance;
-                lock_instance->list->tail = lock_instance;
+                // lock_instance->next_trx = nullptr;
+                // lock_instance->next = nullptr;
+                // lock_instance->prev = lock_instance->list->tail;
+                // lock_instance->list->tail->next = lock_instance;
+                // lock_instance->list->tail = lock_instance;
 
-                lock_instance->acquired = true;
+                // lock_instance->acquired = true;
+                // pthread_mutex_unlock(lock_manager_mutex);
+                // return lock_instance;
+                pthread_cond_destroy(lock_instance->cond);
+                delete lock_instance->cond;
+                delete lock_instance;
                 pthread_mutex_unlock(lock_manager_mutex);
-                return lock_instance;
+                return existing_lock;
             }
         }
         existing_lock = existing_lock->prev;
