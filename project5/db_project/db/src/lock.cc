@@ -21,7 +21,9 @@ std::unordered_map<trxid_t, std::unordered_set<trxid_t>> trx_wait;
 
 namespace lock_helper {
 
-bool _find_deadlock(trxid_t current, trxid_t root) {
+bool _find_deadlock(trxid_t current, trxid_t root, std::unordered_set<trxid_t> visit) {
+    if (visit.find(current) != visit.end()) return false;
+    visit.insert(current);
     if (current == 0) {
         return false;
     }
@@ -29,15 +31,16 @@ bool _find_deadlock(trxid_t current, trxid_t root) {
         return true;
     }
     for (auto& occupant : trx_wait[current]) {
-        if (_find_deadlock(occupant, root)) {
+        if (_find_deadlock(occupant, root, visit)) {
             return true;
         }
     }
     return false;
 }
 bool find_deadlock(trxid_t root) {
+    std::unordered_set<trxid_t> visit;
     for (auto& occupant : trx_wait[root]) {
-        if (_find_deadlock(occupant, root)) {
+        if (_find_deadlock(occupant, root, visit)) {
             return true;
         }
     }
