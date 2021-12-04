@@ -29,7 +29,7 @@ pthread_mutex_t* buffer_manager_mutex;
 namespace buffer_helper {
 BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
                          trxid_t trx_id, bool pin) {
-    pthread_mutex_lock(buffer_manager_mutex);
+    //pthread_mutex_lock(buffer_manager_mutex);
     auto page_location = std::make_pair(table_id, pagenum);
     const auto& existing_buffer = buffer_index.find(page_location);
     if (existing_buffer != buffer_index.end()) {
@@ -38,9 +38,9 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
 
         if (pin && buffer_page->pin_owner != trx_id) {
             buffer_page->someone_waiting++;
-            pthread_mutex_unlock(buffer_manager_mutex);
-            pthread_mutex_lock(&buffer_page->mutex);
-            pthread_mutex_lock(buffer_manager_mutex);
+            //pthread_mutex_unlock(buffer_manager_mutex);
+            //pthread_mutex_lock(&buffer_page->mutex);
+            //pthread_mutex_lock(buffer_manager_mutex);
             buffer_page->someone_waiting--;
             buffer_page->pin_owner = trx_id;
         }
@@ -51,7 +51,7 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
             memcpy(page, &(buffer_page->page), PAGE_SIZE);
         }
 
-        pthread_mutex_unlock(buffer_manager_mutex);
+        //pthread_mutex_unlock(buffer_manager_mutex);
         return buffer_slot + buffer_page_idx;
     }
 
@@ -62,9 +62,9 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
 
         if (pin) {
             buffer_page->someone_waiting++;
-            pthread_mutex_unlock(buffer_manager_mutex);
-            pthread_mutex_lock(&buffer_page->mutex);
-            pthread_mutex_lock(buffer_manager_mutex);
+            //pthread_mutex_unlock(buffer_manager_mutex);
+            //pthread_mutex_lock(&buffer_page->mutex);
+            //pthread_mutex_lock(buffer_manager_mutex);
             buffer_page->someone_waiting--;
             buffer_page->pin_owner = trx_id;
         }
@@ -90,12 +90,12 @@ BufferBlock* load_buffer(tableid_t table_id, pagenum_t pagenum, page_t* page,
     if (page != nullptr) {
         file_read_page(table_id, pagenum, page);
     }
-    pthread_mutex_unlock(buffer_manager_mutex);
+    //pthread_mutex_unlock(buffer_manager_mutex);
     return nullptr;
 }
 
 bool apply_buffer(tableid_t table_id, pagenum_t pagenum, const page_t* page) {
-    pthread_mutex_lock(buffer_manager_mutex);
+    //pthread_mutex_lock(buffer_manager_mutex);
     auto page_location = std::make_pair(table_id, pagenum);
     const auto& existing_buffer = buffer_index.find(page_location);
     if (existing_buffer != buffer_index.end()) {
@@ -108,19 +108,19 @@ bool apply_buffer(tableid_t table_id, pagenum_t pagenum, const page_t* page) {
         buffer_page->is_dirty = true;
         buffer_page->pin_owner = -1;
 
-        pthread_mutex_unlock(&buffer_page->mutex);
-        pthread_mutex_unlock(buffer_manager_mutex);
+        //pthread_mutex_unlock(&buffer_page->mutex);
+        //pthread_mutex_unlock(buffer_manager_mutex);
         return true;
     }
 
     // direct I/O fallback
     file_write_page(table_id, pagenum, page);
-    pthread_mutex_unlock(buffer_manager_mutex);
+    //pthread_mutex_unlock(buffer_manager_mutex);
     return false;
 }
 
 void release_buffer(tableid_t table_id, pagenum_t pagenum) {
-    pthread_mutex_lock(buffer_manager_mutex);
+    //pthread_mutex_lock(buffer_manager_mutex);
     auto page_location = std::make_pair(table_id, pagenum);
     const auto& existing_buffer = buffer_index.find(page_location);
     if (existing_buffer != buffer_index.end()) {
@@ -128,9 +128,9 @@ void release_buffer(tableid_t table_id, pagenum_t pagenum) {
         BufferBlock* buffer_page = buffer_slot + buffer_page_idx;
 
         buffer_page->pin_owner = -1;
-        pthread_mutex_unlock(&buffer_page->mutex);
+        //pthread_mutex_unlock(&buffer_page->mutex);
     }
-    pthread_mutex_unlock(buffer_manager_mutex);
+    //pthread_mutex_unlock(buffer_manager_mutex);
 }
 
 int evict() {
@@ -309,6 +309,9 @@ int shutdown_buffer() {
         buffer_size = 0;
         buffer_index.clear();
     }
+    pthread_mutex_destroy(buffer_manager_mutex);
+    delete buffer_manager_mutex;
+
     file_close_table_files();
     return 0;
 }
