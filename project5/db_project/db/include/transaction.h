@@ -1,5 +1,5 @@
 /**
- * @addtogroup TransactionManager
+ * @addtogroup DiskSpaceManager
  * @{
  */
 #pragma once
