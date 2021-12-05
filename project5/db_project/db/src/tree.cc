@@ -105,12 +105,22 @@ bool find_by_key(tableid_t table_id, recordkey_t key, char* value,
     if (!leaf_page_idx) return false;
     buffered_read_page(table_id, leaf_page_idx, &leaf_page, trx_id, false);
     int key_idx = page_helper::get_record_idx(&leaf_page, key);
-    
-    if (trx_id &&
-        !trx_helper::lock_acquire(table_id, leaf_page_idx, key_idx, trx_id, SHARED))
-        return false;
-
     PageSlot* leaf_slot = page_helper::get_page_slot(&leaf_page);
+
+    if(key_idx < 0) {
+        return false;
+    }
+    
+    // if (trx_id &&
+    //     !trx_helper::lock_acquire(table_id, leaf_page_idx, key_idx, trx_id, SHARED))
+    //     return false;
+    //if(leaf_slot[key_idx].trx_id != trx_id) {
+        //explicit_lock(table_id, leaf_page_idx, key_idx, leaf_slot[key_idx].trx_id);
+    //}
+    if (!lock_acquire(table_id, leaf_page_idx, key_idx, trx_id,
+                            SHARED)) {
+        return 0;
+    }
 
     for (i = 0; i < leaf_page.page_header.key_num; i++) {
         if (leaf_slot[i].key == key) break;
@@ -485,7 +495,6 @@ pagenum_t coalesce_internal_nodes(tableid_t table_id, pagenum_t left_page_idx,
     internalpage_t parent_page;
     internalpage_t left_page, right_page;
     allocatedpage_t child_page;
-    PageSlot* right_slot;
 
     buffered_read_page(table_id, 0, &header_page, 0, false);
     buffered_read_page(table_id, left_page_idx, &left_page);
@@ -894,9 +903,6 @@ pagenum_t delete_node(tableid_t table_id, recordkey_t key) {
 pagenum_t update_node(tableid_t table_id, recordkey_t key, const char* value,
                       valsize_t new_val_size, valsize_t* old_val_size,
                       trxid_t trx_id) {
-    if (!find_by_key(table_id, key)) {
-        return 0;
-    }
     pagenum_t leaf_page_idx = find_leaf(table_id, key);
 
     if (leaf_page_idx == 0) return 0;
@@ -905,27 +911,29 @@ pagenum_t update_node(tableid_t table_id, recordkey_t key, const char* value,
     buffered_read_page(table_id, leaf_page_idx, &leaf_page, trx_id, false);
 
     int key_idx = page_helper::get_record_idx(&leaf_page, key);
+    PageSlot* leaf_slot = page_helper::get_page_slot(&leaf_page);
 
-    if (!trx_helper::lock_acquire(table_id, leaf_page_idx, key_idx, trx_id,
+    if(key_idx < 0) return 0;
+
+    //if(leaf_slot[key_idx].trx_id != trx_id) {
+        //explicit_lock(table_id, leaf_page_idx, key_idx, leaf_slot[key_idx].trx_id);
+        if (!lock_acquire(table_id, leaf_page_idx, key_idx, trx_id,
                                   EXCLUSIVE)) {
-        return 0;
-    }
+            return 0;
+        }
+    //}
+
     buffered_read_page(table_id, leaf_page_idx, &leaf_page, trx_id, true);
+    leaf_slot[key_idx].trx_id = trx_id;
 
     char* old_value = new char[MAX_VALUE_SIZE];
 
-    if (page_helper::set_leaf_value(&leaf_page, key, old_value, old_val_size, value,
-                                    new_val_size)) {
-        //trx_helper::log_update(table_id, key, old_value, *old_val_size, trx_id);
-        buffered_write_page(table_id, leaf_page_idx, &leaf_page);
-        
-        delete[] old_value;
-        return leaf_page_idx;
-    }
-
-    buffered_release_page(table_id, leaf_page_idx);
-
+    page_helper::set_leaf_value(&leaf_page, key_idx, old_value, old_val_size, value,
+                                    new_val_size);
+    //trx_helper::log_update(table_id, key, old_value, *old_val_size, trx_id);
+    buffered_write_page(table_id, leaf_page_idx, &leaf_page);
+    
     delete[] old_value;
-    return 0;
+    return leaf_page_idx;
 }
 /** @}*/
