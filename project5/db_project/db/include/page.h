@@ -79,7 +79,7 @@ struct PageHeader {
 
 /**
  * @class   PageSlot
- * @brief   page slot for leaf node.
+ * @brief   page slot for allocated(internal and leaf) node.
  */
 struct PageSlot {
     /// @brief The page key.
@@ -89,7 +89,8 @@ struct PageSlot {
     /// @brief The value offset(in bytes).
     uint16_t value_offset;
     /// @brief Transaction id which is implicitly locked this record.
-    trxid_t trx_id;
+    /// @todo this project.
+    // trxid_t trx_id;
 } __attribute__((packed));
 
 /**
@@ -254,13 +255,15 @@ bool remove_leaf_value(LeafPage* page, recordkey_t key);
  * @brief Update the record value in the page and returns old record value size.
  *
  * @param page              record page.
- * @param key_idx           record key index.
+ * @param key               record key.
  * @param[out] old_value    old record value.
  * @param[out] old_val_size old record value size.
  * @param new_value         new record value.
  * @param new_val_size      new record value size.
+ * @return <code>true</code> if update successfully, <code>false</code>
+ * otherwise.
  */
-void set_leaf_value(LeafPage* page, int key_idx, char* old_value, valsize_t* old_val_size,
+bool set_leaf_value(LeafPage* page, recordkey_t key, char* old_value, valsize_t* old_val_size,
                     const char* new_value, valsize_t new_val_size);
 
 /**

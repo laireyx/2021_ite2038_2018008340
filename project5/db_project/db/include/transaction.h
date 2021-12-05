@@ -36,7 +36,7 @@ struct TransactionLog {
 /**
  * @brief Transaction running state.
  */
-enum TransactionState { RUNNING = 0, COMMITTING = 1, ABORTING = 2 };
+enum TransactionState { RUNNING = 0, WAITING = 1, COMMITTING = 2, COMMITTED = 3, ABORTING = 4, ABORTED = 5 };
 
 /**
  * @brief Transaction instance.
@@ -56,22 +56,28 @@ struct TransactionInstance {
 typedef struct TransactionLog trxlog_t;
 
 namespace trx_helper {
+
 /**
- * @brief Connect a lock to the tail of next-transaction-lock list.
- * 
+ * @brief Get the trx instance object
+ * @details Quickfix. Expects dragon ahead.
+ *
  * @param trx_id    transaction id.
- * @param lock      lock object.
- * @return <code>true</code> if success, <code>false</code> if otherwise.
+ * @return          transaction instance.
  */
-bool connect_lock_tail(trxid_t trx_id, lock_t* lock);
+TransactionInstance& get_trx_instance(trxid_t trx_id);
+
 /**
- * @brief Check if target transaction is running.
- * @details RUNNING, COMMITTING, ABORTING transaction is running transaction.
+ * @brief Wrapper for <code>lock_acquire()</code>
  * 
+ * @param table_id  table id.
+ * @param page_idx  page index.
+ * @param key       record key index.
  * @param trx_id    transaction id.
- * @return <code>true</code> if transaction is running.
+ * @param lock_mode lock mode.
+ * @return          acquired lock.
  */
-bool is_trx_running(trxid_t trx_id);
+lock_t* lock_acquire(int table_id, pagenum_t page_idx, int key_idx,
+                   trxid_t trx_id, int lock_mode);
 /**
  * @brief Verify if transaction is on good state.
  * @details check if the transaction is already finished(by commit or abort).
@@ -90,9 +96,9 @@ trxid_t new_trx_instance();
 /**
  * @brief Release all the locks in the instance.
  *
- * @param trx_id transaction id.
+ * @param instance transaction instance.
  */
-void release_trx_locks(trxid_t trx_id);
+void release_trx_locks(TransactionInstance& instance);
 /**
  * @brief Rollback an unfinished transaction and finish it.
  *
