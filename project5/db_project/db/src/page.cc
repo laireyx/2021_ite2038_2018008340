@@ -63,13 +63,12 @@ bool add_leaf_value(LeafPage* page, recordkey_t key, const char* value,
     uint16_t value_offset = PAGE_SIZE - value_size;
 
     leaf_slot[page->page_header.key_num].key = key;
+    leaf_slot[page->page_header.key_num].value_size = value_size;
     if (page->page_header.key_num > 0) {
         value_offset =
             leaf_slot[page->page_header.key_num - 1].value_offset - value_size;
     }
     leaf_slot[page->page_header.key_num].value_offset = value_offset;
-    leaf_slot[page->page_header.key_num].value_size = value_size;
-    leaf_slot[page->page_header.key_num].trx_id = 0;
 
     memcpy(reinterpret_cast<uint8_t*>(page) + value_offset, value, value_size);
 
@@ -100,7 +99,6 @@ bool remove_leaf_value(LeafPage* page, recordkey_t key) {
                 leaf_slot[j - 1].value_offset =
                     leaf_slot[j].value_offset + offset_shift;
                 leaf_slot[j - 1].value_size = leaf_slot[j].value_size;
-                leaf_slot[j - 1].trx_id = leaf_slot[j].trx_id;
             }
             page->page_header.key_num--;
             *get_free_space(page) += offset_shift + sizeof(PageSlot);
@@ -111,25 +109,32 @@ bool remove_leaf_value(LeafPage* page, recordkey_t key) {
     return false;
 }
 
-void set_leaf_value(LeafPage* page, int key_idx, char* old_value, valsize_t* old_val_size,
+bool set_leaf_value(LeafPage* page, recordkey_t key, char* old_value, valsize_t* old_val_size,
                     const char* new_value, valsize_t new_val_size) {
     PageSlot* leaf_slot = get_page_slot(page);
 
     uint16_t start_offset;
     uint16_t offset_shift;
 
-    /// @todo update at here
-    if (old_val_size != nullptr)
-        *old_val_size = leaf_slot[key_idx].value_size;
-    if (old_value != nullptr)
-        memcpy(old_value,
-                reinterpret_cast<uint8_t*>(page) +
-                    leaf_slot[key_idx].value_offset,
-                leaf_slot[key_idx].value_size);
+    for (int i = 0; i < page->page_header.key_num; i++) {
+        if (leaf_slot[i].key == key) {
+            /// @todo update at here
+            if (old_val_size != nullptr)
+                *old_val_size = leaf_slot[i].value_size;
+            if (old_value != nullptr)
+                memcpy(old_value,
+                       reinterpret_cast<uint8_t*>(page) +
+                           leaf_slot[i].value_offset,
+                       leaf_slot[i].value_size);
 
-    leaf_slot[key_idx].value_size = new_val_size;
-    memcpy(reinterpret_cast<uint8_t*>(page) + leaf_slot[key_idx].value_offset,
-            new_value, new_val_size);
+            leaf_slot[i].value_size = new_val_size;
+            memcpy(reinterpret_cast<uint8_t*>(page) + leaf_slot[i].value_offset,
+                   new_value, new_val_size);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool add_internal_key(InternalPage* page, recordkey_t key, pagenum_t page_idx) {
