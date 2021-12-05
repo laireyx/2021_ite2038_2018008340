@@ -107,18 +107,31 @@ int init_lock_table();
 int cleanup_lock_table();
 
 /**
+ * @brief Create an acquired explicit lock.
+ * @details Implicit locking is only for X-lock, so we can safely assume that created lock is
+ * always has <code>EXCLUSIVE</code> lock mode.
+ * 
+ * @param table_id  table id.
+ * @param page_id   page id.
+ * @param key_idx   record key index.
+ * @param trx_id    transaction id.
+ * @return created lock instance.
+ */
+Lock* explicit_lock(tableid_t table_id, pagenum_t page_id, int key_idx, trxid_t trx_id);
+
+/**
  * @brief Acquire a lock corresponding to given table id and key.
  * @details If there are no existing lock, it instantly returns a new lock
  * instance. Otherwise, blocks until all previous lock is released and returns.
  *
  * @param table_id  table id.
  * @param page_id   page id.
- * @param key       record key index.
+ * @param key_idx   record key index.
  * @param trx_id    transaction id.
  * @param lock_mode lock mode.
  * @return non-null lock instance if success, <code>nullptr</code> otherwise.
  */
-Lock* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
+Lock* lock_acquire(tableid_t table_id, pagenum_t page_id, int key_idx,
                    trxid_t trx_id, int lock_mode);
 
 /**
@@ -130,6 +143,8 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
  * @return 0 if success, nonzero otherwise.
  */
 int lock_release(Lock* lock_obj);
+
+bool empty_trx(trxid_t trx_id);
 
 typedef struct Lock lock_t;
 /** @}*/
