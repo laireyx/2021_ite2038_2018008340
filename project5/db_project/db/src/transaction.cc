@@ -1,5 +1,5 @@
 /**
- * @addtogroup DiskSpaceManager
+ * @addtogroup TransactionManager
  * @{
  */
 #include <pthread.h>
