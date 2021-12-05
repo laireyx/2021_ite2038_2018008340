@@ -9,7 +9,6 @@
 #include <cstring>
 #include <map>
 #include <new>
-#include <iostream>
 
 /// @brief Transaction manager mutex.
 pthread_mutex_t* trx_manager_mutex = nullptr;
@@ -25,40 +24,38 @@ std::unordered_map<trxlogid_t, TransactionLog> trx_logs;
 
 namespace trx_helper {
 
-bool connect_lock_tail(trxid_t trx_id, lock_t* lock) {
-    if(!is_trx_running(trx_id)) {
-        return false;
-    }
+TransactionInstance& get_trx_instance(trxid_t trx_id) {
+    return transaction_instances[trx_id];
+}
+lock_t* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
+                   trxid_t trx_id, int lock_mode) {
     pthread_mutex_lock(trx_manager_mutex);
     TransactionInstance& instance = transaction_instances[trx_id];
+
+    instance.state = WAITING;
+    pthread_mutex_unlock(trx_manager_mutex);
     
+    lock_t* lock;
+    if(!(lock = ::lock_acquire(table_id, page_id, key_idx, trx_id, lock_mode))) {
+        // Lock failed. abort this transaction.
+        trx_abort(trx_id);
+        return nullptr;
+    }
+
+    pthread_mutex_lock(trx_manager_mutex);
     if (instance.lock_head == nullptr) {
         instance.lock_head = lock;
+        instance.lock_tail = lock;
     } else {
-        instance.lock_tail->next_trx = lock;
+        if(!lock->next_trx && instance.lock_tail != lock) {
+            instance.lock_tail->next_trx = lock;
+            instance.lock_tail = lock;
+        }
     }
-    instance.lock_tail = lock;
 
+    instance.state = RUNNING;
     pthread_mutex_unlock(trx_manager_mutex);
-    return true;
-}
-
-bool is_trx_running(trxid_t trx_id) {
-    pthread_mutex_lock(trx_manager_mutex);
-    
-    if(transaction_instances.find(trx_id) == transaction_instances.end()) {
-        pthread_mutex_unlock(trx_manager_mutex);
-        return false;
-    }
-
-    TransactionInstance& instance = transaction_instances[trx_id];
-    if(instance.state == RUNNING) {
-        pthread_mutex_unlock(trx_manager_mutex);
-        return true;
-    }
-
-    pthread_mutex_unlock(trx_manager_mutex);
-    return false;
+    return lock;
 }
 
 bool verify_trx(const TransactionInstance& instance) {
@@ -76,8 +73,7 @@ trxid_t new_trx_instance() {
     return instance_id;
 }
 
-void release_trx_locks(trxid_t trx_id) {
-    TransactionInstance& instance = transaction_instances[trx_id];
+void release_trx_locks(TransactionInstance& instance) {
     lock_t* lock_ptr = instance.lock_head;
     while (lock_ptr != nullptr) {
         lock_t* next_lock = lock_ptr->next_trx;
@@ -107,16 +103,14 @@ void flush_trx_log() {
 }
 
 void trx_abort(trxid_t trx_id) {
-    pthread_mutex_lock(trx_manager_mutex);
     TransactionInstance& instance = transaction_instances[trx_id];
 
     instance.state = ABORTING;
     trx_rollback(trx_id);
     flush_trx_log();
-    release_trx_locks(trx_id);
+    release_trx_locks(instance);
 
     transaction_instances.erase(trx_id);
-    pthread_mutex_unlock(trx_manager_mutex);
 }
 
 trxlogid_t log_update(tableid_t table_id, recordkey_t key,
@@ -206,8 +200,9 @@ trxid_t trx_commit(trxid_t trx_id) {
         current_log_id = next_log_id;
     }
 
-    trx_helper::release_trx_locks(trx_id);
+    trx_helper::release_trx_locks(instance);
     trx_helper::flush_trx_log();
+    instance.state = COMMITTED;
 
     transaction_instances.erase(trx_id);
     pthread_mutex_unlock(trx_manager_mutex);
