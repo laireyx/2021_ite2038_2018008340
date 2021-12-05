@@ -71,7 +71,83 @@ int cleanup_lock_table() {
     return 0;
 }
 
-Lock* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
+Lock* explicit_lock(tableid_t table_id, pagenum_t page_id, int key_idx,
+                   trxid_t trx_id) {
+    if(key_idx < 0 || key_idx >= 64) {
+        return nullptr;
+    }
+    if(!trx_helper::is_trx_running(trx_id)) {
+        return nullptr;
+    }
+    pthread_mutex_lock(lock_manager_mutex);
+    Lock* lock_instance = new Lock;
+    LockLocation lock_location = std::make_pair(table_id, page_id);
+
+    lock_instance->lock_mode = EXCLUSIVE;
+    lock_instance->acquired = true;
+
+    lock_instance->cond = new pthread_cond_t;
+    pthread_cond_init(lock_instance->cond, nullptr);
+
+    lock_instance->trx_id = trx_id;
+    lock_instance->mask = 0;
+    lock_helper::set_bit(lock_instance, key_idx);
+
+    if (lock_instances.find(lock_location) == lock_instances.end()) {
+        LockList* new_lock_list = new LockList;
+        new_lock_list->lock_location = lock_location;
+        new_lock_list->head = new_lock_list->tail = lock_instance;
+
+        lock_instance->list = new_lock_list;
+        lock_instance->prev = nullptr;
+        lock_instance->next = nullptr;
+        lock_instance->next_trx = nullptr;
+
+        lock_instances[lock_location] = new_lock_list;
+        pthread_mutex_unlock(lock_manager_mutex);
+        if(!trx_helper::connect_lock_tail(trx_id, lock_instance)) {
+            lock_release(lock_instance);
+            return nullptr;
+        }
+        return lock_instance;
+    }
+
+    Lock* existing_lock = lock_instances[lock_location]->tail;
+
+    existing_lock = lock_instances[lock_location]->tail;;
+    while(existing_lock) {
+        if (existing_lock->trx_id == trx_id && existing_lock->acquired) {
+            if(lock_helper::get_bit(existing_lock, key_idx)) {
+                // Already acquired lock
+                if (existing_lock->lock_mode == EXCLUSIVE) {
+                    pthread_cond_destroy(lock_instance->cond);
+                    delete lock_instance->cond;
+                    delete lock_instance;
+                    pthread_mutex_unlock(lock_manager_mutex);
+                    return existing_lock;
+                }
+            }
+        }
+        existing_lock = existing_lock->prev;
+    }
+
+    lock_instance->list = lock_instances[lock_location];
+
+    lock_instance->next_trx = nullptr;
+    lock_instance->prev = nullptr;
+    lock_instance->next = lock_instance->list->head;
+    lock_instance->list->head->prev = lock_instance;
+    lock_instance->list->head = lock_instance;
+
+    pthread_mutex_unlock(lock_manager_mutex);
+    if(!trx_helper::connect_lock_tail(trx_id, lock_instance)) {
+        lock_release(lock_instance);
+        return nullptr;
+    }
+    return lock_instance;
+};
+
+Lock* lock_acquire(tableid_t table_id, pagenum_t page_id, int key_idx,
                    trxid_t trx_id, int lock_mode) {
     if(key_idx < 0 || key_idx >= 64) {
         return nullptr;
@@ -103,6 +179,10 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
 
         lock_instances[lock_location] = new_lock_list;
         pthread_mutex_unlock(lock_manager_mutex);
+        if(trx_id && !trx_helper::connect_lock_tail(trx_id, lock_instance)) {
+            lock_release(lock_instance);
+            return nullptr;
+        }
         return lock_instance;
     }
 
@@ -144,21 +224,16 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
 
     bool should_wait = trx_wait[trx_id].size() > 0;
 
-    if (lock_helper::find_deadlock(trx_id)) {
-        trx_wait.erase(trx_id);
-        pthread_mutex_unlock(lock_manager_mutex);
-        return nullptr;
-    }
-
     // Check if this lock is already acquired.
     // Also check if this lock is compressible.
     existing_lock = lock_instances[lock_location]->tail;
     while(existing_lock) {
         if (existing_lock->trx_id == trx_id && existing_lock->acquired) {
             if(lock_helper::get_bit(existing_lock, key_idx)) {
-                // Already acquired lcok
+                // Already acquired lock
                 if (existing_lock->lock_mode == EXCLUSIVE ||
                         lock_mode == SHARED) {
+                    trx_wait.erase(trx_id);
                     pthread_cond_destroy(lock_instance->cond);
                     delete lock_instance->cond;
                     delete lock_instance;
@@ -180,6 +255,12 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
         existing_lock = existing_lock->prev;
     }
 
+    if (lock_helper::find_deadlock(trx_id)) {
+        trx_wait.erase(trx_id);
+        pthread_mutex_unlock(lock_manager_mutex);
+        return nullptr;
+    }
+
     lock_instance->next_trx = nullptr;
     lock_instance->next = nullptr;
     lock_instance->prev = lock_instance->list->tail;
@@ -193,6 +274,10 @@ Lock* lock_acquire(int table_id, pagenum_t page_id, int key_idx,
 
     lock_instance->acquired = true;
     pthread_mutex_unlock(lock_manager_mutex);
+    if(trx_id && !trx_helper::connect_lock_tail(trx_id, lock_instance)) {
+        lock_release(lock_instance);
+        return nullptr;
+    }
     return lock_instance;
 };
 
@@ -251,5 +336,15 @@ int lock_release(Lock* lock_obj) {
     delete lock_obj;
     pthread_mutex_unlock(lock_manager_mutex);
     return 0;
+}
+
+bool empty_trx(trxid_t trx_id) {
+    pthread_mutex_lock(lock_manager_mutex);
+    if(trx_wait.find(trx_id) == trx_wait.end()) {
+        pthread_mutex_unlock(lock_manager_mutex);
+        return true;
+    }
+    pthread_mutex_unlock(lock_manager_mutex);
+    return false;
 }
 /** @}*/
