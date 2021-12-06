@@ -121,6 +121,9 @@ void flush_trx_log();
 void trx_abort(trxid_t trx_id);
 /**
  * @brief Log an update query into transaction log.
+ * @details Finding does not make any record change, so update is the only one to be recorded.
+ * Thinking about objective of the log in current project, we don't need to recovery any updates,
+ * so log only includes old record value, not newly updated value.
  *
  * @param table_id      table id.
  * @param key           record key.

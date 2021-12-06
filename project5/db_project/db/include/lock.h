@@ -9,6 +9,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <unordered_set>
 
 enum LockMode { SHARED = 0, EXCLUSIVE = 1 };
 struct Lock;
@@ -32,6 +33,7 @@ struct LockList {
  */
 struct Lock {
     /// @brief Lock mode.
+    /// @details There can be multiple locks with same location, except for eXclusive lock. It means, if there were any X lock, then any other lock can be acquired at the same location and it is why X lock is named "exclusive".
     LockMode lock_mode;
     /// @brief <code>true</code> if acquired, <code>false</code> if sleeping.
     bool acquired;
@@ -56,6 +58,28 @@ struct Lock {
 };
 
 namespace lock_helper {
+
+/**
+ * @brief Recursively traverse transaction waiting graph.
+ * @details Calls itself for every child nodes of <code>current</code> node of transaction waiting graph.
+ * If any child that represents <code>root</code>, then it means there is a cycle.
+ * Recursion ends at <code>0</code>, which means there are no children.
+ * 
+ * @param current   current transactio node
+ * @param root      root transaction node
+ * @param visit     visit check(for recursive traversal)
+ * @return <code>true</code> if found, <code>false</code> otherwise.
+ */
+bool _find_deadlock(trxid_t current, trxid_t root, std::unordered_set<trxid_t> visit);
+/**
+ * @brief Determine if there is any deadlock includes this transaction.
+ * @details Every <code>lock_acquire()</code> request updates a deadlock waiting graph(transaction waiting list),
+ * and this function traverses the graph to find the cycle includes target transaction.
+ * 
+ * @param root  root transaction.
+ * @return <code>true</code> if found, <code>false</code> otherwise.
+ */
+bool find_deadlock(trxid_t root);
 
 /**
  * @brief Get the pos-th bit of the lock key mask.
@@ -110,7 +134,9 @@ int cleanup_lock_table();
  * @brief Acquire a lock corresponding to given table id and key.
  * @details If there are no existing lock, it instantly returns a new lock
  * instance. Otherwise, blocks until all previous lock is released and returns.
- * If this lock request induces a new deadlock, then it instantly returns
+ * If the transaction needs blocking, then it will create transaction waiting graph edges,
+ * which points the transactions which are owning conflicting leading locks.
+ * However, if this lock request induces a new deadlock, then it instantly returns
  * nullptr, to abort this transaction and other workers keep going on.
  *
  * @param table_id  table id.

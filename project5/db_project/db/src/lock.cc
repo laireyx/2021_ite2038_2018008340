@@ -9,14 +9,13 @@
 #include <iostream>
 #include <new>
 #include <unordered_map>
-#include <unordered_set>
 
 /// @brief Lock manager mutex.
 pthread_mutex_t* lock_manager_mutex;
 
 /** @todo change it to MAX_TABLE_INSTANCE */
 std::unordered_map<LockLocation, LockList*> lock_instances;
-/// @brief Transaction waiting list.
+/// @brief Transaction waiting list(Deadlock waiting graph).
 std::unordered_map<trxid_t, std::unordered_set<trxid_t>> trx_wait;
 
 namespace lock_helper {
