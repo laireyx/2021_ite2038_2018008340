@@ -20,12 +20,12 @@ tableid_t table_id;
 uint8_t temp_size[test_count] = {};
 static uint8_t temp_value[test_count][128] = {};
 
-class BasicTableTest : public ::testing::Test {
+class BasicTransactionTest : public ::testing::Test {
    protected:
     /// @brief Random indexes for test count
     int test_order[test_count];
 
-    BasicTableTest() {
+    BasicTransactionTest() {
         init_db();
         srand(1);
 
@@ -44,15 +44,15 @@ class BasicTableTest : public ::testing::Test {
             test_order[y] = temp;
         }
     }
-    ~BasicTableTest() { shutdown_db(); }
+    ~BasicTransactionTest() { shutdown_db(); }
 };
 
 /**
- * @brief   Tests database insertion API.
+ * @brief   Tests database transaction API.
  * @details 1. Open a database and write random values in random order.
- *          2. Find the value using the key and compare it to the value.
+ *          2. Update the value using the key and compare it to the value.
  */
-TEST_F(BasicTableTest, TransactionTest) {
+TEST_F(BasicTransactionTest, TransactionTest) {
     table_id = open_table("test_trx.db");
     // Check if the file is opened
     ASSERT_TRUE(table_id >=
