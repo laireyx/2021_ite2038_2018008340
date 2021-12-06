@@ -110,6 +110,8 @@ int cleanup_lock_table();
  * @brief Acquire a lock corresponding to given table id and key.
  * @details If there are no existing lock, it instantly returns a new lock
  * instance. Otherwise, blocks until all previous lock is released and returns.
+ * If this lock request induces a new deadlock, then it instantly returns
+ * nullptr, to abort this transaction and other workers keep going on.
  *
  * @param table_id  table id.
  * @param page_id   page id.

@@ -200,8 +200,8 @@ trxid_t trx_commit(trxid_t trx_id) {
         current_log_id = next_log_id;
     }
 
-    trx_helper::release_trx_locks(instance);
     trx_helper::flush_trx_log();
+    trx_helper::release_trx_locks(instance);
     instance.state = COMMITTED;
 
     transaction_instances.erase(trx_id);

@@ -101,6 +101,7 @@ trxid_t new_trx_instance();
 void release_trx_locks(TransactionInstance& instance);
 /**
  * @brief Rollback an unfinished transaction and finish it.
+ * @details Roll back all the updates provoked by this transaction.
  *
  * @param trx_id  transaction id.
  */
@@ -112,6 +113,8 @@ void trx_rollback(trxid_t trx_id);
 void flush_trx_log();
 /**
  * @brief Immediately abort a transaction and release all of its locks.
+ * @details Rolls back all the updates, flushes transaction log, and finally
+ * releases its own lock.
  *
  * @param trx_id transaciton id obtained with <code>trx_begin()</code>.
  */
@@ -154,6 +157,7 @@ int cleanup_trx();
 trxid_t trx_begin();
 /**
  * @brief Commit a transaction.
+ * @details Flushes a log and releases its own locks.
  *
  * @param trx_id transaction id obtained with <code>trx_begin()</code>.
  * @return <code>trx_id</code>(committed transaction id) if success.
